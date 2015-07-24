@@ -1,6 +1,4 @@
+*.DS_Store
 *.pyc
-*.txt
-.DS_Store
-
-config.py
 client_secret.json
+data/

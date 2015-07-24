@@ -1,6 +1,6 @@
 from apiclient import errors
-from config import black_listed_subjects, prune_junk_from_message
-from gmail_api import GmailApi
+from app.data.settings import black_listed_subjects, prune_junk_from_message
+from app.data.gmail_api import GmailApi
 
 service = GmailApi().get_service()
 

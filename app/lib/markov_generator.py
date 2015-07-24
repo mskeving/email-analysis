@@ -50,14 +50,14 @@ def make_chain(markov):
 
 
 def generate_and_save_markov(user):
-    with open(user.pruned_messages, 'r') as file:
+    with open('data/' + user.pruned_file, 'r') as file:
         data = file.read()
     file.close()
 
     markov_dict = create_markov_dict(data)
     markov_chain = make_chain(markov_dict)
 
-    with open(user.markov_file, 'a') as file:
+    with open('data/' + user.markov_file, 'a') as file:
         file.write('\n\n')
         file.write(markov_chain)
     file.close()
