@@ -1,3 +1,4 @@
+import codecs
 from apiclient import errors
 from app.data.settings import black_listed_subjects, prune_junk_from_message
 from app.data.gmail_api import GmailApi
@@ -51,8 +52,8 @@ def save_messages_from(user):
     # parts to save: subject, sender, to, cc, time, message_id, thread_id, body
     # attachments? images inline? links? emoticons?
     messages = get_all_messages_from(user)
-    canonical = open(user.canonical_file, 'w')
-    pruned = open(user.pruned_file, 'w')
+    canonical = codecs.open(user.canonical_file, encoding="utf-8", mode='w')
+    pruned = codecs.open(user.pruned_file, encoding="utf-8", mode='w')
 
     for message in messages:
         skip_this_message = False
