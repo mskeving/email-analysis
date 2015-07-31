@@ -6,7 +6,7 @@ from httplib2 import Http
 from oauth2client import client
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
+CLIENT_SECRET_FILE = '../client_secret.json'
 APPLICATION_NAME = 'Gmail API Quickstart'
 
 try:

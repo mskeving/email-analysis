@@ -1,7 +1,7 @@
 import codecs
 from apiclient import errors
-from app.data.settings import black_listed_subjects, prune_junk_from_message
-from app.data.gmail_api import GmailApi
+from data.settings import black_listed_subjects, prune_junk_from_message
+from lib.gmail_api import GmailApi
 
 service = GmailApi().get_service()
 
@@ -52,8 +52,8 @@ def save_messages_from(user):
     # parts to save: subject, sender, to, cc, time, message_id, thread_id, body
     # attachments? images inline? links? emoticons?
     messages = get_all_messages_from(user)
-    canonical = codecs.open(user.canonical_file, encoding="utf-8", mode='w')
-    pruned = codecs.open(user.pruned_file, encoding="utf-8", mode='w')
+    canonical = codecs.open('data/' + user.canonical_file, encoding="utf-8", mode='w')
+    pruned = codecs.open('data/' + user.pruned_file, encoding="utf-8", mode='w')
 
     for message in messages:
         skip_this_message = False
@@ -71,9 +71,9 @@ def save_messages_from(user):
             for part in response['payload']['parts']:
                 if part['mimeType'] == 'text/plain':
                     encoded_message = part['body']['data']
-                    decoded_message = base64.urlsafe_b64decode(str(encoded_message))
-                    canonical.write(decoded_message)
-                    pruned.write(prune_junk_from_message(decoded_message))
+                    decoded_message = base64.urlsafe_b64decode(encoded_message.encode('utf-8'))
+                    canonical.write(decoded_message.decode('utf-8'))
+                    pruned.write(prune_junk_from_message(decoded_message).decode('utf-8'))
                     break
     canonical.close()
     pruned.close()
