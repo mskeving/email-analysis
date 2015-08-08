@@ -6,14 +6,13 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    addresses = db.relationship('EmailAddress', backref='user')
-    pruned_text = db.Column(db.UnicodeText())
-    email_dump = db.Column(db.UnicodeText())
+    addresses = db.relationship('EmailAddress')
 
     def address_str(self):
         # change list of addresses into a string to use as
         # query parameter
-        return "(" + (" OR ").join(self.addresses) + ")"
+        email_addresses = [e.email_address for e in self.addresses]
+        return "(" + (" OR ").join(email_addresses) + ")"
 
 
 class EmailAddress(db.Model):
@@ -21,12 +20,27 @@ class EmailAddress(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    email_address = db.Column(db.String(255))
+    email_address = db.Column(db.String(128), unique=True)
+
+
+class Message(db.Model):
+    __tablename__ = "messages"
+
+    id = db.Column(db.Integer, primary_key=True)
+    message_id = db.Column(db.String(128), unique=True)
+    thread_id = db.Column(db.String(128))
+    data = db.Column(db.Text())
+    sender = db.Column(db.Integer, db.ForeignKey('addresses.id'))
+    body = db.Column(db.Text())
+    subject = db.Column(db.Text())
+    send_time = db.Column(db.String(64))
+    pruned = db.Column(db.Text())
+    recipients = db.Column(db.Text())
 
 
 class Markov(db.Model):
     __tablename__ = "markovs"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    chain = db.Column(db.String(255))
+    chain = db.Column(db.Text())
     is_tweeted = db.Column(db.Boolean, default=False, nullable=False)
