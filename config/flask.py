@@ -6,7 +6,7 @@ class Config(object):
     SECRET_KEY = 'hello'
 
 class Development(Config):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost:5432/NAME_OF_DB'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost:5432/email'
 
 class Production(Config):
     DEBUG = False

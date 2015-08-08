@@ -1,4 +1,3 @@
-import os
 from app import create_app, create_db
 from flask.ext.script import Manager
 

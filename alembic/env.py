@@ -11,8 +11,8 @@ from app import db, create_app
 # access to the values within the .ini file in use.
 config = context.config
 
-app = create_app(os.environ['CONFIG_ENV'])
-#app = create_app('Development')
+# app = create_app(os.environ['CONFIG_ENV'])
+app = create_app('Development')
 
 config.set_main_option('sqlalchemy.url', app.config['SQLALCHEMY_DATABASE_URI'])
 
