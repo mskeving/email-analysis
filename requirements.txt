@@ -1,2 +1,12 @@
+Flask==0.10.1
+Flask-SQLAlchemy==1.0
+Jinja2==2.8
+Mako==1.0.2
+MarkupSafe==0.23
+SQLAlchemy==0.7.10
+Werkzeug==0.10.4
+alembic==0.7.6
+itsdangerous==0.24
 nltk==3.0.4
-google-api-python-client==1.4.1
+psycopg2==2.6.1
+wsgiref==0.1.2
