@@ -1,6 +1,3 @@
-from markov_generator import generate_and_save_markov
-
-
 class User():
     def __init__(self,
                  name,
@@ -49,6 +46,3 @@ class User():
                 return text.count(str_to_match)
         except:
             print "file %s doesn't exist" % self.pruned_file
-
-    def markov(self):
-        return generate_and_save_markov(self)

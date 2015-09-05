@@ -5,7 +5,7 @@ SQLALCHEMY_DATABASE_URI = "postgresql://localhost:5432/email"
 DEBUG = True
 SECRET_KEY = 'development-key'
 app = Flask(__name__, template_folder='static/templates')
-app.config.from_object(__name__) # takes all capitalized variables and adds to config
+app.config.from_object(__name__) # add all capitalized variables to config
 db = SQLAlchemy(app)
 
 def create_app(config):

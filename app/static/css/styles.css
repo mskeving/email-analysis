@@ -1,0 +1,15 @@
+.user {
+    margin-top: 15px;
+    margin-right: 15px;
+}
+#missy-new-markov {
+    display: inline-block;
+    padding: 10px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+.chain {
+    display: inline-block;
+    margin-left: 15px;
+}

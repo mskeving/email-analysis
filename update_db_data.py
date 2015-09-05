@@ -7,6 +7,8 @@ from apiclient import errors
 from app.lib.gmail_api import GmailApi
 from app.data.settings import family_list, prune_junk_from_message
 from app.models import User, EmailAddress, Message
+from nltk.tokenize import word_tokenize
+from collections import defaultdict
 
 db = app.db
 service = GmailApi().get_service()
@@ -176,9 +178,37 @@ def add_messages():
     db.session.commit()
 
 
+def create_markov_dicts():
+    # TODO: figure out a way to store all this. JSON is problematic
+    # beause the keys are tuples. Storing as a plain string is
+    # causing unicode errors when trying to translate back 
+    # to a dict.
+    users = [u for u in User.query.filter().all()]
+    for u in users:
+        "creating dict for: %s" % u.name
+        msgs = Message.query.filter(Message.sender == u.id).all()
+        text = (" ").join([
+            msg.pruned for msg in msgs if msg.pruned
+        ])
+        markov = defaultdict(list)
+        words = word_tokenize(text)
+        for i in xrange(len(words) - 2):
+            current = words[i]
+            if current == ',':
+                continue
+            next_word = words[i+1]
+            prefix = str((current, next_word))
+            suffix = words[i + 2]
+            if suffix not in markov[prefix]:
+                markov[prefix].append(suffix)
+        u.markov_dict = str(markov).encode('utf-8')
+        db.session.add(u)
+    db.session.commit()
+
 def main():
     create_users()
     add_messages()
+    # create_markov_dicts() # NOTE this does not work
 
 
 if __name__ == '__main__':

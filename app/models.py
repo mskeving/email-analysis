@@ -6,6 +6,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+    markov_dict = db.Column(db.Text())
     addresses = db.relationship('EmailAddress')
 
     def address_str(self):
