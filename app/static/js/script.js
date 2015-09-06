@@ -1,13 +1,13 @@
-console.log('in js');
-
 $('document').ready(function() {
-  $('#missy-new-markov').on('click', function() {
+  $('.new-markov').on('click', function() {
+    var newbtn = $(this);
+    var userName = newbtn.data('username');
     $.ajax({
-      data: {'user_name': 'missy'},
+      data: {'user_name': userName},
       url: '/get_markov',
       type: 'POST', 
       success: function(chain) {
-        $('.chain').text(chain);
+        newbtn.siblings('.chain').text(chain);
       },
       error: function(e) {
         console.log(e);

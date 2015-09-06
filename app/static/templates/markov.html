@@ -1,9 +1,11 @@
 {% extends "base.html" %}
  
 {% block content %}
-<div class="user">
-    <div class="name">Missy:</div>
-    <div class="chain">{{chain}}</div>
-    <div id="missy-new-markov" style="border: 1px solid black; border-radius:5px;">NEW</div>
-</div>
+    {% for chain in chains %}
+        <div class="user">
+            <div class="name">{{chain.name}}:</div>
+            <div class="chain" data-username={{chain.name}}>{{chain.chain}}</div>
+            <div class="new-markov" data-username={{chain.name}}>NEW</div>
+        </div>
+    {% endfor %}
 {% endblock %}

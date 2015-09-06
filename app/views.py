@@ -9,10 +9,16 @@ def index():
 
 @app.route('/markov')
 def markov():
-    # defualt to missy on page load
-    chain = get_chain(1)
+    # on page load, get markov for every user
+    users = User.query.all()
+    chains = []
+    for user in users:
+        chains.append({
+            'name': user.name,
+            'chain': get_chain(user.id)
+        })
 
-    return render_template('markov.html', chain=chain)
+    return render_template('markov.html', chains=chains)
 
 @app.route('/get_markov', methods=['POST'])
 def get_markov(user_name=None):
