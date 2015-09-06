@@ -1,0 +1,11 @@
+extends base
+ 
+block content
+  .container
+    - for chain in chains
+      .user
+        .chain-info
+          .name {{ chain.name }}
+          .chain(data-username=chain.name) {{ chain.chain }}
+        .options
+          .new-btn(data-username=chain.name) NEW

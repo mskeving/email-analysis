@@ -34,4 +34,19 @@ def make_chain(user):
     except:
         pass
 
-    return (' ').join(text_list)
+    chain = (' ').join(text_list)
+
+    # The nltk library treats punctuation as its own word (inserts space before it).
+    # This goes through and gets rid of the space to keep it a readable sentence.
+    ending_punctuation = ['.', ',', '"', ': ', ')', '>', '!', '?', ';', "'"]
+    starting_punctuation = ['<', '(', '$', '#']
+    contractions = ["'ve", "'ll", "n't", "'s", "'d"]
+
+    for p in ending_punctuation:
+        chain = chain.replace(' %s' % p, p)
+    for p in starting_punctuation:
+        chain = chain.replace('%s ' % p, p)
+    for c in contractions:
+        chain = chain.replace(' %s' % c, c)
+
+    return chain

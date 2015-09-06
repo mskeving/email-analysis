@@ -6,6 +6,7 @@ DEBUG = True
 SECRET_KEY = 'development-key'
 app = Flask(__name__, template_folder='static/templates')
 app.config.from_object(__name__) # add all capitalized variables to config
+app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 db = SQLAlchemy(app)
 
 def create_app(config):

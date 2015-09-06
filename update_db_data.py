@@ -124,7 +124,6 @@ def add_messages():
                         email_address = regex.findall(header['value'])[0].lower()
                         message_info['sender'] = email_address_to_user_ids[email_address]
                     except Exception:
-                        print ("*" * 100)
                         print ("Couldn't get sender from message id: %s, sender: %s") % (message_id, header['value'])
                         break
                 if header['name'] == "To":
@@ -156,7 +155,6 @@ def add_messages():
                             send_time=m['send_time'],
                             recipients=m['recipients'])
                     db.session.add(new_message)
-                print ("*" * 50)
                 print ("committing 25 messages. %d to go") % (len(all_message_ids) - i)
                 db.session.commit()
                 message_infos = []

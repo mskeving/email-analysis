@@ -1,17 +1,36 @@
-.user {
-    margin-top: 15px;
-    margin-right: 15px;
+.container {
+    width: 80%;
+    max-width: 725px;
+    margin: auto;
 }
-.new-markov {
+.chain-info {
     display: inline-block;
+    width: 75%;
+}
+.options {
+    display: inline-block;
+    width: 23%;
+    vertical-align: top;
+    text-align: right;
+}
+.user {
+    padding: 15px;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+.name {
+    margin-bottom: 10px;
+}
+.chain {
+    height: 36px;
+}
+.new-btn {
+    display: inline-block;
+    width: 37px;
     padding: 10px;
-    margin-left: 15px;
+    margin-top: 10px;
     cursor: pointer;
     border: 1px solid black;
     border-radius: 5px;
-}
-
-.chain {
-    display: inline-block;
-    margin-left: 15px;
 }

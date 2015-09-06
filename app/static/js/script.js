@@ -1,5 +1,5 @@
 $('document').ready(function() {
-  $('.new-markov').on('click', function() {
+  $('.new-btn').on('click', function() {
     var newbtn = $(this);
     var userName = newbtn.data('username');
     $.ajax({
@@ -7,7 +7,7 @@ $('document').ready(function() {
       url: '/get_markov',
       type: 'POST', 
       success: function(chain) {
-        newbtn.siblings('.chain').text(chain);
+        $('.chain[data-username=' + userName + ']').text(chain);
       },
       error: function(e) {
         console.log(e);

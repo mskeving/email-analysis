@@ -12,13 +12,19 @@ def markov():
     # on page load, get markov for every user
     users = User.query.all()
     chains = []
+
     for user in users:
+        chain = make_chain(user)
+        new_markov = Markov(user_id=user.id, chain=chain)
+        db.session.add(new_markov)
         chains.append({
             'name': user.name,
-            'chain': make_chain(user)
+            'chain': chain
         })
 
-    return render_template('markov.html', chains=chains)
+    db.session.commit()
+
+    return render_template('markov.jade', chains=chains)
 
 @app.route('/get_markov', methods=['POST'])
 def get_markov(user_name=None):
