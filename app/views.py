@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, request
-from lib.markov_generator import get_chain
+from lib.markov_generator import make_chain
 from models import Markov, User
 
 @app.route('/')
@@ -15,7 +15,7 @@ def markov():
     for user in users:
         chains.append({
             'name': user.name,
-            'chain': get_chain(user.id)
+            'chain': make_chain(user)
         })
 
     return render_template('markov.html', chains=chains)
@@ -23,9 +23,11 @@ def markov():
 @app.route('/get_markov', methods=['POST'])
 def get_markov(user_name=None):
     form = request.form
-    user_name = form.get('user_name', 'missy')
+    user_name = form.get('user_name', None)
+    if not user_name:
+        return "Error: No user name found"
     user = User.query.filter_by(name=user_name).first()
-    chain = get_chain(user.id)
+    chain = make_chain(user)
 
     new_markov = Markov(user_id=user.id, chain=chain)
     db.session.add(new_markov)

@@ -2,6 +2,7 @@ import app
 import re
 import base64
 import json
+import nltk.data
 
 from apiclient import errors
 from app.lib.gmail_api import GmailApi
@@ -178,18 +179,22 @@ def add_messages():
     db.session.commit()
 
 
-def create_markov_dicts():
-    # TODO: figure out a way to store all this. JSON is problematic
-    # beause the keys are tuples. Storing as a plain string is
-    # causing unicode errors when trying to translate back 
-    # to a dict.
-    users = [u for u in User.query.filter().all()]
+def save_markov_info():
+    """ This stores the markov_dict on user object as json.
+    The dict has a 2 word prefex - {('a', 'b'): ['c', 'd', 'e']}
+    you need to first jsonify the prefix, and then the whole dict,
+    otherwise it complains about not having a string as the key.
+
+    This also stores the starter words. These are words that begin
+    sentences in the emails, so they are also candidates to start
+    the markov chains.
+    """
+    users = User.query.all()
     for u in users:
-        "creating dict for: %s" % u.name
-        msgs = Message.query.filter(Message.sender == u.id).all()
-        text = (" ").join([
-            msg.pruned for msg in msgs if msg.pruned
-        ])
+        messages = Message.query.filter_by(sender=u.id).all()
+        text = (' ').join([m.pruned for m in messages if m.pruned])
+
+        print ("creating markov dict for: %s") % u.name
         markov = defaultdict(list)
         words = word_tokenize(text)
         for i in xrange(len(words) - 2):
@@ -197,18 +202,31 @@ def create_markov_dicts():
             if current == ',':
                 continue
             next_word = words[i+1]
-            prefix = str((current, next_word))
+            prefix = (current, next_word)
             suffix = words[i + 2]
             if suffix not in markov[prefix]:
                 markov[prefix].append(suffix)
-        u.markov_dict = str(markov).encode('utf-8')
+        json_markov = json.dumps({json.dumps(k): v for k, v in markov.iteritems()})
+        u.markov_dict = json_markov
+
+        print ("Saving starter words for: %s") % (u.name)
+        sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+        sentences = sent_detector.tokenize(text.strip())
+        word_pairs = []
+        for sentence in sentences:
+            words = word_tokenize(sentence)
+            if len(words) > 1:
+                word_pairs.append((words[0], words[1]))
+        u.markov_starter_words = json.dumps(word_pairs)
+
         db.session.add(u)
     db.session.commit()
 
+
 def main():
-    create_users()
-    add_messages()
-    # create_markov_dicts() # NOTE this does not work
+    # create_users()
+    # add_messages()
+    save_markov_info()
 
 
 if __name__ == '__main__':

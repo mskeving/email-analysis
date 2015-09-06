@@ -1,19 +1,5 @@
-import nltk.data
-from collections import defaultdict
+import json
 from random import randint
-from app.models import Message
-from nltk.tokenize import word_tokenize
-
-
-def find_starter_words(text):
-    sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-    sentences = sent_detector.tokenize(text.strip())
-    word_pairs = []
-    for sentence in sentences:
-        words = word_tokenize(sentence)
-        if len(words) > 1:
-            word_pairs.append((words[0], words[1]))
-    return word_pairs
 
 
 def choose_rand_from_list(l):
@@ -22,23 +8,18 @@ def choose_rand_from_list(l):
     else:
         return l[randint(0, len(l)-1)]
 
-def create_markov_dict(text):
-    markov = defaultdict(list)
-    words = word_tokenize(text)
-    for i in xrange(len(words) - 2):
-        current = words[i]
-        next_word = words[i+1]
-        prefix = (current, next_word)
-        suffix = words[i + 2]
-        if suffix not in markov[prefix]:
-            markov[prefix].append(suffix)
-    return markov
 
-def make_chain(text):
+def make_chain(user):
     text_list = []
+    starter_words = [tuple(w) for w in json.loads(user.markov_starter_words)]
+    # the keys are nested json so you need to do .loads() twice
+    # look at update_db_data.save_markov_info to see how it's stored
+    markov_dict = json.loads(user.markov_dict)
+    markov_dict = {tuple(json.loads(k)): v for k, v in markov_dict.iteritems()}
 
-    starter_words = find_starter_words(text)
-    markov_dict = create_markov_dict(text)
+    if not starter_words or not markov_dict:
+        return "Error: %s is missing the markov_dict or starter words" % user.name
+
     current_word_pair = choose_rand_from_list(starter_words)
     next_word = choose_rand_from_list(markov_dict[current_word_pair])
 
@@ -54,11 +35,3 @@ def make_chain(text):
         pass
 
     return (' ').join(text_list)
-
-def get_chain(user_id):
-    messages = Message.query.filter_by(sender=user_id).all()
-    if  not messages:
-        return "No markov found for %r." % "Missy"
-
-    text = (' ').join([m.pruned for m in messages if m.pruned])
-    return make_chain(text)
