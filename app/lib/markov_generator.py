@@ -31,7 +31,8 @@ def make_chain(user):
             current_word_pair = (current_word_pair[1], next_word)
             next_word = choose_rand_from_list(markov_dict[current_word_pair])
             text_list.append(next_word)
-    except:
+    except Exception as e:
+        print ("Error finishing sentence for %s: %r") % (user.name, e)
         pass
 
     chain = (' ').join(text_list)

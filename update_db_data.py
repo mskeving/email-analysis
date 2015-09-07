@@ -192,13 +192,11 @@ def save_markov_info():
         messages = Message.query.filter_by(sender=u.id).all()
         text = (' ').join([m.pruned for m in messages if m.pruned])
 
-        print ("creating markov dict for: %s") % u.name
+        print ("Creating markov dict for: %s") % u.name
         markov = defaultdict(list)
         words = word_tokenize(text)
         for i in xrange(len(words) - 2):
             current = words[i]
-            if current == ',':
-                continue
             next_word = words[i+1]
             prefix = (current, next_word)
             suffix = words[i + 2]
