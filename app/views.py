@@ -11,23 +11,23 @@ def index():
 def markov():
     # on page load, get markov for every user
     users = User.query.all()
-    chains = []
+    markovs = []
 
     for user in users:
         chain = make_chain(user)
         new_markov = Markov(user_id=user.id, chain=chain)
         db.session.add(new_markov)
-        chains.append({
-            'name': user.name,
-            'chain': chain
+        db.session.commit()
+        db.session.refresh(new_markov)
+        markovs.append({
+            'username': user.name,
+            'obj': new_markov
         })
 
-    db.session.commit()
-
-    return render_template('markov.jade', chains=chains)
+    return render_template('markov.jade', markovs=markovs)
 
 @app.route('/get_markov', methods=['POST'])
-def get_markov(user_name=None):
+def get_markov():
     form = request.form
     user_name = form.get('user_name', None)
     if not user_name:
@@ -40,3 +40,13 @@ def get_markov(user_name=None):
     db.session.commit()
 
     return chain
+
+@app.route('/tweet', methods=['POST'])
+def tweet():
+    markov_id = request.form.get('markov_id', None)
+    markov = Markov.query.filter_by(id=markov_id)
+    if not markov:
+        return "no markov found"
+    markov.is_tweeted = True
+    db.session.commit()
+    return "success"

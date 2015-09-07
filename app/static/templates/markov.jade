@@ -2,10 +2,12 @@ extends base
  
 block content
   .container
-    - for chain in chains
+    a(class="reference", href="http://www.piliapp.com/twitter-symbols/") User symbols
+    - for markov in markovs
       .user
         .chain-info
-          .name {{ chain.name }}
-          .chain(data-username=chain.name) {{ chain.chain }}
+          .name {{ markov.username.title() }}
+          .chain(data-username=markov.username) {{ markov.obj.chain }}
         .options
-          .new-btn(data-username=chain.name) NEW
+          .btn.new(data-username=markov.username) new
+          .btn.tweet(data-markov-id=markov.obj.id, data-username=markov.username) tweet

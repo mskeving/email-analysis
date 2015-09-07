@@ -1,3 +1,17 @@
+div {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    text-decoration: underline;
+}
+.reference {
+    margin-left: 15px;
+}
 .container {
     width: 80%;
     max-width: 725px;
@@ -7,12 +21,6 @@
     display: inline-block;
     width: 75%;
 }
-.options {
-    display: inline-block;
-    width: 23%;
-    vertical-align: top;
-    text-align: right;
-}
 .user {
     padding: 15px;
     margin-top: 15px;
@@ -21,16 +29,29 @@
 }
 .name {
     margin-bottom: 10px;
+    font-weight: 700;
 }
 .chain {
     height: 36px;
 }
-.new-btn {
+.options {
     display: inline-block;
-    width: 37px;
-    padding: 10px;
-    margin-top: 10px;
-    cursor: pointer;
+    width: 23%;
+    vertical-align: top;
+}
+.btn {
+    width: 65px;
+    padding: 5px;
+    margin: auto;
+    text-align: center;
+    font-size: 14px;
     border: 1px solid black;
     border-radius: 5px;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #ddd;
+}
+.tweet {
+    margin-top: 5px;
 }
