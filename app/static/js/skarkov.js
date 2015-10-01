@@ -1,3 +1,6 @@
+require("../css/styles.css")
+$ = require("jquery")
+
 $('document').ready(function() {
   $('.btn.tweet').on('click', function(e) {
     var markov_id = $(this).data('markov-id');
