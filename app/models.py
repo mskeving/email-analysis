@@ -46,3 +46,11 @@ class Markov(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     chain = db.Column(db.Text())
     is_tweeted = db.Column(db.Boolean, default=False, nullable=False)
+
+    def to_api_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'chain': self.chain,
+            'is_tweeted': self.is_tweeted,
+        }
