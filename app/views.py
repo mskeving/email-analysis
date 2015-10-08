@@ -1,3 +1,5 @@
+import json
+
 from app import app, db
 from flask import render_template, request
 from lib.markov_generator import make_chain
@@ -5,29 +7,30 @@ from models import Markov, User
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.jade')
 
-@app.route('/markov')
+@app.route('/markov', methods=['GET'])
 def markov():
+    return render_template('markov_new.jade')
+
+@app.route('/get_markovs', methods=['POST'])
+def get_markovs():
     # on page load, get markov for every user
     users = User.query.all()
-    markovs = []
+    markov_dict = {}
 
     for user in users:
         chain = make_chain(user)
         new_markov = Markov(user_id=user.id, chain=chain)
-        db.session.add(new_markov)
-        db.session.commit()
-        db.session.refresh(new_markov)
-        markovs.append({
-            'username': user.name,
-            'obj': new_markov
-        })
+        # db.session.add(new_markov)
+        # db.session.commit()
+        # db.session.refresh(new_markov)
+        markov_dict[user.name] = new_markov.to_api_dict()
 
-    return render_template('markov.jade', markovs=markovs)
+    return json.dumps(markov_dict)
 
-@app.route('/get_markov', methods=['POST'])
-def get_markov():
+@app.route('/get_one_markov', methods=['POST'])
+def get_one_markov():
     form = request.form
     user_name = form.get('user_name', None)
     if not user_name:
