@@ -1,45 +1,43 @@
 React   = require('react')
+map     = require('lodash/collection/map')
 $       = require('jquery')
 $$      = React.DOM
 
 Chain = React.createFactory(require('./Chain.coffee'))
 
 module.exports = React.createClass
-  displayName: 'UserMarkov'
+  displayName: 'UserMarkovs'
 
   getInitialState: ->
-    d = {'missy': 'value'}
-    return d
+    markovs: []
 
   loadMarkovs: ->
-    self = @
     $.ajax
       url: '/get_markovs'
       type: 'POST'
-      success: (markov_dict) ->
-        for user_name, markov of markov_dict
-          new_state = {}
-          new_state[user_name] = markov
-          self.setState new_state
+      dataType: 'JSON'
+      success: (markovs) =>
+        @setState
+          markovs: markovs
       error: (e) ->
-        console.log(e)
+        alert "error retrieving Markov chains: #{e}"
 
   componentDidMount: ->
-    console.log "mounted"
     @loadMarkovs()
 
-  markovNodes: ->
-    if @state
-      chainNodes = for user_name, chain of @state
-        chain_dict = {}
-        chain_dict[user_name] = chain
-        Chain(chain_dict)
-      return chainNodes
+  renderChain: (markov_dict) ->
+    return Chain
+      user_name: markov_dict.user_name
+      chain: markov_dict.markov_dict.chain
+      id: markov_dict.markov_dict.id
+      key: markov_dict.markov_dict.user_id
 
   render: ->
-    $$.div className: "container",
+    chainNodes = map(@state.markovs, @renderChain)
+
+    return $$.div className: "container",
       $$.a
         className: "reference"
         href:"http://www.piliapp.com/twitter-symbols/",
           "User Symbols"
-      @markovNodes()
+      chainNodes

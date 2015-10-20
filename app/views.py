@@ -11,28 +11,30 @@ def index():
 
 @app.route('/markov', methods=['GET'])
 def markov():
-    return render_template('markov_new.jade')
+    return render_template('markov.jade')
 
 @app.route('/get_markovs', methods=['POST'])
 def get_markovs():
     # on page load, get markov for every user
     users = User.query.all()
-    markov_dict = {}
+    markovs = []
 
     for user in users:
         chain = make_chain(user)
         new_markov = Markov(user_id=user.id, chain=chain)
-        # db.session.add(new_markov)
-        # db.session.commit()
-        # db.session.refresh(new_markov)
-        markov_dict[user.name] = new_markov.to_api_dict()
+        db.session.add(new_markov)
+        db.session.commit()
+        db.session.refresh(new_markov)
+        markovs.append({
+            'user_name': user.name,
+            'markov_dict': new_markov.to_api_dict()
+        })
 
-    return json.dumps(markov_dict)
+    return json.dumps(markovs)
 
 @app.route('/get_one_markov', methods=['POST'])
 def get_one_markov():
-    form = request.form
-    user_name = form.get('user_name', None)
+    user_name = request.form.get('user_name', None)
     if not user_name:
         return "Error: No user name found"
     user = User.query.filter_by(name=user_name).first()
@@ -42,14 +44,17 @@ def get_one_markov():
     db.session.add(new_markov)
     db.session.commit()
 
-    return chain
+    return json.dumps(new_markov.to_api_dict())
 
 @app.route('/tweet', methods=['POST'])
 def tweet():
     markov_id = request.form.get('markov_id', None)
     markov = Markov.query.filter_by(id=markov_id)
+
     if not markov:
         return "no markov found"
+
     markov.is_tweeted = True
     db.session.commit()
+
     return "success"
