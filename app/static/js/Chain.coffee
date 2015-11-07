@@ -6,37 +6,15 @@ $$      = React.DOM
 module.exports = React.createClass
   displayName: 'Chain'
 
-  getInitialState: ->
-    # TODO: probably shouldn't keep state in here.
-    # just get the chain passed in as a prop from Markovs
-    chain: @props.chain
-    id: @props.id
-
-  getMarkov: ->
-    data =
-      user_name: @props.user_name
-
-    $.ajax
-      data: data
-      url: '/get_one_markov'
-      type: 'POST'
-      dataType: 'JSON'
-      success: (markov_dict) =>
-        @setState
-          chain: markov_dict.chain
-          id: markov_dict.id
-      error: (e) ->
-        alert "Error retrieving Markov chain: #{e}"
-
   tweetMarkov: ->
     data =
-      markov_id: @state.id
+      markov_id: @props.markov_info.markov_dict.id
     $.ajax
       data: data
       url: '/tweet'
       type: 'POST'
       success: =>
-        tweet_url = "http://twitter.com/home?status=\"#{@state.chain}\" - "
+        tweet_url = "http://twitter.com/home?status=\"#{@props.markov_info.markov_dict.chain}\" - "
 
         win = window.open(tweet_url, '_blank')
         if win
@@ -49,15 +27,18 @@ module.exports = React.createClass
 
   render: ->
     $$.div className: "user",
+      $$.img if @props.markov_info.markov_dict.is_legit
+        className: "legit"
+        src: "/static/images/legit-stamp.png"
       $$.div className: "chain-info",
         $$.div className: "name",
-          @props.user_name
+          @props.markov_info.user_name
         $$.div className: "chain",
-          @state.chain
+          @props.markov_info.markov_dict.chain
       $$.div className: "options",
         $$.div
           className: cls(['btn', 'new'])
-          onClick: @getMarkov,
+          onClick: @props.get_new_markov,
           "new"
         $$.div
           className: cls(['btn', 'tweet'])

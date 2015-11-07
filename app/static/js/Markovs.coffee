@@ -1,5 +1,5 @@
 React   = require('react')
-map     = require('lodash/collection/map')
+_       = require('lodash')
 $       = require('jquery')
 $$      = React.DOM
 
@@ -25,15 +25,31 @@ module.exports = React.createClass
   componentDidMount: ->
     @loadMarkovs()
 
-  renderChain: (markov_dict) ->
+  _get_new_markov: (user_name) ->
+    data =
+      user_name: user_name
+
+    $.ajax
+      data: data
+      url: '/get_one_markov'
+      type: 'POST'
+      dataType: 'JSON'
+      success: (markov_info) =>
+        new_markov_list = _.remove(@state.markovs, (m) -> m.user_name == username)
+        new_markov_list.push(markov_info)
+        @setState
+          markovs: new_markov_list
+      error: (e) ->
+        alert "Error retrieving Markov chain: #{e}"
+
+  renderChain: (markov_info) ->
     return Chain
-      user_name: markov_dict.user_name
-      chain: markov_dict.markov_dict.chain
-      id: markov_dict.markov_dict.id
-      key: markov_dict.markov_dict.user_id
+      markov_info: markov_info
+      get_new_markov: @_get_new_markov
+      key: markov_info.markov_dict.user_id
 
   render: ->
-    chainNodes = map(@state.markovs, @renderChain)
+    chainNodes = _.map(@state.markovs, @renderChain)
 
     return $$.div className: "container",
       $$.a

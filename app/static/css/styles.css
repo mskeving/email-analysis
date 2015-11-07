@@ -22,10 +22,19 @@ a:hover {
     width: 75%;
 }
 .user {
+    position: relative;
     padding: 15px;
     margin-top: 15px;
     border: 1px solid #ddd;
     border-radius: 3px;
+}
+img.legit {
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    width: 50px;
+    transform: rotate(35deg);
+    -webkit-transform: rotate(35deg);
 }
 .name {
     margin-bottom: 10px;

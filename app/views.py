@@ -49,7 +49,7 @@ def get_one_markov():
 @app.route('/tweet', methods=['POST'])
 def tweet():
     markov_id = request.form.get('markov_id', None)
-    markov = Markov.query.filter_by(id=markov_id)
+    markov = Markov.query.filter_by(id=markov_id).one()
 
     if not markov:
         return "no markov found"

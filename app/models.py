@@ -11,10 +11,23 @@ class User(db.Model):
     addresses = db.relationship('EmailAddress')
 
     def address_str(self):
-        # change list of addresses into a string to use as
-        # query parameter
+        '''
+        change list of addresses into a string to use as
+        query parameter'''
         email_addresses = [e.email_address for e in self.addresses]
-        return "(" + (" OR ").join(email_addresses) + ")"
+        return "(%s)" % (" OR ").join(email_addresses)
+
+    def all_pruned_text(self, user_id=None):
+        '''
+        returns a string of all the text one has written -
+        from the pruned version'''
+        if user_id is None:
+            user_id = self.id
+
+        msgs = Message.query.filter_by(sender=user_id).all()
+        get_pruned = lambda x: x.pruned if x.pruned else ''
+        pruned_text = map(get_pruned, msgs)
+        return (' ').join(pruned_text)
 
 
 class EmailAddress(db.Model):
@@ -47,10 +60,20 @@ class Markov(db.Model):
     chain = db.Column(db.Text())
     is_tweeted = db.Column(db.Boolean, default=False, nullable=False)
 
+    def is_legit(self, chain):
+        '''
+        we want to know if the chain is actually just a sentence
+        someone typed. If it is, we're not considering it a legit
+        markov chain. at least not for our tweeting purposes.'''
+        user = User.query.filter_by(id=self.user_id).first()
+        pruned_text = user.all_pruned_text(self.user_id)
+        return chain not in pruned_text
+
     def to_api_dict(self):
         return {
             'id': self.id,
             'user_id': self.user_id,
             'chain': self.chain,
             'is_tweeted': self.is_tweeted,
+            'is_legit': self.is_legit(self.chain),
         }
