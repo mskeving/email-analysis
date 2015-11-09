@@ -25,6 +25,9 @@ module.exports = React.createClass
       error: (e) ->
         alert "Error marking this chain as tweeted: #{e}"
 
+  _get_markov: ->
+    @props.get_new_markov(@props.markov_info.user_name)
+
   render: ->
     $$.div className: "user",
       $$.img if @props.markov_info.markov_dict.is_legit
@@ -38,7 +41,7 @@ module.exports = React.createClass
       $$.div className: "options",
         $$.div
           className: cls(['btn', 'new'])
-          onClick: @props.get_new_markov,
+          onClick: @_get_markov
           "new"
         $$.div
           className: cls(['btn', 'tweet'])

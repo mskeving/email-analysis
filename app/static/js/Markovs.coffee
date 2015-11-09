@@ -34,11 +34,15 @@ module.exports = React.createClass
       url: '/get_one_markov'
       type: 'POST'
       dataType: 'JSON'
-      success: (markov_info) =>
-        new_markov_list = _.remove(@state.markovs, (m) -> m.user_name == username)
-        new_markov_list.push(markov_info)
+      success: (markov_dict) =>
+        # find the index of the markov to change based on user name
+        # and update that. Can't remove and append new one
+        # because it will change the order.
+        markovs = @state.markovs
+        idx = _.indexOf(markovs, _.find(markovs, {user_name: user_name}))
+        markovs[idx].markov_dict = markov_dict
         @setState
-          markovs: new_markov_list
+          markovs: markovs
       error: (e) ->
         alert "Error retrieving Markov chain: #{e}"
 
