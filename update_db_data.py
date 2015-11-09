@@ -41,11 +41,12 @@ def generate_query(sender=None,
                    recipient_addresses=None,
                    labels_to_exclude=''):
     """ recipient_addresses comes in as a list of email addresses.
-        sender is a user instance """
+    sender is a user instance. These queries correspond to what you
+    would type in your gmail search field."""
     if not sender or not recipient_addresses:
         return "Cannot generate query without sender or recipients"
 
-    recipients = "(" + (" AND ").join(recipient_addresses) + ")"
+    recipients = "(%s)" % ((" AND ").join(recipient_addresses))
     return ("from:(%s) to: (%s) -label:%s" %
             (sender.address_str(), recipients, labels_to_exclude))
 
@@ -53,7 +54,10 @@ def generate_query(sender=None,
 def add_messages():
     """ First, messages.list() for each family member to
     get all messages and their ids. Once we have all
-    the ids, we can messages.get() to insert into db """
+    the ids, we can messages.get() to insert into db.
+
+    We will only add new messages. This checks for existing
+    message id's and skips them. """
     all_message_ids = []
     queries = []
     existing_message_ids = [m.message_id for m in Message.query.all()]
@@ -68,7 +72,8 @@ def add_messages():
         recipients = [user.address_str() for user in family_list if user.name != sender.name]
         queries.append(generate_query(sender, recipients, "chats"))
 
-    # messages.list() section
+    # messages.list() section. This gets you the IDs. To get more detailed information
+    # need to do messages.get() with that ID.
     print ("Running queries...")
     for query in queries:
         try:
@@ -92,6 +97,7 @@ def add_messages():
 
     # messages.get() section
     message_infos = []
+    commited_messages_count = 0
     print ("Getting messages...")
     for i, message_id in enumerate(all_message_ids):
         if message_id in existing_message_ids:
@@ -119,6 +125,8 @@ def add_messages():
                     subject = header['value'] if header['value'] else '(no subject)'
                     message_info['subject'] = subject
                 if header['name'] == "From":
+                    # comes in as "FirstName LastName <email@address.com>". Take whatever's in the
+                    # brackets to get the email address.
                     regex = re.compile('<(.*?)>')
                     try:
                         email_address = regex.findall(header['value'])[0].lower()
@@ -141,40 +149,36 @@ def add_messages():
                         message_info['pruned'] = prune_junk_from_message(message_info['body']).decode('utf-8')
             message_infos.append(message_info)
 
-            if len(message_infos) == 25:
-                # commit in chunks so I don't have to start from scratch.
+            # commit in chunks so I don't have to start from scratch.
+            chunk_size = 25
+            if len(message_infos) == chunk_size or i >= len(all_message_ids) - chunk_size:
+                # the second part of this if statements is so that if all_message_ids is not evenly
+                # divisible by chunk_size, it will get the remainder. But, it means that it will do
+                # chunk_size commits for the last chunk. (if there are 10 remaining, it will be 10
+                # individual commits)
                 for m in message_infos:
                     new_message = Message(
-                            message_id=m['id'],
-                            thread_id=m['thread_id'],
-                            data=m['data'],
-                            sender=m['sender'],
-                            body=m['body'],
-                            pruned=m['pruned'],
-                            subject=m['subject'],
-                            send_time=m['send_time'],
-                            recipients=m['recipients'])
+                        message_id=m['id'],
+                        thread_id=m['thread_id'],
+                        data=m['data'],
+                        sender=m['sender'],
+                        body=m['body'],
+                        pruned=m['pruned'],
+                        subject=m['subject'],
+                        send_time=m['send_time'],
+                        recipients=m['recipients'],
+                    )
                     db.session.add(new_message)
-                print ("committing 25 messages. %d to go") % (len(all_message_ids) - i)
+                print ("committing %d messages. %d to go") % (chunk_size, len(all_message_ids) - i)
                 db.session.commit()
+                commited_messages_count += len(message_infos)
+                # banking on the fact that all_message_ids % chunk_size != 0
+                if message_infos < chunk_size:
+                    print ("Finished adding %d new messages") % (commited_messages_count)
                 message_infos = []
 
         except errors.HttpError as error:
             print ('An error occurred: %s') % error
-
-    for m in message_infos:
-        new_message = Message(
-                message_id=m['id'],
-                thread_id=m['thread_id'],
-                data=m['data'],
-                sender=m['sender'],
-                body=m['body'],
-                pruned=m['pruned'],
-                subject=m['subject'],
-                send_time=m['send_time'],
-                recipients=m['recipients'])
-        db.session.add(new_message)
-    db.session.commit()
 
 
 def save_markov_info():
@@ -220,8 +224,8 @@ def save_markov_info():
 
 
 def main():
-    # create_users()
-    # add_messages()
+    create_users()
+    add_messages()
     save_markov_info()
 
 
