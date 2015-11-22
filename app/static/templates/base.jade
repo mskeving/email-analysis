@@ -1,8 +1,7 @@
 html(lang="en")
   head
     link(rel="stylesheet", type="text/css", href="https://fonts.googleapis.com/css?family=Roboto:400,700,300")
-    script(type="text/javascript", src="{{ url_for('static', filename='js/bundle.js') }}")
+    script(type="text/javascript", src="/static/js/build/#{js_filename}")
 
-    title Skarkov
   body
-    block content
+    #content

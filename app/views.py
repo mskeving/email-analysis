@@ -9,9 +9,13 @@ from models import Markov, User
 def index():
     return render_template('index.jade')
 
+@app.route('/stats', methods=['GET'])
+def stats():
+    return render_template('base.jade', js_filename='stats.bundle.js')
+
 @app.route('/markov', methods=['GET'])
 def markov():
-    return render_template('markov.jade')
+    return render_template('base.jade', js_filename='skarkov.bundle.js')
 
 @app.route('/get_markovs', methods=['POST'])
 def get_markovs():

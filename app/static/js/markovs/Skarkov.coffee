@@ -1,5 +1,6 @@
-require("../css/styles.css")
-React = require("react")
+require("../../css/skarkov.css")
+
+React   = require("react")
 Markovs = React.createFactory(require('./Markovs.coffee'))
 
 window.onload = ->
