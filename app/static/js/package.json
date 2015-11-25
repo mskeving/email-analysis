@@ -2,6 +2,7 @@
   "name": "skarkov",
   "private": true,
   "devDependencies": {
+    "d3": "^3.5.9",
     "webpack": "^1.11.0"
   },
   "dependencies": {

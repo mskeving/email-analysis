@@ -1,7 +1,7 @@
 module.exports = {
     entry: {
         skarkov: "../markovs/Skarkov.coffee",
-        stats: "../Stats.coffee"
+        stats: "../stats/Stats.coffee"
     },
     output: {
         path: __dirname,
