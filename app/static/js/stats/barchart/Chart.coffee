@@ -6,6 +6,7 @@ module.exports = React.createClass
 
   render: ->
     $$.svg
+      className: "bar-chart"
       width: @props.width
       height: @props.height,
       @props.children

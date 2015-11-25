@@ -29,6 +29,13 @@ class User(db.Model):
         pruned_text = map(get_pruned, msgs)
         return (' ').join(pruned_text)
 
+    def count_number_of(self, str_to_match):
+        if not str_to_match:
+            return "no string provided"
+        pruned_text = self.all_pruned_text()
+        if not pruned_text:
+            return "There was no text found for %s" % (self.name)
+        return pruned_text.count(str_to_match)
 
 class EmailAddress(db.Model):
     __tablename__ = "addresses"

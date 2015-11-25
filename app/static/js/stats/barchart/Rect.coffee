@@ -44,12 +44,15 @@ module.exports = React.createClass
   render: ->
     easyeasy = d3.ease('back-out');
     height = @state.height + (@props.height - @state.height) * easyeasy(Math.min(1, @state.milliseconds/1000))
-    # height = @state.height + (@props.height - @state.height) * easyeasy(2)
     y = @props.height - height + @props.y
-    # debugger
-    return $$.rect
-      className: "bar"
-      height: height
-      y: y
-      width: @props.width
-      x: @props.x
+    return $$.g null,
+      $$.rect
+        className: "bar"
+        height: height
+        y: y
+        width: @props.width
+        x: @props.x
+      $$.text
+        x: @props.x + 10
+        y: @props.height + @props.y + 15,
+        @props.label

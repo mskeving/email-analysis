@@ -13,6 +13,15 @@ def index():
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
 
+@app.route('/stats/get_count', methods=['GET'])
+def get_count():
+    all_users = User.query.all()
+    string_to_match = '!'
+    data = {'values':[]}
+    for u in all_users:
+        data['values'].append({'x': u.name, 'y': u.count_number_of(string_to_match)})
+    return json.dumps(data)
+
 @app.route('/markov', methods=['GET'])
 def markov():
     return render_template('base.jade', js_filename='skarkov.bundle.js')

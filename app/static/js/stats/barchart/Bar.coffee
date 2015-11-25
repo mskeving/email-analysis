@@ -27,8 +27,8 @@ module.exports = React.createClass
       .domain(d3.range(props.data.length))
       .rangeRoundBands([0, props.width], .05)
 
-    bars = data.map((point, i) ->
-      height = yScale(point)
+    bars = @props.data.map((point, i) ->
+      height = yScale(point.y)
       y = props.height - height
       width = xScale.rangeBand()
       x = xScale(i)
@@ -39,7 +39,8 @@ module.exports = React.createClass
         x: x
         y: y
         key: i
+        label: point.x
     )
 
-    $$.g null,
+    return $$.g null,
       bars
