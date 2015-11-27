@@ -25,3 +25,13 @@ svg.bar-chart {
   margin-left: 10px;
   cursor: pointer;
 }
+
+.btn-search {
+  display: inline-block;
+  margin-left: 20px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+}

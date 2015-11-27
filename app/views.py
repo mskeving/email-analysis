@@ -16,7 +16,9 @@ def stats():
 @app.route('/stats/get_count', methods=['GET'])
 def get_count():
     all_users = User.query.all()
-    string_to_match = '!'
+    string_to_match = request.args.get('string_to_match')
+    if not string_to_match:
+        return json.dumps({})
     data = {'values':[]}
     for u in all_users:
         data['values'].append({'x': u.name, 'y': u.count_number_of(string_to_match)})

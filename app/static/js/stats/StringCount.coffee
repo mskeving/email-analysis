@@ -29,30 +29,27 @@ module.exports = React.createClass
       dataType: 'JSON'
       url: "/stats/get_count"
       success: (data) =>
+        console.log data
         @setState
           data: data.values
       error: (e) ->
         console.log "error: #{e}"
 
-  showAll: ->
-    @setState
-      data: [
-        {x: "missy", y: 1}
-        {x: "crysty", y: 2}
-        {x: "jen", y: 3}
-        {x: "mary", y: 4}
-      ]
+  _new_search: ->
+    str = document.getElementById('search-str').value
+    @query(str)
 
   render: ->
     $$.div null,
-      $$.div className: "selection",
-        $$.ul null,
-          $$.li
-            onClick: @new_search,
-            "missy"
-          $$.li
-            onClick: @new_search,
-            "jen"
+      $$.div null,
+        $$.input
+          id: "search-str"
+          type: "text"
+        $$.div
+          id: "btn-search-str"
+          className: "btn-search"
+          onClick: @_new_search,
+          "search"
       Chart
         width: @props.width
         height: @props.height,

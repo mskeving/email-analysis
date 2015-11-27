@@ -43,16 +43,21 @@ module.exports = React.createClass
 
   render: ->
     easyeasy = d3.ease('back-out');
-    height = @state.height + (@props.height - @state.height) * easyeasy(Math.min(1, @state.milliseconds/1000))
-    y = @props.height - height + @props.y
+    bar_height = @state.height + (@props.height - @state.height) * easyeasy(Math.min(1, @state.milliseconds/1000))
+    y_value_height = @props.y * easyeasy(Math.min(1, @state.milliseconds/1000))
+    y = @props.height - bar_height + @props.y
     return $$.g null,
       $$.rect
         className: "bar"
-        height: height
+        height: bar_height
         y: y
         width: @props.width
         x: @props.x
       $$.text
         x: @props.x + 10
         y: @props.height + @props.y + 15,
-        @props.label
+        @props.x_value
+      $$.text
+        x: @props.x + 15
+        y: y_value_height
+        @props.y_value
