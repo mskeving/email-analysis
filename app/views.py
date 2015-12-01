@@ -19,7 +19,10 @@ def get_count():
     string_to_match = request.args.get('string_to_match')
     if not string_to_match:
         return json.dumps({})
-    data = {'values':[]}
+    data = {
+        'values':[],
+        'search_str': string_to_match
+    }
     for u in all_users:
         data['values'].append({'x': u.name, 'y': u.count_number_of(string_to_match)})
     return json.dumps(data)

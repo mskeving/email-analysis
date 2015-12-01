@@ -1,9 +1,15 @@
 React   = require('react')
+_       = require('lodash')
 $       = require('jquery')
 $$      = React.DOM
 
-Chart = React.createFactory(require('./barchart/Chart.coffee'))
-Bar   = React.createFactory(require('./barchart/Bar.coffee'))
+Bar            = React.createFactory(require('./barchart/Bar.coffee'))
+Chart          = React.createFactory(require('./barchart/Chart.coffee'))
+SearchOption   = React.createFactory(require('./SearchOption.coffee'))
+
+SAVED_SEARCHES = [
+  "!", "haha", "wine", "drunk", "family", "friends", "wine", "dog"
+]
 
 module.exports = React.createClass
   displayName: 'StringCount'
@@ -14,6 +20,7 @@ module.exports = React.createClass
 
   getInitialState: ->
     data: []
+    chart_title: ""
 
   componentDidMount: ->
     @query('!')
@@ -29,30 +36,48 @@ module.exports = React.createClass
       dataType: 'JSON'
       url: "/stats/get_count"
       success: (data) =>
-        console.log data
         @setState
           data: data.values
-      error: (e) ->
-        console.log "error: #{e}"
+          chart_title: "Matches for \"#{str}\""
+      error: (e) =>
+        @setState
+          data: []
+          title: "Error with this search"
 
   _new_search: ->
     str = document.getElementById('search-str').value
     @query(str)
 
+  _saved_search: (str) ->
+    @query(str)
+
+  _render_search_option: (str) ->
+    return SearchOption
+      onClick: @_saved_search
+      searchStr: str
+
   render: ->
     $$.div null,
-      $$.div null,
-        $$.input
-          id: "search-str"
-          type: "text"
+      $$.div
+        className: "search-option-container",
+        _.map(SAVED_SEARCHES, @_render_search_option)
         $$.div
-          id: "btn-search-str"
-          className: "btn-search"
-          onClick: @_new_search,
-          "search"
+          className: 'search-custom',
+          $$.div
+            className: "search-custom-label",
+            "Custom: "
+          $$.input
+            id: "search-str"
+            type: "text"
+          $$.div
+            id: "btn-search-str"
+            className: "btn-search"
+            onClick: @_new_search,
+            "search"
       Chart
         width: @props.width
-        height: @props.height,
+        height: @props.height
+        title: @state.chart_title,
         Bar
           data: @state.data
           width: @props.width

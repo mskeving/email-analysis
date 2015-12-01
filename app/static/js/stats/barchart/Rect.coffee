@@ -1,4 +1,5 @@
 React   = require('react')
+_       = require('lodash')
 d3      = require('d3')
 $$      = React.DOM
 
@@ -42,14 +43,14 @@ module.exports = React.createClass
       milliseconds: @state.milliseconds + 10
 
   render: ->
-    easyeasy = d3.ease('back-out');
+    easyeasy = d3.ease('back-out')
     bar_height = @state.height + (@props.height - @state.height) * easyeasy(Math.min(1, @state.milliseconds/1000))
     y_value_height = @props.y * easyeasy(Math.min(1, @state.milliseconds/1000))
     y = @props.height - bar_height + @props.y
     return $$.g null,
       $$.rect
         className: "bar"
-        height: bar_height
+        height: _.max([bar_height, 0])
         y: y
         width: @props.width
         x: @props.x
@@ -58,6 +59,6 @@ module.exports = React.createClass
         y: @props.height + @props.y + 15,
         @props.x_value
       $$.text
-        x: @props.x + 15
-        y: y_value_height
+        x: @props.x + 20
+        y: _.max([y_value_height - 10, 0])
         @props.y_value

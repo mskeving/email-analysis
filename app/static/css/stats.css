@@ -2,6 +2,17 @@ body {
   font-family: helvetica, arial, sans-serif;  
 }
 
+.bar-chart-container {
+  display: inline-block;
+  margin: 30px;
+}
+
+.bar-chart-title {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+}
+
 svg.bar-chart {
 	padding: 50px;
 }
@@ -23,6 +34,32 @@ svg.bar-chart {
   display: inline;
   text-decoration: none;
   margin-left: 10px;
+  cursor: pointer;
+}
+
+.search-option-container {
+  width: 500px;
+  margin-top: 15px;
+  margin-left: 30px;
+  text-align: center;
+}
+
+.search-custom {
+  display: block;
+}
+
+.search-custom-label {
+  display: inline-block;
+  margin-right: 12px;
+}
+
+.search-option {
+  display: inline-block;
+  padding: 5px 26px;
+  margin: 10px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
   cursor: pointer;
 }
 
