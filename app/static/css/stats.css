@@ -2,14 +2,28 @@ body {
   font-family: helvetica, arial, sans-serif;  
 }
 
+.str-count-container {
+  width: 90%;
+  min-width: 525px;
+  margin: auto;
+}
+
 .bar-chart-container {
   display: inline-block;
-  margin: 30px;
+  width: 50%;
+  min-width: 525px;
+  text-align: center;
 }
 
 .bar-chart-title {
   text-align: center;
   font-size: 2em;
+  font-weight: bold;
+}
+
+.bar-chart-subtitle {
+  text-align: center;
+  font-size: 1em;
   font-weight: bold;
 }
 
@@ -37,10 +51,9 @@ svg.bar-chart {
   cursor: pointer;
 }
 
-.search-option-container {
-  width: 500px;
-  margin-top: 15px;
-  margin-left: 30px;
+.search-options-container {
+  width: 60%;
+  margin: 30px auto;
   text-align: center;
 }
 
@@ -51,6 +64,12 @@ svg.bar-chart {
 .search-custom-label {
   display: inline-block;
   margin-right: 12px;
+}
+
+.search-custom input {
+  width: 200px;
+  padding: 6px;
+  border-radius: 5px;
 }
 
 .search-option {

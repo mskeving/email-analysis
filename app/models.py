@@ -35,7 +35,11 @@ class User(db.Model):
         pruned_text = self.all_pruned_text()
         if not pruned_text:
             return "There was no text found for %s" % (self.name)
-        return pruned_text.count(str_to_match)
+
+        return {
+            'case_sensitive': pruned_text.count(str_to_match),
+            'case_insensitive': pruned_text.lower().count(str_to_match.lower())
+        }
 
 class EmailAddress(db.Model):
     __tablename__ = "addresses"

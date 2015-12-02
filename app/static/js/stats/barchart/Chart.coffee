@@ -10,6 +10,9 @@ module.exports = React.createClass
       $$.div
         className: "bar-chart-title",
         @props.title
+      $$.div
+        className: "bar-chart-subtitle",
+        @props.subtitle
       $$.svg
         className: "bar-chart"
         width: @props.width

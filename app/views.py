@@ -15,16 +15,26 @@ def stats():
 
 @app.route('/stats/get_count', methods=['GET'])
 def get_count():
-    all_users = User.query.all()
     string_to_match = request.args.get('string_to_match')
     if not string_to_match:
         return json.dumps({})
+
     data = {
-        'values':[],
+        'case_sensitive_counts': [],
+        'case_insensitive_counts': [],
         'search_str': string_to_match
     }
+
+    all_users = User.query.all()
     for u in all_users:
-        data['values'].append({'x': u.name, 'y': u.count_number_of(string_to_match)})
+        # For each user, we need both x and y axis labels (user name and
+        # word count, respectively) for both case-sensitive and insensitive
+        count_case_sensitive = u.count_number_of(string_to_match)['case_sensitive']
+        count_case_insensitive = u.count_number_of(string_to_match)['case_insensitive']
+
+        data['case_sensitive_counts'].append({'x': u.name, 'y': count_case_sensitive})
+        data['case_insensitive_counts'].append({'x': u.name, 'y': count_case_insensitive})
+
     return json.dumps(data)
 
 @app.route('/markov', methods=['GET'])
