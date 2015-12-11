@@ -84,15 +84,6 @@ module.exports = React.createClass
       Chart
         width: @props.width
         height: @props.height
-        title: @state.chart_title,
-        subtitle: "Case Sensitive" if @state.chart_title != ""
-        Bar
-          data: @state.case_sensitive_counts
-          width: @props.width
-          height: @props.height
-      Chart
-        width: @props.width
-        height: @props.height
         title: @state.chart_title
         subtitle: "Case Insensitive" if @state.chart_title != "",
         Bar
