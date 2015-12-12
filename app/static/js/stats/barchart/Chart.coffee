@@ -4,6 +4,12 @@ $$      = React.DOM
 module.exports = React.createClass
   displayName: 'Chart'
 
+  getDefaultProps: ->
+    title: "Chart Title"
+    subtitle: ""
+    width: 500
+    height: 500
+
   render: ->
     $$.div 
       className: "bar-chart-container",

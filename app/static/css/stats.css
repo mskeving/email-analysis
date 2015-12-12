@@ -3,7 +3,8 @@ body {
 }
 
 .str-count-container {
-  width: 90%;
+  display: inline-block;
+  width: 50%;
   min-width: 525px;
   margin: auto;
 }

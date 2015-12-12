@@ -1,6 +1,6 @@
 require("../../css/stats.css")
 React       = require("react")
-StringCount = React.createFactory(require('./StringCount.coffee'))
+StatDisplay = React.createFactory(require('./StatDisplay.coffee'))
 
 window.onload = ->
-  React.render(StringCount(), window.document.getElementById('content'))
+  React.render(StatDisplay(), window.document.getElementById('content'))

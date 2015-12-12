@@ -13,6 +13,16 @@ def index():
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
 
+@app.route('/stats/get_message_count', methods=['GET'])
+def get_message_count():
+    '''For each user, get the total number of messages they have sent'''
+    all_users = User.query.all()
+    data = []
+    for u in all_users:
+        data.append({'x': u.name, 'y': u.message_count()})
+
+    return json.dumps(data)
+
 @app.route('/stats/get_count', methods=['GET'])
 def get_count():
     string_to_match = request.args.get('string_to_match')
@@ -20,20 +30,16 @@ def get_count():
         return json.dumps({})
 
     data = {
-        'case_sensitive_counts': [],
-        'case_insensitive_counts': [],
+        'user_to_str_counts': [],
         'search_str': string_to_match
     }
 
     all_users = User.query.all()
     for u in all_users:
         # For each user, we need both x and y axis labels (user name and
-        # word count, respectively) for both case-sensitive and insensitive
-        count_case_sensitive = u.count_number_of(string_to_match)['case_sensitive']
-        count_case_insensitive = u.count_number_of(string_to_match)['case_insensitive']
-
-        data['case_sensitive_counts'].append({'x': u.name, 'y': count_case_sensitive})
-        data['case_insensitive_counts'].append({'x': u.name, 'y': count_case_insensitive})
+        # word count, respectively). For now we're just showing case-insensitve results
+        user_to_str_counts = u.count_number_of(string_to_match)['case_insensitive']
+        data['user_to_str_counts'].append({'x': u.name, 'y': user_to_str_counts})
 
     return json.dumps(data)
 

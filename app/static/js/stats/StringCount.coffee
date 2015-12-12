@@ -17,44 +17,20 @@ module.exports = React.createClass
   getDefaultProps: ->
     width: 500
     height: 500
-
-  getInitialState: ->
-    case_sensitive_counts: []
-    case_insensitive_counts: []
+    data: []
     chart_title: ""
 
   componentDidMount: ->
-    @query('!')
-
-  query: (str) ->
-    data = {
-      string_to_match: str
-    }
-
-    $.ajax
-      type: "GET"
-      data: data
-      dataType: 'JSON'
-      url: "/stats/get_count"
-      success: (data) =>
-        @setState
-          case_sensitive_counts: data.case_sensitive_counts
-          case_insensitive_counts: data.case_insensitive_counts
-          chart_title: "Matches for \"#{str}\""
-
-      error: (e) =>
-        @setState
-          data: []
-          title: "Error with this search"
+    @props.get_data('!')
 
   _new_search: ->
     str = document.getElementById('search-str').value
-    @query(str)
+    @props.get_data(str)
 
   _saved_search: (str) ->
     # if you click on a saved search, clear input box
     document.getElementById('search-str').value = ""
-    @query(str)
+    @props.get_data(str)
 
   _render_search_option: (str, i) ->
     return SearchOption
@@ -84,9 +60,9 @@ module.exports = React.createClass
       Chart
         width: @props.width
         height: @props.height
-        title: @state.chart_title
-        subtitle: "Case Insensitive" if @state.chart_title != "",
+        title: @props.chart_title
+        subtitle: @props.chart_sub_title
         Bar
-          data: @state.case_insensitive_counts
+          data: @props.data
           width: @props.width
           height: @props.height
