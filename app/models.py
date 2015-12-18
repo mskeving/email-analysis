@@ -1,7 +1,9 @@
 import re
 from collections import Counter
+from nltk.tokenize import word_tokenize
 
 from app import db
+from app.lib.helper import parse_recipients
 
 
 class User(db.Model):
@@ -19,16 +21,18 @@ class User(db.Model):
         email_addresses = [e.email_address for e in self.addresses]
         return "(%s)" % (" OR ").join(email_addresses)
 
-    def all_pruned_text(self, user_id=None):
+    def all_pruned_text(self):
         '''returns a string of all the text one has written -
         from the pruned version'''
-        if user_id is None:
-            user_id = self.id
-
-        msgs = Message.query.filter_by(sender=user_id).all()
+        msgs = Message.query.filter_by(sender=self.id).all()
         get_pruned = lambda x: x.pruned if x.pruned else ''
         pruned_text = map(get_pruned, msgs)
         return (' ').join(pruned_text)
+
+    def word_list(self):
+        text = self.all_pruned_text()
+        words = word_tokenize(text)
+        return words
 
     def count_number_of(self, str_to_match):
         '''pass in a string and this will count how many times it shows
@@ -39,23 +43,40 @@ class User(db.Model):
             return "There was no text found for %s" % (self.name)
 
         return {
-            'case_sensitive': pruned_text.count(str_to_match),
-            'case_insensitive': pruned_text.lower().count(str_to_match.lower())
+            'case_sensitive': int(pruned_text.count(str_to_match)),
+            'case_insensitive':int( pruned_text.lower().count(str_to_match.lower()))
         }
 
     def message_count(self):
-        return Message.query.filter_by(sender=self.id).count()
+        '''The number of unique messages this user has sent.'''
+        return int(Message.query.filter_by(sender=self.id).count())
 
     def word_count(self):
-        '''This just takes all_pruned_text and splits it on the spaces.
-        I'm sure the nltk library has more accurate word count...
+        '''Take all_pruned_text and and let word_tokenize split it up
+        into words. Get rid of punctuation.
         '''
-        text = self.all_pruned_text()
-        words = text.split(' ')
-        return len(words)
+        words = self.word_list()
+        non_punct = re.compile('.*[A-Za-z0-9].*') # must contain letter or digit
+        filtered = [w for w in text if non_punct.match(w)]
+
+        return len(filtered)
+
+    def num_words_all_caps(self):
+        words = self.word_list()
+        return len([w for w in words if w.isupper()])
+
+    def num_swear_words(self):
+        f = open('app/lib/badwords.txt')
+        bad_words = f.read().split('\r\n')
+
+        users_words = self.word_list()
+        users_bad_words = [w.lower() for w in users_words if w.lower() in bad_words]
+
+        return Counter(users_bad_words)
 
     def avg_word_count_per_message(self):
-        return self.word_count / self.message_count
+        average = self.word_count() / self.message_count()
+        return average
 
     def response_percentages(self):
         '''From here you should be able to tell favorites by seeing who this person
@@ -68,20 +89,15 @@ class User(db.Model):
         }
 
         '''
-        # recipients come in the form "person_name <person@email.com>".
-        # we just want a list of addresses out of that between the <>.
-        regex = re.compile('<(.*?)>')
-
         # Get a count of number of replies to unique email addresses.
         # We're only going to take the first email address that shows up
         # in message.recipients, because they're the 'true' recipient
         messages_sent = Message.query.filter_by(sender=self.id).all()
         recipients = []
         for message in messages_sent:
-            try:
-                recipients.append(regex.findall(message.recipients)[0])
-            except:
-                continue
+            msg_recipients = parse_recipients(message)
+            if msg_recipients:
+                recipients.append(msg_recipients[0])
 
         resp_counts = Counter(recipients)
 
@@ -146,6 +162,23 @@ class Message(db.Model):
                             ).all()
         return len(unique_threads)
 
+    @classmethod
+    def outsiders(cls):
+        '''find all other email addresses on threads that are not included
+        in EmailAddress. We don't have cc info in here, so it's possible
+        there are others we're missing here.'''
+        all_messages = cls.query.all()
+        our_emails = [e.email_address.lower() for e in EmailAddress.query.all()]
+        outsider_emails = []
+
+        for msg in all_messages:
+            recipients = parse_recipients(msg)
+            outsider_emails += [r.lower() for r in recipients if r.lower() not in our_emails]
+
+        # depending on what's used to create a word cloud, this could become
+        # (' ').join(outsider_emails) so it's just a string of recipients
+        return Counter(outsider_emails)
+
 
 class Markov(db.Model):
     __tablename__ = "markovs"
@@ -159,7 +192,7 @@ class Markov(db.Model):
         someone typed. If it is, we're not considering it a legit
         markov chain. at least not for our tweeting purposes.'''
         user = User.query.filter_by(id=self.user_id).first()
-        pruned_text = user.all_pruned_text(self.user_id)
+        pruned_text = user.all_pruned_text()
         return chain not in pruned_text
 
     def to_api_dict(self):
