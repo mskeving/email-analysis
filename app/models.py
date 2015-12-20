@@ -163,6 +163,15 @@ class Message(db.Model):
         return len(unique_threads)
 
     @classmethod
+    def timezone_counter(cls):
+        all_messages = cls.query.all()
+        timezones = []
+        for m in all_messages:
+            if m.send_time:
+                timezones.append(m.send_time.split(' ')[-1])
+        return Counter(timezones)
+
+    @classmethod
     def outsiders(cls):
         '''find all other email addresses on threads that are not included
         in EmailAddress. We don't have cc info in here, so it's possible
