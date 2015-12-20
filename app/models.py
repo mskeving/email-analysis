@@ -137,6 +137,7 @@ class Message(db.Model):
     body = db.Column(db.Text())
     subject = db.Column(db.Text())
     send_time = db.Column(db.String(64))
+    send_time_unix = db.Column(db.String(64))
     pruned = db.Column(db.Text())
     recipients = db.Column(db.Text()) # this only includes to: and not cc:
 

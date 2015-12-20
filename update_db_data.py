@@ -5,11 +5,13 @@ import json
 import nltk.data
 
 from apiclient import errors
+from email.utils import parsedate_tz, mktime_tz
+from nltk.tokenize import word_tokenize
+from collections import defaultdict
+
 from app.lib.gmail_api import GmailApi
 from app.data.settings import family_list, prune_junk_from_message
 from app.models import User, EmailAddress, Message
-from nltk.tokenize import word_tokenize
-from collections import defaultdict
 
 db = app.db
 service = GmailApi().get_service()
@@ -157,6 +159,9 @@ def add_messages():
                 # chunk_size commits for the last chunk. (if there are 10 remaining, it will be 10
                 # individual commits)
                 for m in message_infos:
+                    time = parsedate_tz(m['send_time'])
+                    unix_timestamp = mktime_tz(time)
+
                     new_message = Message(
                         message_id=m['id'],
                         thread_id=m['thread_id'],
@@ -166,6 +171,7 @@ def add_messages():
                         pruned=m['pruned'],
                         subject=m['subject'],
                         send_time=m['send_time'],
+                        send_time_unix=unix_timestamp,
                         recipients=m['recipients'],
                     )
                     db.session.add(new_message)
