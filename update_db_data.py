@@ -21,6 +21,8 @@ def create_users():
     existing_users = [u.name for u in User.query.all()]
     for user in family_list:
         if user.name in existing_users:
+            # note: this means you won't be able to update a new user,
+            # for example if they have a new email address.
             print ("Can't create user %s. Already exists") % user.name
 
         else:
@@ -72,7 +74,7 @@ def add_messages():
         # include all family members
         sender = users.pop() # keep family_list intact to get recipient list
         recipients = [user.address_str() for user in family_list if user.name != sender.name]
-        queries.append(generate_query(sender, recipients, "chats"))
+        queries.append(generate_query(sender, recipients, labels_to_exclude="chats"))
 
     # messages.list() section. This gets you the IDs. To get more detailed information
     # need to do messages.get() with that ID.
@@ -100,12 +102,10 @@ def add_messages():
     # messages.get() section
     message_infos = []
     commited_messages_count = 0
-    print ("Getting messages...")
-    for i, message_id in enumerate(all_message_ids):
-        if message_id in existing_message_ids:
-            print ("already have message %s") % message_id
-            continue
+    new_messages = [x for x in all_message_ids if x not in existing_message_ids]
 
+    print ("Getting messages...")
+    for i, message_id in enumerate(new_messages):
         message_info = {'id': message_id,
                         'data': None,
                         'thread_id': None,
@@ -153,12 +153,15 @@ def add_messages():
 
             # commit in chunks so I don't have to start from scratch.
             chunk_size = 25
-            if len(message_infos) == chunk_size or i >= len(all_message_ids) - chunk_size:
+            if len(message_infos) == chunk_size or i >= len(new_messages) - chunk_size:
                 # the second part of this if statements is so that if all_message_ids is not evenly
                 # divisible by chunk_size, it will get the remainder. But, it means that it will do
                 # chunk_size commits for the last chunk. (if there are 10 remaining, it will be 10
                 # individual commits)
                 for m in message_infos:
+                    if not m['send_time']:
+                        print ("no send_time for message_id: %s") % m['id']
+                        continue
                     time = parsedate_tz(m['send_time'])
                     unix_timestamp = mktime_tz(time)
 
@@ -175,7 +178,7 @@ def add_messages():
                         recipients=m['recipients'],
                     )
                     db.session.add(new_message)
-                print ("committing %d messages. %d to go") % (chunk_size, len(all_message_ids) - i)
+                print ("committing %d messages. %d to go") % (len(message_infos), len(all_message_ids) - i)
                 db.session.commit()
                 commited_messages_count += len(message_infos)
                 # banking on the fact that all_message_ids % chunk_size != 0
