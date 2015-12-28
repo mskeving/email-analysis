@@ -2,7 +2,9 @@
   "name": "skarkov",
   "private": true,
   "devDependencies": {
+    "css-loader": "^0.23.1",
     "d3": "^3.5.9",
+    "style-loader": "^0.13.0",
     "webpack": "^1.11.0"
   },
   "dependencies": {
