@@ -24,7 +24,7 @@ module.exports = React.createClass
       url: "/stats/get_count"
       success: (data) =>
         @setState
-          str_count: data.user_to_str_counts
+          str_count: data.usr_to_str_counts
           str_count_chart_title: "Matches for \"#{str}\""
           str_count_subtitle: "Case Insensitive"
 

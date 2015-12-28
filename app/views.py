@@ -5,13 +5,16 @@ from flask import render_template, request
 from lib.markov_generator import make_chain
 from models import Markov, User
 
+
 @app.route('/')
 def index():
     return render_template('index.jade')
 
+
 @app.route('/stats', methods=['GET'])
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
+
 
 @app.route('/stats/get_message_count', methods=['GET'])
 def get_message_count():
@@ -23,29 +26,32 @@ def get_message_count():
 
     return json.dumps(data)
 
+
 @app.route('/stats/get_count', methods=['GET'])
 def get_count():
-    string_to_match = request.args.get('string_to_match')
-    if not string_to_match:
+    string = request.args.get('string_to_match')
+    if not string:
         return json.dumps({})
 
     data = {
-        'user_to_str_counts': [],
-        'search_str': string_to_match
+        'usr_to_str_counts': [],
+        'search_str': string
     }
 
     all_users = User.query.all()
     for u in all_users:
         # For each user, we need both x and y axis labels (user name and
-        # word count, respectively). For now we're just showing case-insensitve results
-        user_to_str_counts = u.count_number_of(string_to_match)['case_insensitive']
-        data['user_to_str_counts'].append({'x': u.name, 'y': user_to_str_counts})
+        # word count, respectively). We're just showing case-insensitve results
+        usr_to_str_counts = u.count_number_of(string)['case_insensitive']
+        data['usr_to_str_counts'].append({'x': u.name, 'y': usr_to_str_counts})
 
     return json.dumps(data)
+
 
 @app.route('/markov', methods=['GET'])
 def markov():
     return render_template('base.jade', js_filename='skarkov.bundle.js')
+
 
 @app.route('/get_markovs', methods=['POST'])
 def get_markovs():
@@ -66,6 +72,7 @@ def get_markovs():
 
     return json.dumps(markovs)
 
+
 @app.route('/get_one_markov', methods=['POST'])
 def get_one_markov():
     user_name = request.form.get('user_name', None)
@@ -79,6 +86,7 @@ def get_one_markov():
     db.session.commit()
 
     return json.dumps(new_markov.to_api_dict())
+
 
 @app.route('/tweet', methods=['POST'])
 def tweet():
