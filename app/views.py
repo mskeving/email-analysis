@@ -11,6 +11,11 @@ def index():
     return render_template('index.jade')
 
 
+@app.route('/line')
+def my_line_chart():
+    return render_template('base.jade', js_filename='linechart.bundle.js')
+
+
 @app.route('/stats', methods=['GET'])
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
