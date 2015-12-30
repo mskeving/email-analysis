@@ -4,6 +4,7 @@ $$      = React.DOM
 
 StringCount  = React.createFactory(require('./StringCount.coffee'))
 MessageCount = React.createFactory(require('./MessageCount.coffee'))
+TimeLineChart = React.createFactory(require('../common/TimeLineChart.coffee'))
 
 module.exports = React.createClass
   displayName: 'StatDisplay'
@@ -11,6 +12,25 @@ module.exports = React.createClass
   getInitialState: ->
     message_counts: []
     message_count_chart_title: []
+    msgs_over_time: [{
+      label: ''
+      values: [{x: new Date(2008, 2, 5), y: 1}]
+    }]
+
+  _get_msgs_over_time: ->
+    $.ajax
+      type: "GET"
+      data: {}
+      dataType: 'JSON'
+      url: "/stats/message_time_graph"
+      success: (data) =>
+        @setState
+          msgs_over_time: data
+
+      error: (e) =>
+        @setState
+          msgs_over_time: []
+        console.log "There was an error with the message count search"
 
   _get_str_count: (str) ->
     data = {
@@ -54,6 +74,9 @@ module.exports = React.createClass
 
   render: ->
     $$.div null,
+      TimeLineChart
+        data: @state.msgs_over_time
+        get_data: @_get_msgs_over_time
       StringCount
         get_data: @_get_str_count
         data: @state.str_count

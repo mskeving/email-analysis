@@ -1,9 +1,11 @@
 import json
 
+from datetime import datetime
+
 from app import app, db
 from flask import render_template, request
 from lib.markov_generator import make_chain
-from models import Markov, User
+from models import Markov, User, Message
 
 
 @app.route('/')
@@ -19,6 +21,32 @@ def my_line_chart():
 @app.route('/stats', methods=['GET'])
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
+
+
+@app.route('/stats/message_time_graph', methods=['GET'])
+def message_time_graph():
+    def sort_by_year(messages):
+        data = []
+        year_to_count = {}
+        for m in messages:
+            if not m.send_time_unix:
+                print "no send_time for message: %d" % (m.send_time_unix)
+                continue
+            year = datetime.fromtimestamp(float(m.send_time_unix)).strftime('%Y')
+            year_to_count[year] = year_to_count.get(year, 0) + 1
+
+        for year, count in year_to_count.iteritems():
+            data.append({'x': year, 'y': year_to_count[year]})
+        sorted_by_year = sorted(data, key=lambda data: data['x'])
+        return sorted_by_year
+
+    data = []
+    all_users = User.query.all()
+    for u in all_users:
+        messages = Message.query.filter_by(sender=u.id).order_by('send_time_unix').all()
+        data.append({'label': u.name, 'values': sort_by_year(messages)})
+
+    return json.dumps(data)
 
 
 @app.route('/stats/get_message_count', methods=['GET'])
