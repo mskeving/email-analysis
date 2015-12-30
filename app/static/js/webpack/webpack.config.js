@@ -2,7 +2,7 @@ module.exports = {
     entry: {
         skarkov: "../markovs/Skarkov.coffee",
         stats: "../stats/Stats.coffee",
-        linechart: "../stats/LineDisplay.coffee"
+        linechart: "../stats/MessagesOverTime.coffee"
     },
     output: {
         path: __dirname,
