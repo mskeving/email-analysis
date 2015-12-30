@@ -1,7 +1,7 @@
 *.DS_Store
 *.pyc
 client_secret.json
-data/
+app/data/
 env/
 app/static/js/node_modules
 app/static/js/build
