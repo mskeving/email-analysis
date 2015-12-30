@@ -1,10 +1,12 @@
 React   = require('react')
 $       = require('jquery')
+ReactD3 = require('react-d3-components')
 $$      = React.DOM
 
-StringCount  = React.createFactory(require('./StringCount.coffee'))
-MessageCount = React.createFactory(require('./MessageCount.coffee'))
+StringCount   = React.createFactory(require('./StringCount.coffee'))
+MessageCount  = React.createFactory(require('./MessageCount.coffee'))
 TimeLineChart = React.createFactory(require('../common/TimeLineChart.coffee'))
+BarChart      = React.createFactory(ReactD3.BarChart)
 
 module.exports = React.createClass
   displayName: 'StatDisplay'
@@ -16,6 +18,15 @@ module.exports = React.createClass
       label: ''
       values: [{x: new Date(2008, 2, 5), y: 1}]
     }]
+    msgs_over_time_bargraph: [
+      {
+        label: '2015',
+        values: [
+          {x: 'missy', y: 24}
+          {x: 'jen', y: 20}
+        ]
+      }
+    ]
 
   _get_msgs_over_time: ->
     $.ajax
@@ -26,6 +37,21 @@ module.exports = React.createClass
       success: (data) =>
         @setState
           msgs_over_time: data
+
+      error: (e) =>
+        @setState
+          msgs_over_time: []
+        console.log "There was an error with the message count search"
+
+  _get_msgs_over_time_bargraph: ->
+    $.ajax
+      type: "GET"
+      data: {}
+      dataType: 'JSON'
+      url: "/stats/message_time_bargraph"
+      success: (data) =>
+        @setState
+          msgs_over_time_bargraph: data
 
       error: (e) =>
         @setState
@@ -72,8 +98,22 @@ module.exports = React.createClass
           message_count_chart_title: "Total Messages Sent - Error"
         console.log "There was an error with the message count search"
 
+  componentDidMount: ->
+    @_get_msgs_over_time_bargraph()
+
+  tooltip: (x, y0, y, total) ->
+    return y.toString();
+
   render: ->
     $$.div null,
+      BarChart
+        groupedBars: true
+        width: 400
+        height: 400
+        data: @state.msgs_over_time_bargraph
+        tooltipHtml: @tooltip
+        tooltipMode: 'mouse'
+        margin: {top: 10, bottom: 50, left: 50, right: 10}
       TimeLineChart
         data: @state.msgs_over_time
         get_data: @_get_msgs_over_time

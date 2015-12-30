@@ -1,6 +1,7 @@
 import json
 
 from datetime import datetime
+from collections import defaultdict
 
 from app import app, db
 from flask import render_template, request
@@ -28,15 +29,40 @@ def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
 
 
+@app.route('/stats/message_time_bargraph', methods=['GET'])
+def message_time_bargraph():
+    msgs = Message.query.all()
+    year_to_messages = defaultdict(list)
+    for m in msgs:
+        year = datetime.fromtimestamp(int(m.send_time_unix)).strftime('%Y')
+        year_to_messages[year].append(m)
+
+    all_data = []
+    for year, msgs in year_to_messages.iteritems():
+        if year == '2008':
+            continue
+        year_data = {}
+
+        user_to_count = {}
+        for m in msgs:
+            user_to_count[m.sender] = user_to_count.get(m.sender, 0) + 1
+
+        values = []
+        for user, count in user_to_count.iteritems():
+            values.append({'x': user, 'y': count})
+        year_data['label'] = year
+        year_data['values'] = values
+        all_data.append(year_data)
+
+    return json.dumps(all_data)
+
+
 @app.route('/stats/message_time_graph', methods=['GET'])
 def message_time_graph():
     def sort_by_year(messages):
         data = []
         year_to_count = {}
         for m in messages:
-            if not m.send_time_unix:
-                print "no send_time for message: %d" % (m.send_time_unix)
-                continue
             year = datetime.fromtimestamp(float(m.send_time_unix)).strftime('%Y')
             year_to_count[year] = year_to_count.get(year, 0) + 1
 
