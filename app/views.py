@@ -107,6 +107,11 @@ def brush():
     return render_template('brush.html')
 
 
+@app.route('/playground/grouped_barchart')
+def grouped_barchart():
+    return render_template('grouped_bar_chart.html')
+
+
 @app.route('/markov', methods=['GET'])
 def markov():
     return render_template('base.jade', js_filename='skarkov.bundle.js')
