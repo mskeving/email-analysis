@@ -14,16 +14,6 @@ def index():
     return render_template('index.jade')
 
 
-@app.route('/playground/brush')
-def brush():
-    return render_template('brush.html')
-
-
-@app.route('/line')
-def my_line_chart():
-    return render_template('base.jade', js_filename='linechart.bundle.js')
-
-
 @app.route('/stats', methods=['GET'])
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')
@@ -110,6 +100,11 @@ def get_count():
         data['usr_to_str_counts'].append({'x': u.name, 'y': usr_to_str_counts})
 
     return json.dumps(data)
+
+
+@app.route('/playground/brush')
+def brush():
+    return render_template('brush.html')
 
 
 @app.route('/markov', methods=['GET'])

@@ -1,8 +1,14 @@
 React   = require('react')
+V       = React.PropTypes
 $$      = React.DOM
+
+Bar = React.createFactory(require('./Bar.coffee'))
 
 module.exports = React.createClass
   displayName: 'Chart'
+
+  propTypes:
+    get_data: V.func.isRequired
 
   getDefaultProps: ->
     title: "Chart Title"
@@ -10,8 +16,11 @@ module.exports = React.createClass
     width: 500
     height: 500
 
+  componentDidMount: ->
+    @props.get_data()
+
   render: ->
-    $$.div 
+    $$.div
       className: "bar-chart-container",
       $$.div
         className: "bar-chart-title",
@@ -23,4 +32,7 @@ module.exports = React.createClass
         className: "bar-chart"
         width: @props.width
         height: @props.height,
-        @props.children
+        Bar
+          data: @props.data
+          width: @props.width
+          height: @props.height

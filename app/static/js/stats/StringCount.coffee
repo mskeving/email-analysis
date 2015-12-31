@@ -2,9 +2,10 @@ React   = require('react')
 _       = require('lodash')
 $       = require('jquery')
 $$      = React.DOM
+V       = React.PropTypes
 
-Bar            = React.createFactory(require('./barchart/Bar.coffee'))
-Chart          = React.createFactory(require('./barchart/Chart.coffee'))
+Bar            = React.createFactory(require('../common/barchart/Bar.coffee'))
+BarChart       = React.createFactory(require('../common/barchart/BarChart.coffee'))
 SearchOption   = React.createFactory(require('./SearchOption.coffee'))
 
 SAVED_SEARCHES = [
@@ -14,14 +15,14 @@ SAVED_SEARCHES = [
 module.exports = React.createClass
   displayName: 'StringCount'
 
+  propTypes:
+    get_data: V.func.isRequired
+
   getDefaultProps: ->
     width: 500
     height: 500
     data: []
     chart_title: ""
-
-  componentDidMount: ->
-    @props.get_data('!')
 
   _new_search: ->
     str = document.getElementById('search-str').value
@@ -57,12 +58,10 @@ module.exports = React.createClass
             className: "btn-search"
             onClick: @_new_search,
             "search"
-      Chart
+      BarChart
         width: @props.width
         height: @props.height
+        get_data: => @props.get_data('!')
         title: @props.chart_title
         subtitle: @props.chart_sub_title
-        Bar
-          data: @props.data
-          width: @props.width
-          height: @props.height
+        data: @props.data

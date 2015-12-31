@@ -1,6 +1,6 @@
 require("../../css/stats.css")
 React       = require("react")
-StatDisplay = React.createFactory(require('./StatDisplay.coffee'))
+StatsController = React.createFactory(require('./StatsController.coffee'))
 
 window.onload = ->
-  React.render(StatDisplay(), window.document.getElementById('content'))
+  React.render(StatsController(), window.document.getElementById('content'))
