@@ -11,6 +11,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+    avatar_link = db.Column(db.Text())
     markov_dict = db.Column(db.Text())
     markov_starter_words = db.Column(db.Text())
     addresses = db.relationship('EmailAddress')
@@ -116,6 +117,14 @@ class User(db.Model):
             resp_percentages[user.name] = 100 * float(num_resp) / float(num_messages_received)
 
         return resp_percentages
+
+    def to_api_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'addresses': [a.email_address for a in self.addresses],
+            'avatar_link': self.avatar_link
+        }
 
 
 class EmailAddress(db.Model):

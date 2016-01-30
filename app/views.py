@@ -14,6 +14,19 @@ def index():
     return render_template('index.jade')
 
 
+@app.route('/users', methods=['GET'])
+def users():
+    return render_template('base.jade', js_filename='users.bundle.js')
+
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    users = [u.to_api_dict() for u in users]
+
+    return json.dumps(users)
+
+
 @app.route('/stats', methods=['GET'])
 def stats():
     return render_template('base.jade', js_filename='stats.bundle.js')

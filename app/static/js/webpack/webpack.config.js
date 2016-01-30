@@ -2,6 +2,7 @@ module.exports = {
     entry: {
         skarkov: "../markovs/Skarkov.coffee",
         stats: "../stats/Stats.coffee",
+        users: "../users/Users.coffee",
     },
     output: {
         path: __dirname,
