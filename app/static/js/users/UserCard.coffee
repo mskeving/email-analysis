@@ -2,24 +2,24 @@ React   = require('react')
 $$      = React.DOM
 V       = React.PropTypes
 
-Avatar   = React.createFactory(require('./Avatar.coffee'))
-UserInfo = React.createFactory(require('./UserInfo.coffee'))
+Avatar       = React.createFactory(require('./Avatar.coffee'))
+UserCardInfo = React.createFactory(require('./UserCardInfo.coffee'))
 
 module.exports = React.createClass
   displayName: 'UserCard'
 
   propTypes:
-    avatar_link: V.string
-    name: V.string
-    email_addresses: V.array
-
-  _capitalize: (word) ->
-    return "#{word[0].toUpperCase()}#{word.slice(1)}"
+    user: V.object
+    select_this_user: V.function
 
   render: ->
-    $$.div className: 'user-container',
+    u = @props.user
+
+    return $$.div
+      className: 'user-container'
+      onClick: => @props.select_this_user(u),
       Avatar
-        link: @props.avatar_link
-      UserInfo
-        name: @props.name
-        email_addresses: @props.email_addresses
+        link: u.avatar_link
+      UserCardInfo
+        name: u.name
+        email_addresses: u.addresses

@@ -3,7 +3,7 @@ $$      = React.DOM
 V       = React.PropTypes
 
 module.exports = React.createClass
-  displayName: 'UserInfo'
+  displayName: 'UserCardInfo'
 
   propTypes:
     name: V.string
@@ -15,13 +15,15 @@ module.exports = React.createClass
   render: ->
     $$.div className: 'user-info',
       $$.div
-        className: 'user-name',
+        className: 'user-name'
+        onClick: @_go_to_user_page,
         @_capitalize(@props.name)
       $$.div
         className: 'category-title',
         'Email addresses:'
-        @props.email_addresses.map((email) ->
+        @props.email_addresses.map((email, i) ->
           return $$.div
-            className: 'email-address',
+            className: 'email-address'
+            key: i,
               email
         )

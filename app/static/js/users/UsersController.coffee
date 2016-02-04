@@ -1,14 +1,17 @@
 React   = require('react')
 $       = require('jquery')
+_       = require('lodash')
 $$      = React.DOM
 
-UserCard = React.createFactory(require('./UserCard.coffee'))
+UserCard     = React.createFactory(require('./UserCard.coffee'))
+UsersDisplay = React.createFactory(require('./UsersDisplay.coffee'))
 
 module.exports = React.createClass
   displayName: 'UsersController'
 
   getInitialState: ->
-    return users: []
+    users: []
+    selected_user: null
 
   componentDidMount: ->
     @_fetch_users()
@@ -25,12 +28,13 @@ module.exports = React.createClass
       error: (e) ->
         console.log "error getting data: #{e}"
 
+  _select_user: (u) ->
+    idx = _.indexOf(@state.users, u)
+    @setState
+      selected_user: @state.users[idx]
+
   render: ->
-    $$.div null,
-      @state.users.map((u) ->
-        return UserCard
-          key: u.id
-          name: u.name
-          email_addresses: u.addresses
-          avatar_link: u.avatar_link
-      )
+    UsersDisplay
+      users: @state.users
+      select_user: @_select_user
+      selected_user: @state.selected_user
