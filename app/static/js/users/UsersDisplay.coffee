@@ -1,8 +1,9 @@
 React   = require('react')
+_       = require('lodash')
 $$      = React.DOM
 V       = React.PropTypes
 
-UserCard    = React.createFactory(require('./UserCard.coffee'))
+Tab         = React.createFactory(require('../common/Tab.coffee'))
 UserDetails = React.createFactory(require('./UserDetails.coffee'))
 
 module.exports = React.createClass
@@ -23,8 +24,11 @@ module.exports = React.createClass
     return user_cards
 
   render: ->
-    $$.div null,
-      $$.div className: 'user-cards',
-        @_get_user_cards()
-      UserDetails
-        user: @props.selected_user
+    return $$.div
+      className: 'user-container',
+        Tab
+          options: @props.users
+          on_click: @props.select_user
+          selected_option: @props.selected_user
+        UserDetails
+          user: @props.selected_user

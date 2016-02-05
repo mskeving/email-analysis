@@ -3,7 +3,6 @@ $       = require('jquery')
 _       = require('lodash')
 $$      = React.DOM
 
-UserCard     = React.createFactory(require('./UserCard.coffee'))
 UsersDisplay = React.createFactory(require('./UsersDisplay.coffee'))
 
 module.exports = React.createClass
@@ -28,7 +27,7 @@ module.exports = React.createClass
       error: (e) ->
         console.log "error getting data: #{e}"
 
-  _select_user: (u) ->
+  select_user: (u) ->
     idx = _.indexOf(@state.users, u)
     @setState
       selected_user: @state.users[idx]
@@ -36,5 +35,5 @@ module.exports = React.createClass
   render: ->
     UsersDisplay
       users: @state.users
-      select_user: @_select_user
+      select_user: @select_user
       selected_user: @state.selected_user

@@ -1,28 +1,14 @@
-.user-cards {
-    display: inline-block;
-    width: 35%;
-}
-
 .user-container {
-    margin: 10px 0;
+    margin: 10px auto;
     padding: 20px;
+    width: 70%;
     max-width: 1200px;
-    border: 1px solid #eee;
-    border-radius: 5px;
 }
 
 .user-info {
     display: inline-block;
     vertical-align: top;
     margin-left: 20px;
-}
-
-.user-name {
-    font-weight: bold;
-}
-
-.email-address {
-    margin: 3px 0;
 }
 
 .avatar-container {
@@ -32,7 +18,9 @@
 }
 
 .user-details {
-    display: inline-block;
+    padding: 20px;
+    width: 97%;
     vertical-align: top;
-    margin-left: 100px;
+    border: 1px solid #eee;
+    border-radius: 5px;
 }
