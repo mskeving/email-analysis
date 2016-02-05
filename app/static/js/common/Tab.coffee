@@ -1,4 +1,4 @@
-require("../../css/tab.css")
+require("../../stylesheets/components/_tab.scss")
 React = require('react')
 cls   = require('classnames')
 $$    = React.DOM

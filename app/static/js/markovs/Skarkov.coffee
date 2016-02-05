@@ -1,4 +1,4 @@
-require("../../css/skarkov.css")
+require("../../stylesheets/skarkov.scss")
 
 React   = require("react")
 Markovs = React.createFactory(require('./Markovs.coffee'))

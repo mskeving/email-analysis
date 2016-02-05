@@ -1,4 +1,4 @@
-require("../../css/stats.css")
+require("../../stylesheets/stats.scss")
 React       = require("react")
 StatsController = React.createFactory(require('./StatsController.coffee'))
 
