@@ -12,7 +12,7 @@ module.exports = React.createClass
     users: []
     selected_user: null
 
-  componentDidMount: ->
+  componentWillMount: ->
     @_fetch_users()
 
   _fetch_users: ->
@@ -24,6 +24,7 @@ module.exports = React.createClass
       success: (data) =>
         @setState
           users: data
+          selected_user: data[0]
       error: (e) ->
         console.log "error getting data: #{e}"
 
@@ -33,7 +34,11 @@ module.exports = React.createClass
       selected_user: @state.users[idx]
 
   render: ->
-    UsersDisplay
-      users: @state.users
-      select_user: @select_user
-      selected_user: @state.selected_user
+    if @state.selected_user?
+      return UsersDisplay
+        users: @state.users
+        select_user: @select_user
+        selected_user: @state.selected_user
+    else
+      return $$.div null,
+        "Fetching data..."

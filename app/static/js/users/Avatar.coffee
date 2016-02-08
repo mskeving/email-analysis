@@ -3,7 +3,7 @@ $$      = React.DOM
 V       = React.PropTypes
 
 module.exports = React.createClass
-  displayName: 'UserCard'
+  displayName: 'Avatar'
 
   propTypes:
     link: V.string

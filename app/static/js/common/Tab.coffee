@@ -15,11 +15,12 @@ module.exports = React.createClass
   render: ->
     return $$.div
       className: 'tab-container',
-        @props.options.map((option) =>
+        @props.options.map((option, i) =>
           return $$.div
             className: cls('tab', {
               'active': option is @props.selected_option
             })
+            key: i
             onClick: => @props.on_click(option),
             option.name
         )

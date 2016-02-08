@@ -24,3 +24,15 @@
     border: 1px solid #eee;
     border-radius: 5px;
 }
+
+.user-basics {
+    .avatar-container {
+        display: inline-block;
+    }
+    .text {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 25px;
+    }
+}
+

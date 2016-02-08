@@ -1,5 +1,4 @@
 React   = require('react')
-_       = require('lodash')
 $$      = React.DOM
 V       = React.PropTypes
 
@@ -11,17 +10,8 @@ module.exports = React.createClass
 
   propTypes:
     users: V.array
-    select_user: V.function
+    select_user: V.func
     selected_user: V.object
-
-  _get_user_cards: ->
-    user_cards = @props.users.map((u) =>
-        return UserCard
-          key: u.id
-          user: u
-          select_this_user: @props.select_user
-      )
-    return user_cards
 
   render: ->
     return $$.div
