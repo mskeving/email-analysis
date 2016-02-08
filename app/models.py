@@ -45,7 +45,7 @@ class User(db.Model):
 
         return {
             'case_sensitive': int(pruned_text.count(str_to_match)),
-            'case_insensitive':int( pruned_text.lower().count(str_to_match.lower()))
+            'case_insensitive': int(pruned_text.lower().count(str_to_match.lower()))
         }
 
     def message_count(self):
@@ -57,8 +57,8 @@ class User(db.Model):
         into words. Get rid of punctuation.
         '''
         words = self.word_list()
-        non_punct = re.compile('.*[A-Za-z0-9].*') # must contain letter or digit
-        filtered = [w for w in text if non_punct.match(w)]
+        non_punct = re.compile('.*[A-Za-z0-9].*')  # must contain letter or digit
+        filtered = [w for w in words if non_punct.match(w)]
 
         return len(filtered)
 
@@ -123,7 +123,10 @@ class User(db.Model):
             'id': self.id,
             'name': self.name,
             'addresses': [a.email_address for a in self.addresses],
-            'avatar_link': self.avatar_link
+            'avatar_link': self.avatar_link,
+            'avg_word_count': self.avg_word_count_per_message(),
+            'message_count': self.message_count(),
+            'response_percentages': self.response_percentages(),
         }
 
 
