@@ -1,7 +1,9 @@
-React   = require('react')
-map     = require('lodash/collection/map')
-$$      = React.DOM
-V       = React.PropTypes
+React      = require('react')
+map        = require('lodash/collection/map')
+capitalize = require('../helpers/capitalize.coffee')
+
+$$ = React.DOM
+V  = React.PropTypes
 
 Avatar = React.createFactory(require('./Avatar.coffee'))
 
@@ -10,9 +12,6 @@ module.exports = React.createClass
 
   propTypes:
     user: V.object.isRequired
-
-  _capitalize: (word) ->
-    return word[0].toUpperCase() + word.slice(1).toLowerCase()
 
   _get_email_addresses: ->
     return map(@props.user.addresses, (address, i) ->
@@ -38,7 +37,7 @@ module.exports = React.createClass
           link: user.avatar_link
         $$.div className: 'text',
           $$.div className: 'name',
-            @_capitalize(user.name)
+            capitalize(user.name)
           $$.div className: 'addresses',
             @_get_email_addresses()
           @_get_facts()

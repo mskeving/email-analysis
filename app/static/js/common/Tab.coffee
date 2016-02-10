@@ -1,8 +1,11 @@
 require("../../stylesheets/components/_tab.scss")
-React = require('react')
-cls   = require('classnames')
-$$    = React.DOM
-V     = React.PropTypes
+
+React      = require('react')
+cls        = require('classnames')
+capitalize = require('../helpers/capitalize.coffee')
+
+$$ = React.DOM
+V  = React.PropTypes
 
 module.exports = React.createClass
   displayName: 'Tab'
@@ -22,5 +25,5 @@ module.exports = React.createClass
             })
             key: i
             onClick: => @props.on_click(option),
-            option.name
+            capitalize(option.name)
         )
