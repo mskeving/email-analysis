@@ -27,7 +27,8 @@ def create_users():
 
         else:
             print ("Create: %s") % user.name
-            new_user = User(name=user.name)
+            new_user = User(name=user.name,
+                            avatar_link=user.avatar_link)
             db.session.add(new_user)
             db.session.commit()
             db.session.refresh(new_user)

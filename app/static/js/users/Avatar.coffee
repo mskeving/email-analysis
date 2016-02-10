@@ -9,6 +9,6 @@ module.exports = React.createClass
     link: V.string
 
   render: ->
-    $$.img
-      className: 'avatar-container'
-      src: @props.link
+    $$.div className: 'avatar-container',
+        $$.img
+          src: @props.link

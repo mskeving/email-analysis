@@ -4,13 +4,15 @@ class User():
                  canonical_file,
                  pruned_file,
                  markov_file,
-                 addresses,):
+                 addresses,
+                 avatar_link=None,):
         self.name = name
         self.canonical_file = canonical_file
         self.pruned_file = pruned_file
         self.markov_file = markov_file
         self.addresses = addresses
         self.recipient_list = None
+        self.avatar_link = avatar_link
 
     def get_recipients(self):
         if self.recipient_list is None:

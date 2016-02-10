@@ -11,12 +11,6 @@
     margin-left: 20px;
 }
 
-.avatar-container {
-    display: inline-block;
-    height: 200px;
-    width: auto;
-}
-
 .user-details {
     padding: 20px;
     width: 97%;
@@ -28,6 +22,14 @@
 .user-basics {
     .avatar-container {
         display: inline-block;
+        height: 200px;
+        width: 200px;
+        text-align: center;
+        overflow: hidden;;
+        img {
+            height: auto;
+            width: 100%;
+        }
     }
     .text {
         display: inline-block;
