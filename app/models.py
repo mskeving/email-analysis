@@ -53,6 +53,9 @@ class User(db.Model):
         '''The number of unique messages this user has sent.'''
         return len(self.messages)
 
+    def serialize_messages(self):
+        return [m.to_api_dict() for m in self.messages]
+
     def word_count(self):
         '''Take all_pruned_text and and let word_tokenize split it up
         into words. Get rid of punctuation.
@@ -128,6 +131,7 @@ class User(db.Model):
             'avg_word_count': self.avg_word_count_per_message(),
             'message_count': self.message_count(),
             'response_percentages': self.response_percentages(),
+            'messages': self.serialize_messages(),
         }
 
 
@@ -201,6 +205,18 @@ class Message(db.Model):
         # depending on what's used to create a word cloud, this could become
         # (' ').join(outsider_emails) so it's just a string of recipients
         return Counter(outsider_emails)
+
+    def to_api_dict(self):
+        return {
+            'id': self.id,
+            'message_id': self.message_id,
+            'subject': self.subject,
+            'sender': self.sender,
+            'pruned': self.pruned,
+            'send_time': self.send_time,
+            'send_time_unix': self.send_time_unix,
+            'recipients': self.recipients,
+        }
 
 
 class Markov(db.Model):
