@@ -15,6 +15,7 @@ class User(db.Model):
     markov_dict = db.Column(db.Text())
     markov_starter_words = db.Column(db.Text())
     addresses = db.relationship('EmailAddress')
+    messages = db.relationship('Message')
 
     def address_str(self):
         '''change list of addresses into a string to use as
@@ -50,7 +51,7 @@ class User(db.Model):
 
     def message_count(self):
         '''The number of unique messages this user has sent.'''
-        return int(Message.query.filter_by(sender=self.id).count())
+        return len(self.messages)
 
     def word_count(self):
         '''Take all_pruned_text and and let word_tokenize split it up
@@ -145,7 +146,7 @@ class Message(db.Model):
     message_id = db.Column(db.String(128), unique=True)
     thread_id = db.Column(db.String(128))
     data = db.Column(db.Text())
-    sender = db.Column(db.Integer, db.ForeignKey('addresses.id'))
+    sender = db.Column(db.Integer, db.ForeignKey('users.id'))
     body = db.Column(db.Text())
     subject = db.Column(db.Text())
     send_time = db.Column(db.String(64))
