@@ -6,3 +6,4 @@ env/
 app/static/js/node_modules
 app/static/js/build
 app/static/js/npm-debug.log
+app/static/images/avatars
