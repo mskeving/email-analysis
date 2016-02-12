@@ -1,3 +1,7 @@
+div, p, span {
+    font-family: Roboto, Arial, Verdana, Georgia, "Times New Roman"
+}
+
 .user-container {
     margin: 10px auto;
     padding: 20px;
@@ -11,33 +15,39 @@
     margin-left: 20px;
 }
 
-.user-details {
+.user-details, .user-stats {
     padding: 20px;
     width: 97%;
-    vertical-align: top;
     border: 1px solid #eee;
     border-radius: 5px;
 }
-
-.user-basics {
-    .avatar-container {
-        display: inline-block;
-        height: 200px;
-        width: 200px;
-        text-align: center;
-        overflow: hidden;;
-        img {
-            height: auto;
-            width: 100%;
+.user-details {
+    vertical-align: top;
+    .user-basics {
+        .avatar-container {
+            display: inline-block;
+            height: 200px;
+            width: 200px;
+            text-align: center;
+            overflow: hidden;;
+            img {
+                height: auto;
+                width: 100%;
+            }
         }
-    }
-    .text {
-        display: inline-block;
-        vertical-align: top;
-        margin-left: 25px;
-    }
-    .name, .addresses {
-        margin-bottom: 20px;
+        .text {
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 25px;
+        }
+        .name, .addresses {
+            margin-bottom: 20px;
+        }
     }
 }
 
+
+.user-stats {
+    .response-percentages {
+    }
+}
