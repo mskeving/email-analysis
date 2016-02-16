@@ -1,4 +1,5 @@
 React      = require('react')
+d3         = require('d3')
 capitalize = require('../helpers/capitalize.coffee')
 percentage = require('../helpers/percentage.coffee')
 _          = require('lodash')
@@ -120,6 +121,9 @@ module.exports = React.createClass
       if tick.endsWith('_1')
         return "'#{tick.split("_")[0]}"
       return ''
+
+    # use this scale when getting messages by quarter
+    yScale: d3.scale.linear().domain([0,70]).range([340, 0])
   }
 
   render: ->
@@ -139,4 +143,4 @@ module.exports = React.createClass
           colorByLabel: false
           xAxis: { tickFormat: @bar_chart.tick_format }
           yAxis: { label: "Number of Messages" }
-
+          yScale: @bar_chart.yScale
