@@ -6,7 +6,7 @@ _          = require('lodash')
 $$ = React.DOM
 V  = React.PropTypes
 
-BarChart = React.createFactory(require('../common/custom/BarChart.js'))
+BarChart = React.createFactory(require('react-d3-components/lib/BarChart.js'))
 
 QUARTERS = {
   'Jan': 1
@@ -39,7 +39,7 @@ module.exports = React.createClass
       ]
     }]
 
-  _format_response_percentages: ->
+  _get_response_percentages: ->
     ret = []
     for name, num of @props.user.response_percentages
       ret.push($$.div null, "#{capitalize(name)}: #{percentage(num)}")
@@ -128,7 +128,7 @@ module.exports = React.createClass
     return $$.div className: 'user-stats',
       $$.div className: 'response-percentages',
         "Response Percentages:"
-        @_format_response_percentages()
+        @_get_response_percentages()
       $$.div className: 'message-timeline',
         BarChart
           data: @_get_messages_by_quarter()
@@ -137,5 +137,6 @@ module.exports = React.createClass
           margin: {top: 10, bottom: 50, left: 50, right: 10}
           tooltipHtml: @bar_chart.tooltip
           colorByLabel: false
-          tickFormat: @bar_chart.tick_format
+          xAxis: { tickFormat: @bar_chart.tick_format }
+          yAxis: { label: "Number of Messages" }
 
