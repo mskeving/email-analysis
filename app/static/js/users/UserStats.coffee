@@ -7,7 +7,8 @@ _          = require('lodash')
 $$ = React.DOM
 V  = React.PropTypes
 
-BarChart = React.createFactory(require('react-d3-components/lib/BarChart.js'))
+BarChart   = React.createFactory(require('react-d3-components/lib/BarChart.js'))
+GraphTitle = React.createFactory(require('../common/GraphTitle.coffee'))
 
 QUARTERS = {
   'Jan': 1
@@ -134,6 +135,8 @@ module.exports = React.createClass
         "Response Percentages:"
         @_get_response_percentages()
       $$.div className: 'message-timeline',
+        GraphTitle
+          text: "Emails Sent Over Time"
         BarChart
           data: @_get_messages_by_quarter()
           width: 800
