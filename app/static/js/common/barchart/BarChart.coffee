@@ -8,7 +8,8 @@ module.exports = React.createClass
   displayName: 'Chart'
 
   propTypes:
-    get_data: V.func.isRequired
+    get_data: V.func
+    data: V.array
 
   getDefaultProps: ->
     title: "Chart Title"
@@ -17,7 +18,8 @@ module.exports = React.createClass
     height: 500
 
   componentDidMount: ->
-    @props.get_data()
+    if @props.get_data
+      @props.get_data()
 
   render: ->
     $$.div
