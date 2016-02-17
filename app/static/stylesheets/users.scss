@@ -1,9 +1,11 @@
+@import "base.scss";
+
 div, p, span {
     font-family: Roboto, Arial, Verdana, Georgia, "Times New Roman"
 }
 
 .user-container {
-    margin: 10px auto;
+    margin: 100px auto;
     padding: 20px;
     width: 70%;
     max-width: 1200px;

@@ -1,0 +1,36 @@
+$linkcolor: white;
+$navcolor: teal;
+
+.navbar-container {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: $navcolor;
+    z-index: 1;
+    a {
+        text-decoration: none;
+        color: $linkcolor;
+    }
+    .logo {
+        display: inline-block;
+        font-size: 43px;
+        padding-top: 9px;
+        padding-left: 23px;
+        margin-right: 100px;
+        color: $linkcolor;
+    }
+    .options-container {
+        display: inline-block;
+        text-align: center;
+        vertical-align: top;
+        .option {
+            display: inline-block;
+            padding: 20px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+        .option:hover {
+           background-color: darken($navcolor, 10%);
+        }
+    }
+}
