@@ -68,8 +68,10 @@ def add_messages():
     existing_message_ids = [m.message_id for m in Message.query.all()]
     users = User.query.all()
     address_objs = EmailAddress.query.all()
+    email_address_to_email_ids = {}
     email_address_to_user_ids = {}
     for obj in address_objs:
+        email_address_to_email_ids[obj.email_address] = obj.id
         email_address_to_user_ids[obj.email_address] = obj.user_id
     while len(users) > 0:
         # include all family members
@@ -111,7 +113,8 @@ def add_messages():
                         'data': None,
                         'thread_id': None,
                         'subject': None,
-                        'sender': None,
+                        'sender_user_id': None,
+                        'sender_email_id': None,
                         'recipients': None,
                         'body': None,
                         'pruned': None,
@@ -133,7 +136,8 @@ def add_messages():
                     regex = re.compile('<(.*?)>')
                     try:
                         email_address = regex.findall(header['value'])[0].lower()
-                        message_info['sender'] = email_address_to_user_ids[email_address]
+                        message_info['sender_user_id'] = email_address_to_user_ids[email_address]
+                        message_info['sender_email_id'] = email_address_to_email_ids[email_address]
                     except Exception:
                         print ("Couldn't get sender from message id: %s, sender: %s") % (message_id, header['value'])
                         break
@@ -170,7 +174,8 @@ def add_messages():
                         message_id=m['id'],
                         thread_id=m['thread_id'],
                         data=m['data'],
-                        sender=m['sender'],
+                        sender_user_id=m['sender_user_id'],
+                        sender_email_id=m['sender_email_id'],
                         body=m['body'],
                         pruned=m['pruned'],
                         subject=m['subject'],
@@ -203,8 +208,7 @@ def save_markov_info():
     """
     users = User.query.all()
     for u in users:
-        messages = Message.query.filter_by(sender=u.id).all()
-        text = (' ').join([m.pruned for m in messages if m.pruned])
+        text = (' ').join([m.pruned for m in u.messages if m.pruned])
 
         print ("Creating markov dict for: %s") % u.name
         markov = defaultdict(list)

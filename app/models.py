@@ -26,9 +26,8 @@ class User(db.Model):
     def all_pruned_text(self):
         '''returns a string of all the text one has written -
         from the pruned version'''
-        msgs = Message.query.filter_by(sender=self.id).all()
         get_pruned = lambda x: x.pruned if x.pruned else ''
-        pruned_text = map(get_pruned, msgs)
+        pruned_text = map(get_pruned, self.messages)
         return (' ').join(pruned_text)
 
     def word_list(self):
@@ -97,9 +96,8 @@ class User(db.Model):
         # Get a count of number of replies to unique email addresses.
         # We're only going to take the first email address that shows up
         # in message.recipients, because they're the 'true' recipient
-        messages_sent = Message.query.filter_by(sender=self.id).all()
         recipients = []
-        for message in messages_sent:
+        for message in self.messages:
             msg_recipients = parse_recipients(message)
             if msg_recipients:
                 recipients.append(msg_recipients[0])
@@ -141,6 +139,7 @@ class EmailAddress(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     email_address = db.Column(db.String(128), unique=True)
+    messages = db.relationship('Message', backref='email_address')
 
 
 class Message(db.Model):
@@ -150,13 +149,18 @@ class Message(db.Model):
     message_id = db.Column(db.String(128), unique=True)
     thread_id = db.Column(db.String(128))
     data = db.Column(db.Text())
-    sender = db.Column(db.Integer, db.ForeignKey('users.id'))
     body = db.Column(db.Text())
     subject = db.Column(db.Text())
     send_time = db.Column(db.String(64))
     send_time_unix = db.Column(db.String(64))
     pruned = db.Column(db.Text())
-    recipients = db.Column(db.Text()) # this only includes to: and not cc:
+    # this only includes to: and not cc:
+    recipients = db.Column(db.Text())
+
+    # keep id of both user and email_address so you can easily
+    # do user.messages or email_address.messages
+    sender_email_id = db.Column(db.Integer, db.ForeignKey('addresses.id'))
+    sender_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     @classmethod
     def longest_thread_subject_length(cls):
@@ -211,7 +215,7 @@ class Message(db.Model):
             'id': self.id,
             'message_id': self.message_id,
             'subject': self.subject,
-            'sender': self.sender,
+            'sender': self.email_address.email_address,
             'pruned': self.pruned,
             'send_time': self.send_time,
             'send_time_unix': self.send_time_unix,
