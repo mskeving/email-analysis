@@ -15,7 +15,7 @@ class User(db.Model):
     markov_dict = db.Column(db.Text())
     markov_starter_words = db.Column(db.Text())
     addresses = db.relationship('EmailAddress')
-    messages = db.relationship('Message')
+    messages = db.relationship('Message', backref='user')
 
     def address_str(self):
         '''change list of addresses into a string to use as

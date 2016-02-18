@@ -1,7 +1,7 @@
 require("../../stylesheets/home.scss")
 
-React       = require("react")
-HomeDisplay = React.createFactory(require('./HomeDisplay.coffee'))
+React          = require("react")
+HomeController = React.createFactory(require('./HomeController.coffee'))
 
 window.onload = ->
-  React.render(HomeDisplay(), window.document.getElementById('content'))
+  React.render(HomeController(), window.document.getElementById('content'))

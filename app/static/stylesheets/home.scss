@@ -2,4 +2,24 @@
 
 .home-container {
     margin-top: $container-margin-top;
+    .facts-container {
+        position: relative;
+        margin-top: -31px;
+        padding: 100px 0;
+        min-height: 200px;
+        background-color: lighten($teal, 10%);
+        text-align: center;
+        .title, .footer {
+            font-size: 40px;
+        }
+        .title, .facts {
+            margin-bottom: 60px;
+        }
+        .facts {
+            font-size: 20px;
+            .fact {
+                padding: 10px 0;
+            }
+        }
+    }
 }

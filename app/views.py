@@ -2,6 +2,7 @@ import json
 
 from datetime import datetime
 from collections import defaultdict
+from sqlalchemy import asc
 
 from app import app, db
 from flask import render_template, request
@@ -12,6 +13,20 @@ from models import Markov, User, Message
 @app.route('/')
 def index():
     return render_template('base.jade', js_filename='home.bundle.js')
+
+
+@app.route('/facts', methods=['POST'])
+def facts():
+    ''' This is where we query for any needed info for our facts list.
+    '''
+    num_messages = len(Message.query.all())
+    first_msg = Message.query.order_by(asc(Message.send_time_unix)).first()
+    ret = {
+        'num_messages': num_messages,
+        'first_msg': first_msg.to_api_dict(),
+    }
+
+    return json.dumps(ret)
 
 
 @app.route('/users', methods=['GET'])
