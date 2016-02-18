@@ -22,6 +22,6 @@ module.exports = React.createClass
               'Markovs'
           $$.div className: 'option',
             $$.a
-              href: "/markov",
+              href: "/stats",
               'Interactive'
 

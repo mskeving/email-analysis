@@ -2,7 +2,6 @@ React   = require('react')
 $$      = React.DOM
 V       = React.PropTypes
 
-NavBar      = React.createFactory(require('../common/NavBar.coffee'))
 Tab         = React.createFactory(require('../common/Tab.coffee'))
 UserDetails = React.createFactory(require('./UserDetails.coffee'))
 UserStats   = React.createFactory(require('./UserStats.coffee'))
@@ -17,7 +16,6 @@ module.exports = React.createClass
 
   render: ->
     return $$.div null,
-      NavBar null
       $$.div className: 'user-container',
         Tab
           options: @props.users

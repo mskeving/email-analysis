@@ -4,6 +4,7 @@ $$      = React.DOM
 
 StringCount   = React.createFactory(require('./StringCount.coffee'))
 BarChart      = React.createFactory(require('../common/barchart/BarChart.coffee'))
+NavBar        = React.createFactory(require('../common/NavBar.coffee'))
 
 module.exports = React.createClass
   displayName: 'StatDisplay'
@@ -44,6 +45,7 @@ module.exports = React.createClass
 
   render: ->
     $$.div null,
+      NavBar null
       StringCount
         get_data: @_get_str_count
         data: @state.str_count

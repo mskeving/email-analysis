@@ -1,7 +1,9 @@
+@import "base.scss";
+
 div {
-    font-family: 'Roboto', sans-serif;
     font-weight: 400;
 }
+
 a {
     text-decoration: none;
     color: black;
@@ -16,6 +18,7 @@ a:hover {
     width: 80%;
     max-width: 725px;
     margin: auto;
+    margin-top: $container-margin-top;
 }
 .chain-info {
     display: inline-block;

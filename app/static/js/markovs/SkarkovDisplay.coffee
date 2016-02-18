@@ -3,7 +3,8 @@ _       = require('lodash')
 $       = require('jquery')
 $$      = React.DOM
 
-Chain = React.createFactory(require('./Chain.coffee'))
+Chain  = React.createFactory(require('./Chain.coffee'))
+NavBar = React.createFactory(require('../common/NavBar.coffee'))
 
 module.exports = React.createClass
   displayName: 'UserMarkovs'
@@ -55,9 +56,11 @@ module.exports = React.createClass
   render: ->
     chainNodes = _.map(@state.markovs, @renderChain)
 
-    return $$.div className: "container",
-      $$.a
-        className: "reference"
-        href:"http://www.piliapp.com/twitter-symbols/",
-          "User Symbols"
-      chainNodes
+    return $$.div null,
+      NavBar null
+      $$.div className: "container",
+        $$.a
+          className: "reference"
+          href:"http://www.piliapp.com/twitter-symbols/",
+            "User Symbols"
+        chainNodes

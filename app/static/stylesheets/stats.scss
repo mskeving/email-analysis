@@ -1,12 +1,11 @@
-body {
-  font-family: helvetica, arial, sans-serif;
-}
+@import "base.scss";
 
 .str-count-container {
   display: inline-block;
   width: 50%;
   min-width: 525px;
   margin: auto;
+  margin-top: $container-margin-top;
 }
 
 .bar-chart-container {

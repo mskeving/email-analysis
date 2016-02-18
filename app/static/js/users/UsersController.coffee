@@ -4,6 +4,7 @@ _       = require('lodash')
 $$      = React.DOM
 
 UsersDisplay = React.createFactory(require('./UsersDisplay.coffee'))
+NavBar       = React.createFactory(require('../common/NavBar.coffee'))
 
 module.exports = React.createClass
   displayName: 'UsersController'
@@ -33,12 +34,18 @@ module.exports = React.createClass
     @setState
       selected_user: @state.users[idx]
 
-  render: ->
+  _get_display_or_waiting: ->
     if @state.selected_user?
       return UsersDisplay
         users: @state.users
         select_user: @select_user
         selected_user: @state.selected_user
     else
-      return $$.div null,
+      return $$.div className: "user-container",
         "Fetching data..."
+
+  render: ->
+    return $$.div null,
+      NavBar null
+      @_get_display_or_waiting()
+
