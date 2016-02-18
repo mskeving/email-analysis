@@ -21,12 +21,15 @@ def facts():
     '''
     num_messages = len(Message.query.all())
     first_msg = Message.query.order_by(asc(Message.send_time_unix)).first()
-    ret = {
-        'num_messages': num_messages,
-        'first_msg': first_msg.to_api_dict(),
-    }
+    longest_thread_subject, longest_thread_length = Message .longest_thread_subject_length()
+    facts = [
+        'There have been %s unqiue messages between us' % (num_messages),
+        'The first message sent had the subject "%s"' % (first_msg.subject),
+        'The longest thread between us has %s messages. The subject is "%s"' %
+        (longest_thread_length, longest_thread_subject)
+    ]
 
-    return json.dumps(ret)
+    return json.dumps({'facts': facts})
 
 
 @app.route('/users', methods=['GET'])

@@ -17,10 +17,7 @@ module.exports = React.createClass
       type: 'POST'
       dataType: 'JSON'
       success: (data) =>
-        facts = [
-          "There have been #{data.num_messages} unqiue messages between us"
-          "The first message sent had the subject \"#{data.first_msg.subject}\""
-        ]
+        facts = data.facts
         @setState
           facts: facts
 
