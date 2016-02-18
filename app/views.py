@@ -11,7 +11,7 @@ from models import Markov, User, Message
 
 @app.route('/')
 def index():
-    return render_template('index.jade')
+    return render_template('base.jade', js_filename='home.bundle.js')
 
 
 @app.route('/users', methods=['GET'])

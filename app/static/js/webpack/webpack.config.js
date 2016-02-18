@@ -1,5 +1,6 @@
 module.exports = {
     entry: {
+        home: "../home/home.coffee",
         skarkov: "../markovs/skarkov.coffee",
         stats: "../stats/stats.coffee",
         users: "../users/users.coffee",
