@@ -52,8 +52,16 @@ class User(db.Model):
         '''The number of unique messages this user has sent.'''
         return len(self.messages)
 
-    def serialize_messages(self):
-        return [m.to_api_dict() for m in self.messages]
+    def initiating_msgs(self):
+        '''a message is considered initiating a thread if it
+        doesn't start with "Re:"
+        '''
+        msgs = [m for m in self.messages if
+                m.subject and m.subject[:3].lower() != 're:']
+        return msgs
+
+    def serialize_messages(self, msgs):
+        return [m.to_api_dict() for m in msgs]
 
     def word_count(self):
         '''Take all_pruned_text and and let word_tokenize split it up
@@ -129,7 +137,8 @@ class User(db.Model):
             'avg_word_count': self.avg_word_count_per_message(),
             'message_count': self.message_count(),
             'response_percentages': self.response_percentages(),
-            'messages': self.serialize_messages(),
+            'messages': self.serialize_messages(self.messages),
+            'initiating_msgs': self.serialize_messages(self.initiating_msgs()),
         }
 
 

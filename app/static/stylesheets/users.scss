@@ -50,7 +50,12 @@
     .response-percentages {
         margin-bottom: 50px;
     }
-    .message-timeline {
-        display: inline-block;
+    .title {
+        text-align: center;
+    }
+    .messages-sent, .threads-initiated {
+        .yearly, .quarterly {
+            display: inline-block;
+        }
     }
 }

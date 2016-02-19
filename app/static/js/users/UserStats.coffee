@@ -48,7 +48,6 @@ module.exports = React.createClass
     return ret
 
   _organize_by_year: (messages) ->
-    messages = @props.user.messages
     year_to_messages = _.groupBy(messages, (m) ->
       d = new Date(Number(m.send_time_unix) * 1000)
       d = d.toString()
@@ -57,7 +56,7 @@ module.exports = React.createClass
 
     return year_to_messages
 
-  _get_messages_by_year: ->
+  _get_messages_by_year: (messages) ->
     # group all messages into an object that looks like this:
     # {
     #      '2008': [message, message, message]
@@ -65,7 +64,7 @@ module.exports = React.createClass
     #      '2010': [message, message]
     # }
     # put each { k, v.length } into an array for our BarChart x, y values.
-    year_to_messages = @_organize_by_year(@props.user.messages)
+    year_to_messages = @_organize_by_year(messages)
     values = []
 
     for year, messages of year_to_messages
@@ -78,7 +77,7 @@ module.exports = React.createClass
       values: values
     }]
 
-  _get_messages_by_quarter: ->
+  _get_messages_by_quarter: (messages)->
     # group all messages into an object that looks like this:
     # {
     #      '08_1': [message, message, message]
@@ -88,7 +87,7 @@ module.exports = React.createClass
     #      '09_1': [message, message]
     # }
     # put each { k, v.length } into an array for our BarChart x, y values.
-    year_to_messages = @_organize_by_year(@props.user.messages)
+    year_to_messages = @_organize_by_year(messages)
 
     values = []
     for year, messages of year_to_messages
@@ -114,17 +113,21 @@ module.exports = React.createClass
       values: values
     }]
 
-  bar_chart: {
-    tooltip: (x, y0, y, total) ->
+  bar_chart_defaults: {
+    tooltiphtml: (x, y0, y, total) ->
       return y.toString()
 
     tick_format: (tick) ->
       if tick.endsWith('_1')
         return "'#{tick.split("_")[0]}"
       return ''
-
-    # use this scale when getting messages by quarter
-    yScale: d3.scale.linear().domain([0,70]).range([340, 0])
+    width: 400
+    height: 200
+    margin: {top: 10, bottom: 50, left: 50, right: 10}
+    colorByLabel: false
+    xAxis: { tickFormat: null }
+    yAxis: { label: "Y axis label" }
+    yScale: null
   }
 
   render: ->
@@ -134,16 +137,69 @@ module.exports = React.createClass
       $$.div className: 'response-percentages',
         "Response Percentages:"
         @_get_response_percentages()
-      $$.div className: 'message-timeline',
-        GraphTitle
-          text: "Emails Sent Over Time"
-        BarChart
-          data: @_get_messages_by_quarter()
-          width: 800
-          height: 400
-          margin: {top: 10, bottom: 50, left: 50, right: 10}
-          tooltipHtml: @bar_chart.tooltip
-          colorByLabel: false
-          xAxis: { tickFormat: @bar_chart.tick_format }
-          yAxis: { label: "Number of Messages" }
-          yScale: @bar_chart.yScale
+      $$.div className: 'messages-sent',
+        $$.div className: 'yearly',
+          $$.div className: 'title',
+            "Unique Emails Sent"
+          GraphTitle
+            text: "By Year"
+          BarChart
+            data: @_get_messages_by_year(user.messages)
+            width: @bar_chart_defaults.width
+            height: @bar_chart_defaults.height
+            margin: @bar_chart_defaults.margin
+            tooltipHtml: @bar_chart_defaults.tooltiphtml
+            colorByLabel: @bar_chart_defaults.colorByLabel
+            yScale: d3.scale.linear().domain([0,210]).range([140, 0])
+            xAxis: { tickFormat: (tick) ->
+              return "'#{tick.slice(2)}"
+            }
+        $$.div className: 'quarterly',
+          GraphTitle
+            text: "By Quarter"
+          BarChart
+            data: @_get_messages_by_quarter(user.messages)
+            width: @bar_chart_defaults.width
+            height: @bar_chart_defaults.height
+            margin: @bar_chart_defaults.margin
+            tooltipHtml: @bar_chart_defaults.tooltiphtml
+            colorByLabel: @bar_chart_defaults.colorByLabel
+            xAxis: { tickFormat: (tick) ->
+              if tick.endsWith('_1')
+                return "'#{tick.split("_")[0]}"
+              return ''
+            }
+            yScale: d3.scale.linear().domain([0,70]).range([140, 0])
+      $$.div className: 'threads-initiated',
+        $$.div className: 'yearly',
+          $$.div className: 'title',
+            "Threads Initiated"
+          GraphTitle
+            text: "By Year"
+          BarChart
+            data: @_get_messages_by_year(user.initiating_msgs)
+            width: @bar_chart_defaults.width
+            height: @bar_chart_defaults.height
+            margin: @bar_chart_defaults.margin
+            tooltipHtml: @bar_chart_defaults.tooltiphtml
+            colorByLabel: @bar_chart_defaults.colorByLabel
+            xAxis: { tickFormat: (tick) ->
+              return "'#{tick.slice(2)}"
+            }
+            yScale: d3.scale.linear().domain([0,85]).range([140, 0])
+        $$.div className: 'quarterly',
+          GraphTitle
+            text: "By Quarter"
+          BarChart
+            data: @_get_messages_by_quarter(user.initiating_msgs)
+            width: @bar_chart_defaults.width
+            height: @bar_chart_defaults.height
+            margin: @bar_chart_defaults.margin
+            tooltipHtml: @bar_chart_defaults.tooltiphtml
+            colorByLabel: @bar_chart_defaults.colorByLabel
+            xAxis: { tickFormat: (tick) ->
+              if tick.endsWith('_1')
+                return "'#{tick.split("_")[0]}"
+              return ''
+            }
+            yScale: d3.scale.linear().domain([0,70]).range([140, 0])
