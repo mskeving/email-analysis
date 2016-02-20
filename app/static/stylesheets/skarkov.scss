@@ -47,20 +47,20 @@ img.legit {
     display: inline-block;
     width: 23%;
     vertical-align: top;
-}
-.btn {
-    width: 65px;
-    padding: 5px;
-    margin: auto;
-    text-align: center;
-    font-size: 14px;
-    border: 1px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.btn:hover {
-    background-color: #ddd;
-}
-.tweet {
-    margin-top: 5px;
+    .option {
+        width: 65px;
+        padding: 5px;
+        margin: auto;
+        text-align: center;
+        font-size: 14px;
+        border: 1px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .option:hover {
+        background-color: #ddd;
+    }
+    .tweet {
+        margin-top: 5px;
+    }
 }

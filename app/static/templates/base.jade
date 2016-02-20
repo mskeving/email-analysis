@@ -1,7 +1,9 @@
 html(lang="en")
   head
     link(rel="stylesheet", type="text/css", href="https://fonts.googleapis.com/css?family=Roboto:400,700,300")
-    script(type="text/javascript", src="/static/js/build/#{js_filename}")
+    link(rel="stylesheet", href="http://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel="stylesheet", href="/static/js/node_modules/materialize-css/dist/css/materialize.min.css", media="screen,projection")
 
   body
+    script(type="text/javascript", src="/static/js/build/#{js_filename}")
     #content

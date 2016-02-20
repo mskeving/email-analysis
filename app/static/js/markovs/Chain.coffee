@@ -40,10 +40,10 @@ module.exports = React.createClass
           @props.markov_info.markov_dict.chain
       $$.div className: "options",
         $$.div
-          className: cls(['btn', 'new'])
+          className: cls(['option'])
           onClick: @_get_markov
           "new"
         $$.div
-          className: cls(['btn', 'tweet'])
+          className: cls(['option', 'tweet'])
           onClick: @tweetMarkov,
           "tweet"
