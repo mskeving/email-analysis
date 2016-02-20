@@ -1,5 +1,9 @@
 @import "base.scss";
 
+.preloader-container {
+    margin-top: 250px;
+    text-align: center;
+}
 .user-container {
     margin: auto;
     margin-top: $container-margin-top;
@@ -52,10 +56,16 @@
     }
     .title {
         text-align: center;
+        font-size: 30px;
     }
     .messages-sent, .threads-initiated {
+        margin: 0 30px;
+        text-align: center;
         .yearly, .quarterly {
             display: inline-block;
         }
+    }
+    .messages-sent {
+        margin-bottom: 33px;
     }
 }
