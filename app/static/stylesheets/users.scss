@@ -43,7 +43,8 @@
             vertical-align: top;
             margin-left: 25px;
         }
-        .name, .addresses {
+        .name {
+            margin: 0;
             margin-bottom: 20px;
         }
     }
@@ -51,8 +52,13 @@
 
 
 .user-stats {
-    .response-percentages {
+    .table {
+        display: inline-block;
         margin-bottom: 50px;
+        td {
+            text-align: right;
+            padding: 6px 15px;
+        }
     }
     .msg-graphs {
         text-align: center

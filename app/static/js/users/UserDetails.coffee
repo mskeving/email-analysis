@@ -21,13 +21,6 @@ module.exports = React.createClass
         address
     )
 
-  _get_facts: ->
-    return $$.div className: 'facts',
-      $$.div null,
-        "Number of messages sent: #{@props.user.message_count}"
-      $$.div null,
-        "Average word count per message: #{@props.user.avg_word_count}"
-
   render: ->
     user = @props.user
 
@@ -36,8 +29,7 @@ module.exports = React.createClass
         Avatar
           link: user.avatar_link
         $$.div className: 'text',
-          $$.div className: 'name',
+          $$.h3 className: 'name',
             capitalize(user.name)
           $$.div className: 'addresses',
             @_get_email_addresses()
-          @_get_facts()

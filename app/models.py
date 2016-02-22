@@ -128,6 +128,11 @@ class User(db.Model):
 
         return resp_percentages
 
+    def num_of_participated_threads(self):
+        # participated_threads = number of unique thread ids from self.messages
+        # participated_threads/Message.threads_count * 100
+        pass
+
     def to_api_dict(self):
         return {
             'id': self.id,
@@ -139,6 +144,8 @@ class User(db.Model):
             'response_percentages': self.response_percentages(),
             'messages': self.serialize_messages(self.messages),
             'initiating_msgs': self.serialize_messages(self.initiating_msgs()),
+            'num_words_all_caps': self.num_words_all_caps(),
+            'word_count': self.word_count(),
         }
 
 
