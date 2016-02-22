@@ -35,6 +35,8 @@ module.exports = React.createClass
     title: V.string
     option_one: V.string
     option_two: V.string
+    yearly_y_scale: V.func
+    quarterly_y_scale: V.func
 
   getInitialState: ->
     is_yearly: true
@@ -124,6 +126,7 @@ module.exports = React.createClass
     messages = @props.messages
 
     if @state.is_yearly
+      yScale = @props.yearly_y_scale or d3.scale.linear().domain([0,200]).range([140, 0])
       $$.div className: 'yearly',
         BarChart
           data: @_get_messages_by_year(messages)
@@ -135,8 +138,9 @@ module.exports = React.createClass
           xAxis: { tickFormat: (tick) ->
             return "'#{tick.slice(2)}"
           }
-          yScale: d3.scale.linear().domain([0,210]).range([140, 0])
+          yScale: yScale
     else
+      yScale = @props.quarterly_y_scale or d3.scale.linear().domain([0,70]).range([140, 0])
       $$.div className: 'quarterly',
         BarChart
           data: @_get_messages_by_quarter(messages)
@@ -147,17 +151,18 @@ module.exports = React.createClass
           colorByLabel: @bar_chart_defaults.colorByLabel
           xAxis: { tickFormat: (tick) ->
             if tick.endsWith('_1')
+              # only show '08 for the first quarter
               return "'#{tick.split("_")[0]}"
             return ''
           }
-          yScale: d3.scale.linear().domain([0,70]).range([140, 0])
+          yScale: yScale
 
   _toggle_is_yearly: ->
     @setState
       is_yearly: !@state.is_yearly
 
   render: ->
-    return $$.div className: 'user-stats',
+    return $$.div className: 'bar-chart',
       $$.div className: 'messages-sent',
         $$.div className: 'title',
           @props.title

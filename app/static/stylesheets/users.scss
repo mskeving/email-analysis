@@ -8,7 +8,7 @@
     margin: auto;
     margin-top: $container-margin-top;
     padding: 20px;
-    width: 70%;
+    width: 85%;
     max-width: 1200px;
 }
 
@@ -54,18 +54,27 @@
     .response-percentages {
         margin-bottom: 50px;
     }
+    .msg-graphs {
+        text-align: center
+    }
+    .bar-chart {
+        display: inline-block;
+        .messages-sent, .threads-initiated {
+            margin: 0 30px;
+            text-align: center;
+            .yearly, .quarterly {
+                display: inline-block;
+            }
+        }
+        .messages-sent {
+            margin-bottom: 33px;
+        }
+        .switch {
+            margin-bottom: 24px;
+        }
+    }
     .title {
         text-align: center;
         font-size: 30px;
-    }
-    .messages-sent, .threads-initiated {
-        margin: 0 30px;
-        text-align: center;
-        .yearly, .quarterly {
-            display: inline-block;
-        }
-    }
-    .messages-sent {
-        margin-bottom: 33px;
     }
 }

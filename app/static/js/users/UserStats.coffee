@@ -26,13 +26,18 @@ module.exports = React.createClass
       $$.div className: 'response-percentages',
         "Response Percentages:"
         @_get_response_percentages()
-      BarChartMsgCount
-        messages: user.messages
-        option_one: "yearly"
-        option_two: "quarterly"
-        title: "Emails Sent"
-      BarChartMsgCount
-        messages: user.initiating_msgs
-        option_one: "yearly"
-        option_two: "quarterly"
-        title: "Initiated Threads"
+      $$.div className: 'msg-graphs',
+        BarChartMsgCount
+          messages: user.messages
+          option_one: "yearly"
+          option_two: "quarterly"
+          title: "Emails Sent"
+          yearly_y_scale: d3.scale.linear().domain([0, 210]).range([140, 0])
+          quarterly_y_scale: d3.scale.linear().domain([0, 70]).range([140, 0])
+        BarChartMsgCount
+          messages: user.initiating_msgs
+          option_one: "yearly"
+          option_two: "quarterly"
+          title: "Initiated Threads"
+          yearly_y_scale: d3.scale.linear().domain([0, 85]).range([140, 0])
+          quarterly_y_scale: d3.scale.linear().domain([0, 30]).range([140, 0])
