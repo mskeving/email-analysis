@@ -1,6 +1,7 @@
 React      = require('react')
 capitalize = require('../helpers/capitalize.coffee')
 percentage = require('../helpers/percentage.coffee')
+seconds_to_time = require('../helpers/seconds_to_time.coffee')
 
 $$ = React.DOM
 V  = React.PropTypes
@@ -27,6 +28,7 @@ module.exports = React.createClass
       { "Average word count": @props.user.avg_word_count }
       { "Total threads initiated": @props.user.initiating_msgs.length }
       { "Percentage of words in all caps": "#{percentage(all_caps/Number(@props.user.word_count) * 100)}" }
+      { "Average response time": "#{seconds_to_time(@props.user.avg_response_time)}" }
     ]
 
   render: ->

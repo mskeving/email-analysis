@@ -133,6 +133,15 @@ class User(db.Model):
         # participated_threads/Message.threads_count * 100
         pass
 
+    def avg_response_time(self):
+        counter = 0
+        total = 0
+        for msg in self.messages:
+            if msg.response_time:
+                counter += 1
+                total += int(msg.response_time)
+        return total/counter
+
     def to_api_dict(self):
         return {
             'id': self.id,
@@ -146,6 +155,7 @@ class User(db.Model):
             'initiating_msgs': self.serialize_messages(self.initiating_msgs()),
             'num_words_all_caps': self.num_words_all_caps(),
             'word_count': self.word_count(),
+            'avg_response_time': self.avg_response_time(),
         }
 
 
@@ -172,6 +182,7 @@ class Message(db.Model):
     pruned = db.Column(db.Text())
     # this only includes to: and not cc:
     recipients = db.Column(db.Text())
+    response_time = db.Column(db.String(64))
 
     # keep id of both user and email_address so you can easily
     # do user.messages or email_address.messages

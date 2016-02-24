@@ -4,6 +4,7 @@ import base64
 import json
 import nltk.data
 
+from sqlalchemy import asc
 from apiclient import errors
 from email.utils import parsedate_tz, mktime_tz
 from nltk.tokenize import word_tokenize
@@ -105,10 +106,10 @@ def add_messages():
     # messages.get() section
     message_infos = []
     commited_messages_count = 0
-    new_messages = [x for x in all_message_ids if x not in existing_message_ids]
+    new_message_ids = [x for x in all_message_ids if x not in existing_message_ids]
 
     print ("Getting messages...")
-    for i, message_id in enumerate(new_messages):
+    for i, message_id in enumerate(new_message_ids):
         message_info = {'id': message_id,
                         'data': None,
                         'thread_id': None,
@@ -158,7 +159,7 @@ def add_messages():
 
             # commit in chunks so I don't have to start from scratch.
             chunk_size = 25
-            if len(message_infos) == chunk_size or i >= len(new_messages) - chunk_size:
+            if len(message_infos) == chunk_size or i >= len(new_message_ids) - chunk_size:
                 # the second part of this if statements is so that if all_message_ids is not evenly
                 # divisible by chunk_size, it will get the remainder. But, it means that it will do
                 # chunk_size commits for the last chunk. (if there are 10 remaining, it will be 10
@@ -194,6 +195,35 @@ def add_messages():
 
         except errors.HttpError as error:
             print ('An error occurred: %s') % error
+
+    # get response times only after everything is committed
+    calculate_response_times(new_message_ids)
+
+
+def calculate_response_times(message_ids):
+    ''' For each new message, find the thread, and recalculate
+    all response times for messages in that thread. This is because
+    we can't assume message_ids is coming in send_time order.
+    '''
+    for msg_id in message_ids:
+        msg = Message.query.filter_by(message_id=msg_id).first()
+        if msg:
+            thread_id = msg.thread_id
+            print "response time for thread: %r" % thread_id
+
+            msgs = (Message.query.filter_by(thread_id=thread_id)
+                    .order_by(asc(Message.send_time_unix)).all()
+                    )
+            curr = msgs[0]
+            curr.response_time = None
+            for m in msgs[1:]:
+                prev = curr
+                curr = m
+                curr.response_time = (int(curr.send_time_unix) -
+                                      int(prev.send_time_unix)
+                                      )
+
+    db.session.commit()
 
 
 def save_markov_info():
