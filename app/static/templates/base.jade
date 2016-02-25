@@ -3,7 +3,10 @@ html(lang="en")
     link(rel="stylesheet", type="text/css", href="https://fonts.googleapis.com/css?family=Roboto:400,700,300")
     link(rel="stylesheet", href="http://fonts.googleapis.com/icon?family=Material+Icons")
     link(rel="stylesheet", href="/static/js/node_modules/materialize-css/dist/css/materialize.min.css", media="screen,projection")
+    link(rel="stylesheet", href="/static/stylesheets/materialize_fixes.css")
 
   body
-    script(type="text/javascript", src="/static/js/build/#{js_filename}")
     #content
+    script(type="text/javascript", src="/static/js/build/#{js_filename}")
+    script(type="text/javascript", src="/static/js/node_modules/jquery/dist/jquery.min.js")
+    script(type="text/javascript", src="/static/js/node_modules/materialize-css/dist/js/materialize.min.js")
