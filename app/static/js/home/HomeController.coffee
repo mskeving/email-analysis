@@ -3,6 +3,8 @@ $       = require('jquery')
 $$      = React.DOM
 
 HomeDisplay = React.createFactory(require('./HomeDisplay.coffee'))
+NavBar      = React.createFactory(require('../common/NavBar.coffee'))
+Preloader   = React.createFactory(require('../common/Preloader.coffee'))
 
 module.exports = React.createClass
   displayName: 'HomeController'
@@ -24,6 +26,16 @@ module.exports = React.createClass
       error: (jqXHR, textStatus, errorThrown) ->
         alert "Error #{jqXHR}, #{textStatus}, #{errorThrown}"
 
+  _get_display_or_waiting: ->
+    if @state.facts.length
+      return HomeDisplay
+        facts: @state.facts
+    else
+      return $$.div className: "preloader-container",
+        Preloader null
+
   render: ->
-    return HomeDisplay
-      facts: @state.facts
+    return $$.div null,
+      NavBar null
+      $$.div className: "home-container",
+        @_get_display_or_waiting()

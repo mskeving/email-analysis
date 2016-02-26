@@ -2,7 +2,14 @@ body {
     margin: 0;
 }
 
-$container-margin-top: 0px;
+.preloader-container {
+    margin-top: 250px;
+    text-align: center;
+}
+
+$container-margin-top: 40px;
 
 $white: white;
 $teal: teal;
+$light-pink: #ffcdd2;
+$nav-color: #ee6e73;
