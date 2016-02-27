@@ -1,5 +1,3 @@
-require("../../stylesheets/users.scss")
-
 React           = require("react")
 UsersController = React.createFactory(require('./UsersController.coffee'))
 

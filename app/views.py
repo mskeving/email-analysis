@@ -12,7 +12,7 @@ from models import Markov, User, Message
 
 @app.route('/')
 def index():
-    return render_template('base.jade', js_filename='home.bundle.js')
+    return render_template('base.jade', js_filename='app.bundle.js')
 
 
 @app.route('/facts', methods=['POST'])

@@ -1,3 +1,5 @@
+require("../../stylesheets/skarkov.scss")
+
 React   = require('react')
 _       = require('lodash')
 $       = require('jquery')

@@ -1,5 +1,3 @@
-require("../../stylesheets/skarkov.scss")
-
 React          = require("react")
 SkarkovDisplay = React.createFactory(require('./SkarkovDisplay.coffee'))
 

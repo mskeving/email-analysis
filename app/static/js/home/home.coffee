@@ -1,5 +1,3 @@
-require("../../stylesheets/home.scss")
-
 React          = require("react")
 HomeController = React.createFactory(require('./HomeController.coffee'))
 

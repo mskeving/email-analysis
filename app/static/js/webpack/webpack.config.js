@@ -4,6 +4,7 @@ module.exports = {
         skarkov: "../markovs/skarkov.coffee",
         stats: "../stats/stats.coffee",
         users: "../users/users.coffee",
+        app: "../index.coffee"
     },
     output: {
         path: __dirname,

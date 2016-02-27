@@ -1,3 +1,4 @@
+require("../../stylesheets/home.scss")
 React   = require('react')
 $$      = React.DOM
 V       = React.PropTypes
