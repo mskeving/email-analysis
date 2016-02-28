@@ -1,29 +1,22 @@
 React       = require("react")
 ReactDom    = require("react-dom")
-ReactRouter = require("react-router")
-hashHistory = ReactRouter.hashHistory
-$$          = React.DOM
+{Router, Route, IndexRoute, browserHistory} = require("react-router")
 
-Router = React.createFactory(ReactRouter.Router)
-Route  = React.createFactory(ReactRouter.Route)
-IndexRoute  = React.createFactory(ReactRouter.IndexRoute)
-
-App             = React.createFactory(require('./App.coffee'))
-SkarkovDisplay  = React.createFactory(require('./markovs/SkarkovDisplay.coffee'))
-UsersController = React.createFactory(require('./users/UsersController.coffee'))
-HomeController  = React.createFactory(require('./home/HomeController.coffee'))
+App             = require('./App')
+UsersController = require('./users/UsersController')
+SkarkovDisplay  = require('./markovs/SkarkovDisplay')
+HomeController  = require('./home/HomeController')
+StatsController = require('./stats/StatsController')
 
 router = (
-  Router history: hashHistory,
-    Route
-      path:"/"
-      component: App
-    Route
-      path: "/users"
-      component: UsersController
-    Route
-      path: "/markovs"
-      component: SkarkovDisplay
+  <Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={HomeController} />
+      <Route path="/users" component={UsersController} />
+      <Route path="/markovs" component={SkarkovDisplay} />
+      <Route path="/extra" component={StatsController} />
+    </Route>
+  </Router>
 )
 
 window.onload = ->

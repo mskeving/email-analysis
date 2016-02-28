@@ -2,11 +2,9 @@ require("../../stylesheets/users.scss")
 React    = require('react')
 $        = require('jquery')
 index_of = require('lodash/array/indexOf')
-$$       = React.DOM
 
-UsersDisplay = React.createFactory(require('./UsersDisplay.coffee'))
-NavBar       = React.createFactory(require('../common/NavBar.coffee'))
-Preloader    = React.createFactory(require('../common/Preloader.coffee'))
+UsersDisplay = require('./UsersDisplay')
+Preloader    = require('../common/Preloader')
 
 module.exports = React.createClass
   displayName: 'UsersController'
@@ -38,16 +36,23 @@ module.exports = React.createClass
 
   _get_display_or_waiting: ->
     if @state.selected_user?
-      return UsersDisplay
-        users: @state.users
-        select_user: @select_user
-        selected_user: @state.selected_user
+      return (
+        <UsersDisplay
+          users={@state.users}
+          select_user={@select_user}
+          selected_user={@state.selected_user}
+        />
+      )
     else
-      return $$.div className: "preloader-container",
-        Preloader null
+      return (
+        <div className="preloader-container">
+          <Preloader />
+        </div>
+      )
 
   render: ->
-    return $$.div null,
-      NavBar null
-      @_get_display_or_waiting()
-
+    return (
+      <div>
+        {@_get_display_or_waiting()}
+      </div>
+    )

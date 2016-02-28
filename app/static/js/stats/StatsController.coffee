@@ -1,13 +1,13 @@
-React   = require('react')
-$       = require('jquery')
-$$      = React.DOM
+require("../../stylesheets/stats.scss")
 
-StringCount   = React.createFactory(require('./StringCount.coffee'))
-BarChart      = React.createFactory(require('../common/barchart/BarChart.coffee'))
-NavBar        = React.createFactory(require('../common/NavBar.coffee'))
+React       = require('react')
+$           = require('jquery')
+StringCount = require('./StringCount.coffee')
+BarChart    = require('../common/barchart/BarChart.coffee')
+NavBar      = require('../common/NavBar.coffee')
 
 module.exports = React.createClass
-  displayName: 'StatDisplay'
+  displayName: 'StatsController'
 
   getInitialState: ->
     message_counts: []
@@ -44,14 +44,17 @@ module.exports = React.createClass
         console.log "Error fetching data for message count"
 
   render: ->
-    $$.div null,
-      NavBar null
-      StringCount
-        get_data: @_get_str_count
-        data: @state.str_count
-        chart_title: @state.str_count_chart_title
-        chart_sub_title: "Case Insensitive"
-      BarChart
-        get_data: @_get_messages_count
-        data: @state.message_counts
-        title: "Total Messages Sent"
+    <div>
+      <StringCount
+        get_data={@_get_str_count}
+        data={@state.str_count}
+        chart_title={@state.str_count_chart_title}
+        chart_sub_title="Case Insensitive"
+      />
+      <BarChart
+        get_data={@_get_messages_count}
+        data={@state.message_counts}
+        title="Total Messages Sent"
+      />
+
+    </div>

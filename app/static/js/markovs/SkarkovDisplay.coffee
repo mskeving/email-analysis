@@ -3,10 +3,7 @@ require("../../stylesheets/skarkov.scss")
 React   = require('react')
 _       = require('lodash')
 $       = require('jquery')
-$$      = React.DOM
-
-Chain  = React.createFactory(require('./Chain.coffee'))
-NavBar = React.createFactory(require('../common/NavBar.coffee'))
+Chain  = require('./Chain')
 
 module.exports = React.createClass
   displayName: 'UserMarkovs'
@@ -50,19 +47,22 @@ module.exports = React.createClass
         alert "Error retrieving Markov chain: #{e}"
 
   renderChain: (markov_info) ->
-    return Chain
-      markov_info: markov_info
-      get_new_markov: @_get_new_markov
-      key: markov_info.markov_dict.user_id
+    return (
+      <Chain
+        markov_info={markov_info}
+        get_new_markov={@_get_new_markov}
+        key={markov_info.markov_dict.user_id}
+      />
+    )
 
   render: ->
-    chainNodes = _.map(@state.markovs, @renderChain)
-
-    return $$.div null,
-      NavBar null
-      $$.div className: "container",
-        $$.a
-          className: "reference"
-          href:"http://www.piliapp.com/twitter-symbols/",
-            "User Symbols"
-        chainNodes
+    return (
+      <div>
+        <div className="container">
+          <a className="reference" href="http://www.piliapp.com/twitter-symbols/">
+            User Symbols
+          </a>
+          {_.map(@state.markovs, @renderChain)}
+        </div>
+      </div>
+    )

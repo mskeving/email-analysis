@@ -10,8 +10,12 @@ from lib.markov_generator import make_chain
 from models import Markov, User, Message
 
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    # react-router is used on the client to take care of routing.
+    # This is a catch-all url to say - whatever url we put in,
+    # render base.jade with app js and the client takes care of the rest.
     return render_template('base.jade', js_filename='app.bundle.js')
 
 
@@ -32,22 +36,12 @@ def facts():
     return json.dumps({'facts': facts})
 
 
-@app.route('/users', methods=['GET'])
-def users():
-    return render_template('base.jade', js_filename='users.bundle.js')
-
-
 @app.route('/api/users', methods=['GET'])
 def get_users():
     users = User.query.all()
     users = [u.to_api_dict() for u in users]
 
     return json.dumps(users)
-
-
-@app.route('/stats', methods=['GET'])
-def stats():
-    return render_template('base.jade', js_filename='stats.bundle.js')
 
 
 @app.route('/stats/message_time_bargraph', methods=['GET'])

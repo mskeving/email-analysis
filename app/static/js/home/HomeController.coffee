@@ -1,10 +1,7 @@
-React   = require('react')
-$       = require('jquery')
-$$      = React.DOM
-
-HomeDisplay = React.createFactory(require('./HomeDisplay.coffee'))
-NavBar      = React.createFactory(require('../common/NavBar.coffee'))
-Preloader   = React.createFactory(require('../common/Preloader.coffee'))
+React       = require('react')
+$           = require('jquery')
+HomeDisplay = require('./HomeDisplay.coffee')
+Preloader   = require('../common/Preloader.coffee')
 
 module.exports = React.createClass
   displayName: 'HomeController'
@@ -28,14 +25,19 @@ module.exports = React.createClass
 
   _get_display_or_waiting: ->
     if @state.facts.length
-      return HomeDisplay
-        facts: @state.facts
+      return <HomeDisplay facts=@state.facts />
     else
-      return $$.div className: "preloader-container",
-        Preloader null
+      return (
+        <div className="preloader-container">
+          <Preloader />
+        </div>
+      )
 
   render: ->
-    return $$.div null,
-      NavBar null
-      $$.div className: "home-container",
-        @_get_display_or_waiting()
+    return (
+      <div>
+        <div className="home-container">
+          {@_get_display_or_waiting()}
+        </div>
+      </div>
+    )

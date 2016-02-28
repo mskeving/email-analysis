@@ -1,14 +1,17 @@
+var webpack = require('webpack');
+
 module.exports = {
-    entry: {
-        home: "../home/home.coffee",
-        skarkov: "../markovs/skarkov.coffee",
-        stats: "../stats/stats.coffee",
-        users: "../users/users.coffee",
-        app: "../index.coffee"
-    },
+    entry: [
+        "../index.coffee"
+    ],
+    devtool: 'source-map',
     output: {
         path: __dirname,
-        filename: "../build/[name].bundle.js"
+        publicPath: "http://localhost:8080/assets/",
+        filename: "build/app.bundle.js"
+    },
+    resolve: {
+      extensions: ['', '.js', '.coffee']
     },
     module: {
         loaders: [
@@ -19,7 +22,7 @@ module.exports = {
         },
         {
             test: /\.coffee$/,
-            loaders: ['coffee-loader']
+            loaders: ['react-hot', 'coffee', 'cjsx']
         },
         {
             test: /\.css$/,
@@ -39,5 +42,5 @@ module.exports = {
         }
 
         ]
-    }
+    },
 };
