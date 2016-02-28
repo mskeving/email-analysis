@@ -1,3 +1,4 @@
+require("../stylesheets/base.scss")
 React  = require('react')
 NavBar = require('./common/NavBar')
 
