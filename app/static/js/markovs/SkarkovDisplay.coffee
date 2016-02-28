@@ -58,7 +58,7 @@ module.exports = React.createClass
   render: ->
     return (
       <div>
-        <div className="container">
+        <div className="skarkov-container">
           <a className="reference" href="http://www.piliapp.com/twitter-symbols/">
             User Symbols
           </a>

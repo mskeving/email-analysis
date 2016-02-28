@@ -1,11 +1,5 @@
-require("../../stylesheets/components/_tab.scss")
-
-React      = require('react')
-cls        = require('classnames')
-capitalize = require('../helpers/capitalize.coffee')
-
-$$ = React.DOM
-V  = React.PropTypes
+React = require('react')
+V     = React.PropTypes
 
 module.exports = React.createClass
   displayName: 'Tab'
@@ -15,15 +9,25 @@ module.exports = React.createClass
     on_click: V.func
     selected_option: V.object
 
+  componentDidMount: ->
+    $('ul.tabs').tabs()
+
+  _tab_items: ->
+    return @props.options.map((option, i) =>
+      return (
+        <li className="tab col" key={i} onClick={=>@props.on_click(option)}>
+          <a href="">{option.name}</a>
+        </li>
+      )
+    )
+
   render: ->
-    return $$.div
-      className: 'tab-container',
-        @props.options.map((option, i) =>
-          return $$.div
-            className: cls('tab', {
-              'active': option is @props.selected_option
-            })
-            key: i
-            onClick: => @props.on_click(option),
-            capitalize(option.name)
-        )
+    return (
+      <div className="row">
+        <div className="col">
+          <ul className="tabs">
+            {@_tab_items()}
+          </ul>
+        </div>
+      </div>
+    )

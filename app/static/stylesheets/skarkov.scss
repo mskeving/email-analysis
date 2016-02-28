@@ -1,20 +1,19 @@
 @import "base.scss";
 
-div {
-    font-weight: 400;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-a:hover {
-    text-decoration: underline;
-}
-.reference {
-    margin-left: 15px;
-}
-.container {
+.skarkov-container {
+    div {
+        font-weight: 400;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    .reference {
+        margin-left: 15px;
+    }
     width: 80%;
     max-width: 725px;
     margin: auto;

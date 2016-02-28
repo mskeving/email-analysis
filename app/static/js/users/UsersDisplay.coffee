@@ -1,6 +1,6 @@
-React   = require('react')
-$$      = React.DOM
-V       = React.PropTypes
+React = require('react')
+$$    = React.DOM
+V     = React.PropTypes
 
 Tab         = React.createFactory(require('../common/Tab.coffee'))
 UserDetails = React.createFactory(require('./UserDetails.coffee'))
