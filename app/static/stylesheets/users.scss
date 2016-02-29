@@ -7,46 +7,17 @@
     max-width: 1200px;
 }
 
-.user-info {
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 20px;
+.user-details {
+    .avatar.card-image {
+        height: 256px;
+    }
 }
 
-.user-details, .user-stats {
+.user-stats {
     padding: 20px;
     width: 97%;
     border: 1px solid #eee;
     border-radius: 5px;
-}
-.user-details {
-    vertical-align: top;
-    .user-basics {
-        .avatar-container {
-            display: inline-block;
-            height: 200px;
-            width: 200px;
-            text-align: center;
-            overflow: hidden;;
-            img {
-                height: auto;
-                width: 100%;
-            }
-        }
-        .text {
-            display: inline-block;
-            vertical-align: top;
-            margin-left: 25px;
-        }
-        .name {
-            margin: 0;
-            margin-bottom: 20px;
-        }
-    }
-}
-
-
-.user-stats {
     .table {
         display: inline-block;
         margin-bottom: 50px;

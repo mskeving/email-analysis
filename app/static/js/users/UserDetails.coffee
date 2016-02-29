@@ -1,6 +1,7 @@
 React      = require('react')
 map        = require('lodash/collection/map')
 capitalize = require('../helpers/capitalize.coffee')
+CardReveal = React.createFactory(require('../common/CardReveal.coffee'))
 
 $$ = React.DOM
 V  = React.PropTypes
@@ -22,14 +23,8 @@ module.exports = React.createClass
     )
 
   render: ->
-    user = @props.user
-
-    return $$.div className: 'user-details',
-      $$.div className: 'user-basics',
-        Avatar
-          link: user.avatar_link
-        $$.div className: 'text',
-          $$.h3 className: 'name',
-            capitalize(user.name)
-          $$.div className: 'addresses',
-            @_get_email_addresses()
+    return $$.div className: 'row user-details',
+      CardReveal
+        avatar_link: @props.user.avatar_link
+        hidden_info: @_get_email_addresses()
+        title: @props.user.name

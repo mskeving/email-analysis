@@ -16,7 +16,7 @@ module.exports = React.createClass
 
   render: ->
     return $$.div null,
-      $$.div className: 'user-container',
+      $$.div className: 'container user-container',
         Tab
           options: @props.users
           on_click: @props.select_user
