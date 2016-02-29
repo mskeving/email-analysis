@@ -15,7 +15,6 @@ module.exports = React.createClass
 
   render: ->
     return (
-      <div className="col s3">
         <div className="card">
           <div className="avatar card-image waves-effect waves-block waves-light">
             <img className="activator" src={@props.avatar_link} />
@@ -36,5 +35,4 @@ module.exports = React.createClass
             </div>
           </div>
         </div>
-      </div>
     )
