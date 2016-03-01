@@ -1,12 +1,10 @@
 React   = require('react')
 _       = require('lodash')
-$       = require('jquery')
 $$      = React.DOM
 V       = React.PropTypes
 
-Bar            = React.createFactory(require('../common/barchart/Bar.coffee'))
-BarChart       = React.createFactory(require('../common/barchart/BarChart.coffee'))
-SearchOption   = React.createFactory(require('./SearchOption.coffee'))
+SearchOption = React.createFactory(require('./SearchOption.coffee'))
+BarChart     = React.createFactory(require('react-d3-components/lib/BarChart.js'))
 
 SAVED_SEARCHES = [
   "!", "haha", "drunk", "family", "friends", "wine", "dog"
@@ -17,12 +15,12 @@ module.exports = React.createClass
 
   propTypes:
     get_data: V.func.isRequired
+    chart_title: V.string
 
   getDefaultProps: ->
-    width: 500
-    height: 500
-    data: []
+    values: [{x: '', y: 0}]
     chart_title: ""
+    get_data: ->
 
   _new_search: ->
     str = document.getElementById('search-str').value
@@ -38,6 +36,15 @@ module.exports = React.createClass
       onClick: @_saved_search
       searchStr: str
       key: i
+
+  data: ->
+    return [{
+      label: 'count',
+      values: @props.values
+    }]
+
+  componentDidMount: ->
+    @props.get_data('!')
 
   render: ->
     $$.div
@@ -58,10 +65,12 @@ module.exports = React.createClass
             className: "btn-search"
             onClick: @_new_search,
             "search"
-      BarChart
-        width: @props.width
-        height: @props.height
-        get_data: => @props.get_data('!')
-        title: @props.chart_title
-        subtitle: @props.chart_sub_title
-        data: @props.data
+      $$.div className: "bar-chart",
+        $$.h5 null, @props.chart_title
+        BarChart
+          data: @data()
+          width: 400
+          height: 400
+          margin: {top: 10, bottom: 50, left: 50, right: 10}
+          tooltipHtml: (x, y0, y, total) ->
+            return y.toString()

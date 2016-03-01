@@ -122,9 +122,9 @@ module.exports = React.createClass
 
 
   _get_chart: ->
-    # if it's not yearly, it's quarterly.
     messages = @props.messages
 
+    # if it's not yearly, it's quarterly.
     if @state.is_yearly
       yScale = @props.yearly_y_scale or d3.scale.linear().domain([0,200]).range([140, 0])
       $$.div className: 'yearly',

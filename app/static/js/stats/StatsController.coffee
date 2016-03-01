@@ -47,7 +47,7 @@ module.exports = React.createClass
     <div>
       <StringCount
         get_data={@_get_str_count}
-        data={@state.str_count}
+        values={@state.str_count}
         chart_title={@state.str_count_chart_title}
         chart_sub_title="Case Insensitive"
       />

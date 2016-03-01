@@ -6,6 +6,12 @@
   min-width: 525px;
   margin: auto;
   margin-top: $container-margin-top;
+  .bar-chart {
+    display: inline-block;
+    h5 {
+      text-align: center;
+    }
+  }
 }
 
 .bar-chart-container {
@@ -29,10 +35,6 @@
 
 svg.bar-chart {
 	padding: 50px;
-}
-
-#app {
-  margin: 30px;
 }
 
 .bar {
