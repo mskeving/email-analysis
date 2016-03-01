@@ -1,6 +1,5 @@
 React   = require('react')
 {Link}  = require('react-router')
-$$      = React.DOM
 
 module.exports = React.createClass
   displayName: 'NavBar'

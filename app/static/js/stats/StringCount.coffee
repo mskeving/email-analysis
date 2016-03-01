@@ -3,12 +3,9 @@ _       = require('lodash')
 $$      = React.DOM
 V       = React.PropTypes
 
-SearchOption = React.createFactory(require('./SearchOption.coffee'))
-BarChart     = React.createFactory(require('react-d3-components/lib/BarChart.js'))
-
-SAVED_SEARCHES = [
-  "!", "haha", "drunk", "family", "friends", "wine", "dog"
-]
+BarChart       = React.createFactory(require('react-d3-components/lib/BarChart.js'))
+PrefilledInput = React.createFactory(require('../common/PrefilledInput'))
+Button         = React.createFactory(require('../common/Button'))
 
 module.exports = React.createClass
   displayName: 'StringCount'
@@ -22,20 +19,12 @@ module.exports = React.createClass
     chart_title: ""
     get_data: ->
 
-  _new_search: ->
-    str = document.getElementById('search-str').value
-    @props.get_data(str)
+  _run_search: ->
+    @props.get_data(@state.search_term)
 
-  _saved_search: (str) ->
-    # if you click on a saved search, clear input box
-    document.getElementById('search-str').value = ""
-    @props.get_data(str)
-
-  _render_search_option: (str, i) ->
-    return SearchOption
-      onClick: @_saved_search
-      searchStr: str
-      key: i
+  _update_search_term: (value) ->
+    @setState
+      search_term: value
 
   data: ->
     return [{
@@ -47,24 +36,17 @@ module.exports = React.createClass
     @props.get_data('!')
 
   render: ->
-    $$.div
-      className: 'str-count-container',
-      $$.div
-        className: "search-options-container",
-        _.map(SAVED_SEARCHES, @_render_search_option)
-        $$.div
-          className: 'search-custom',
-          $$.div
-            className: "search-custom-label",
-            "Custom: "
-          $$.input
-            id: "search-str"
-            type: "text"
-          $$.div
-            id: "btn-search-str"
-            className: "btn-search"
-            onClick: @_new_search,
-            "search"
+    $$.div className: 'str-count-container',
+      $$.div className: "row",
+        $$.div className: "col s6 prefill-input",
+          PrefilledInput
+            prefill: "!"
+            field_title: "Search Term"
+            on_change: @_update_search_term
+        $$.div className: "col s3",
+          Button
+            text: "test"
+            on_click: @_run_search
       $$.div className: "bar-chart",
         $$.h5 null, @props.chart_title
         BarChart

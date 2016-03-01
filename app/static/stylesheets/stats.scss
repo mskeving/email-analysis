@@ -6,6 +6,13 @@
   min-width: 525px;
   margin: auto;
   margin-top: $container-margin-top;
+  .prefill-input {
+    padding-left: 55px;
+  }
+  .btn {
+    display: inline-block;
+    margin-top: 17px;
+  }
   .bar-chart {
     display: inline-block;
     h5 {
@@ -50,46 +57,5 @@ svg.bar-chart {
   display: inline;
   text-decoration: none;
   margin-left: 10px;
-  cursor: pointer;
-}
-
-.search-options-container {
-  width: 60%;
-  margin: 30px auto;
-  text-align: center;
-}
-
-.search-custom {
-  display: block;
-}
-
-.search-custom-label {
-  display: inline-block;
-  margin-right: 12px;
-}
-
-.search-custom input {
-  width: 200px;
-  padding: 6px;
-  border-radius: 5px;
-}
-
-.search-option {
-  display: inline-block;
-  padding: 5px 26px;
-  margin: 10px;
-  text-align: center;
-  border: 1px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-search {
-  display: inline-block;
-  margin-left: 20px;
-  padding: 5px;
-  text-align: center;
-  border: 1px solid black;
-  border-radius: 5px;
   cursor: pointer;
 }
