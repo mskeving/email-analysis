@@ -10,8 +10,8 @@ from email.utils import parsedate_tz, mktime_tz
 from nltk.tokenize import word_tokenize
 from collections import defaultdict
 
+from settings import settings
 from app.lib.gmail_api import GmailApi
-from app.data.settings import family_list, prune_junk_from_message
 from app.models import User, EmailAddress, Message
 
 db = app.db
@@ -20,7 +20,7 @@ service = GmailApi().get_service()
 
 def create_users():
     existing_users = [u.name for u in User.query.all()]
-    for user in family_list:
+    for user in settings.user_list:
         if user.name in existing_users:
             # note: this means you won't be able to update a new user,
             # for example if they have a new email address.
@@ -76,8 +76,8 @@ def add_messages():
         email_address_to_user_ids[obj.email_address] = obj.user_id
     while len(users) > 0:
         # include all family members
-        sender = users.pop() # keep family_list intact to get recipient list
-        recipients = [user.address_str() for user in family_list if user.name != sender.name]
+        sender = users.pop()  # keep user_list intact to get recipient list
+        recipients = [user.address_str() for user in settings.user_list if user.name != sender.name]
         queries.append(generate_query(sender, recipients, labels_to_exclude="chats"))
 
     # messages.list() section. This gets you the IDs. To get more detailed information
@@ -154,7 +154,8 @@ def add_messages():
                     if part['mimeType'] == 'text/plain':
                         encoded_message = part['body']['data']
                         message_info['body'] = base64.urlsafe_b64decode(encoded_message.encode('utf-8'))
-                        message_info['pruned'] = prune_junk_from_message(message_info['body']).decode('utf-8')
+                        prune_message = settings.email_handler.prune_junk_from_message
+                        message_info['pruned'] = prune_message(message_info['body']).decode('utf-8')
             message_infos.append(message_info)
 
             # commit in chunks so I don't have to start from scratch.

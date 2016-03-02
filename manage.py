@@ -4,6 +4,7 @@ from flask.ext.script import Manager
 manager = Manager(create_app, with_default_commands=True)
 manager.add_option('-x', '--xconfig', dest='config', default='Development')
 
+
 @manager.command
 def initdb(env='Development'):
     # Note: calling this will drop everything in db
