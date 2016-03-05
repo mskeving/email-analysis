@@ -1,1 +1,1 @@
-web: gunicorn run:create_app -c config/gunicorn.conf.py
+web: gunicorn run:create_app\(\"$CONFIG_ENV\"\) -c config/gunicorn.conf.py

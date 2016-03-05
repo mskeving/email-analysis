@@ -14,9 +14,8 @@ from settings import settings
 from app.lib.gmail_api import GmailApi
 from app.models import User, EmailAddress, Message
 
-# note: to run this locally but populate heroku's database,
-# you need to create the app with heroku's database uri
 db = app.db
+service = GmailApi().get_service()
 
 
 def create_users():
@@ -65,10 +64,6 @@ def add_messages():
 
     We will only add new messages. This checks for existing
     message id's and skips them. """
-
-    # Gmail Service authentication
-    service = GmailApi().get_service()
-
     all_message_ids = []
     queries = []
     existing_message_ids = [m.message_id for m in Message.query.all()]
