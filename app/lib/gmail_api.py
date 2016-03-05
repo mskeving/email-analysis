@@ -1,13 +1,19 @@
 import os
-import oauth2client
 from oauth2client import tools
+import oauth2client
 from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import client
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
+CLIENT_SECRET_FILE = '../client_secret.json'
 APPLICATION_NAME = 'Gmail API Quickstart'
+
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
 
 
 class GmailApi():
@@ -32,7 +38,10 @@ class GmailApi():
         if not credentials or credentials.invalid:
             flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
             flow.user_agent = APPLICATION_NAME
-            credentials = tools.run(flow, store)
+            if flags:
+                credentials = tools.run_flow(flow, store, flags)
+            else:  # Needed only for compatability with Python 2.6
+                credentials = tools.run(flow, store)
             print 'Storing credentials to ' + credential_path
         return credentials
 
