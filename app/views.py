@@ -4,8 +4,8 @@ from datetime import datetime
 from collections import defaultdict
 from sqlalchemy import asc
 
-from app import app, db
 from flask import render_template, request
+from app import app, db
 from lib.markov_generator import make_chain
 from models import Markov, User, Message
 
