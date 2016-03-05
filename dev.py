@@ -1,7 +1,4 @@
-import os
+from app import create_app
 
 if __name__ == "__main__":
-    os.environ['CONFIG_ENV'] = 'Development'
-
-    from app import create_app
-    create_app(os.environ['CONFIG_ENV']).run()
+    create_app().run()
