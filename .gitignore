@@ -9,9 +9,12 @@ app/static/js/npm-debug.log
 app/static/images/avatars
 app/static/images/other
 
+# for heroku local
+.env
+
 skarkov_info.py
 settings.py
 heroku-settings.py
-heroku-build.sh
-heroku-push.sh
+heroku-build
+heroku-push
 heroku-build-output/
