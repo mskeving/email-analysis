@@ -252,13 +252,7 @@ class Message(db.Model):
     def to_api_dict(self):
         return {
             'id': self.id,
-            'message_id': self.message_id,
-            'subject': self.subject,
-            'sender': self.email_address.email_address,
-            'pruned': self.pruned,
-            'send_time': self.send_time,
             'send_time_unix': self.send_time_unix,
-            'recipients': self.recipients,
         }
 
 
