@@ -1,5 +1,6 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.cache import Cache
 from settings import settings
 
 SQLALCHEMY_DATABASE_URI = settings.database.url
@@ -8,6 +9,7 @@ app = Flask(__name__, template_folder='static/templates')
 app.config.from_object(__name__)  # add capitalized variables above to config
 app.config.update(settings.flask_config)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
+app.cache = Cache(app)
 db = SQLAlchemy(app)
 
 

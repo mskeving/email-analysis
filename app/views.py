@@ -7,6 +7,7 @@ from sqlalchemy import asc
 from app import app, db
 from flask import render_template, request
 from lib.markov_generator import make_chain
+from lib.functools import timeit
 from models import Markov, User, Message
 
 
@@ -37,6 +38,8 @@ def facts():
 
 
 @app.route('/api/users', methods=['GET'])
+@timeit
+@app.cache.cached(timeout=60)
 def get_users():
     users = User.query.all()
     users = [u.to_api_dict() for u in users]

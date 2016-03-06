@@ -1,9 +1,13 @@
 import re
 from collections import Counter
-from nltk.tokenize import word_tokenize
+import nltk
 
-from app import db
+from app import app, db
 from app.lib.helper import parse_recipients
+from app.lib.functools import timeit
+
+# nltk data is stored in root folder to play nice with heroku.
+nltk.data.path.append('./nltk_data')
 
 
 class User(db.Model):
@@ -16,6 +20,11 @@ class User(db.Model):
     markov_starter_words = db.Column(db.Text())
     addresses = db.relationship('EmailAddress')
     messages = db.relationship('Message', backref='user')
+
+    def __repr__(self):
+        # This will be included in cache_key to make sure
+        # keys are unique per person.
+        return "%s(%s)" % (self.__class__.__name__, self.id)
 
     def address_str(self):
         '''change list of addresses into a string to use as
@@ -30,9 +39,11 @@ class User(db.Model):
         pruned_text = map(get_pruned, self.messages)
         return (' ').join(pruned_text)
 
-    def word_list(self):
+    @app.cache.memoize(timeout=30)
+    def get_word_list(self):
         text = self.all_pruned_text()
-        words = word_tokenize(text)
+        words = nltk.tokenize.word_tokenize(text)
+        self.word_list = words
         return words
 
     def count_number_of(self, str_to_match):
@@ -63,25 +74,26 @@ class User(db.Model):
     def serialize_messages(self, msgs):
         return [m.to_api_dict() for m in msgs]
 
+    @app.cache.memoize(timeout=30)
     def word_count(self):
         '''Take all_pruned_text and and let word_tokenize split it up
         into words. Get rid of punctuation.
         '''
-        words = self.word_list()
+        words = self.get_word_list()
         non_punct = re.compile('.*[A-Za-z0-9].*')  # must contain letter or digit
         filtered = [w for w in words if non_punct.match(w)]
 
         return len(filtered)
 
     def num_words_all_caps(self):
-        words = self.word_list()
+        words = self.get_word_list()
         return len([w for w in words if w.isupper()])
 
     def num_swear_words(self):
         f = open('app/lib/badwords.txt')
         bad_words = f.read().split('\r\n')
 
-        users_words = self.word_list()
+        users_words = self.get_word_list()
         users_bad_words = [w.lower() for w in users_words if w.lower() in bad_words]
 
         return Counter(users_bad_words)
