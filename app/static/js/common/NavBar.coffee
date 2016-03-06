@@ -26,20 +26,22 @@ module.exports = React.createClass
 
   render: ->
     return (
-      <nav>
-        <div className="nav-wrapper">
-          <Link className="brand-logo" to="/">
-            Skarkov
-          </Link>
-          <a className="button-collapse" href="#" data-activates="mobile-demo">
-            <i className="material-icons">menu</i>
-          </a>
-          <ul className="right hide-on-med-and-down">
-            {@_get_nav_items()}
-          </ul>
-          <ul className="side-nav" id="mobile-demo">
-            {@_get_nav_items()}
-          </ul>
-        </div>
-      </nav>
+      <header>
+        <nav>
+          <div className="nav-wrapper">
+            <Link className="brand-logo" to="/">
+              Skarkov
+            </Link>
+            <a className="button-collapse" href="#" data-activates="mobile-demo">
+              <i className="material-icons">menu</i>
+            </a>
+            <ul className="right hide-on-med-and-down">
+              {@_get_nav_items()}
+            </ul>
+            <ul className="side-nav" id="mobile-demo">
+              {@_get_nav_items()}
+            </ul>
+          </div>
+        </nav>
+      </header>
     )

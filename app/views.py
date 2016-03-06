@@ -8,7 +8,7 @@ from app import app, db
 from flask import render_template, request
 from lib.markov_generator import make_chain
 from lib.functools import timeit
-from models import Markov, User, Message
+from models import Markov, User, Message, DatabaseImport
 
 
 @app.route('/', defaults={'path': ''})
@@ -35,6 +35,20 @@ def facts():
     ]
 
     return json.dumps({'facts': facts})
+
+
+@app.route('/api/base', methods=['POST'])
+def get_base_data():
+    """ This is the info we need to get to show on every page.
+    For example, anything that needs to be in the header or footer
+    """
+    last_import = DatabaseImport.query.first()
+
+    data = {
+        'last_import': last_import.timestamp
+    }
+
+    return json.dumps(data)
 
 
 @app.route('/api/users', methods=['GET'])

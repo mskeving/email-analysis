@@ -1,9 +1,23 @@
 body {
     margin: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    .import-date {
+        padding-left: 8px;
+    }
 }
 
 .preloader-container {
-    margin-top: 250px;
+    height: 80%;
+    padding-top: 8%;
     text-align: center;
 }
 
@@ -19,9 +33,3 @@ body {
     }
 }
 
-$container-margin-top: 40px;
-
-$white: white;
-$teal: teal;
-$light-pink: #ffcdd2;
-$nav-color: #ee6e73;

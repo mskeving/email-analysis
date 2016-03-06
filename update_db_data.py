@@ -3,6 +3,7 @@ import re
 import base64
 import json
 import nltk.data
+import time
 
 from sqlalchemy import asc
 from apiclient import errors
@@ -12,7 +13,7 @@ from collections import defaultdict
 
 from settings import settings
 from app.lib.gmail_api import GmailApi
-from app.models import User, EmailAddress, Message
+from app.models import User, EmailAddress, Message, DatabaseImport
 
 db = app.db
 service = GmailApi().get_service()
@@ -272,6 +273,14 @@ def main():
     create_users()
     add_messages()
     save_markov_info()
+
+    # Keep track of the last time we ran the import
+    last_updated = DatabaseImport.query.first()
+    if not last_updated:
+        last_updated = DatabaseImport()
+    last_updated.timestamp = int(time.time())
+    db.session.add(last_updated)
+    db.session.commit()
 
 
 if __name__ == '__main__':

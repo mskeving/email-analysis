@@ -279,3 +279,9 @@ class Markov(db.Model):
             'is_tweeted': self.is_tweeted,
             'is_legit': self.is_legit(self.chain),
         }
+
+
+class DatabaseImport(db.Model):
+    __tablename__ = "db_imports"
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.String(64))

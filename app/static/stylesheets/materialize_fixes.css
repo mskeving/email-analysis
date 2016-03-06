@@ -1,3 +1,7 @@
 nav {
     padding: 0px 17px;
 }
+
+footer.page-footer {
+    padding-top: 0;
+}
