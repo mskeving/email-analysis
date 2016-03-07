@@ -1,7 +1,7 @@
 React       = require('react')
 $           = require('jquery')
-HomeDisplay = require('./HomeDisplay.coffee')
-Preloader   = require('../common/Preloader.coffee')
+HomeDisplay = require('./HomeDisplay')
+Preloader   = require('../common/Preloader')
 
 module.exports = React.createClass
   displayName: 'HomeController'

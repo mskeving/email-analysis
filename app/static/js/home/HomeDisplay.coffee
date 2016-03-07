@@ -1,9 +1,10 @@
 require("../../stylesheets/home.scss")
+
 React   = require('react')
+Intro   = require('./Intro')
 $$      = React.DOM
 V       = React.PropTypes
 
-Facts  = React.createFactory(require('./Facts.coffee'))
 
 module.exports = React.createClass
   displayName: 'HomeDisplay'
@@ -12,6 +13,8 @@ module.exports = React.createClass
     facts: V.array
 
   render: ->
-    return $$.div null,
-        Facts
-          facts: @props.facts
+    return (
+      <div>
+        <Intro facts ={@props.facts} />
+      </div>
+    )

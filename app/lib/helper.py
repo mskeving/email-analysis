@@ -1,4 +1,5 @@
 import re
+import datetime
 from email.utils import parsedate_tz, mktime_tz
 
 
@@ -19,3 +20,13 @@ def convert_timestamp_to_unix(timestamp):
     '''
     t = parsedate_tz(timestamp)
     return mktime_tz(t)
+
+
+def convert_unix_to_readable(unix_timestamp):
+    return datetime.datetime.fromtimestamp(
+            int(unix_timestamp)
+        ).strftime('%m/%d/%Y')
+
+
+def capitalize(s):
+    return s[0].upper() + s[1:].lower()

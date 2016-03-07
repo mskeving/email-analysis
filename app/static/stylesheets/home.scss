@@ -1,5 +1,28 @@
 @import "variables.scss";
 
+.intro-container {
+    text-align: center;
+    height: 100%;
+    // background-image: url("/static/images/other/home_hero.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    .slick-track {
+        height: 250px;
+    }
+    .slick-slide {
+        line-height: 263px;
+        font-size: 20px;
+    }
+    .trust {
+        height: 54px;
+        margin-top: 20px;
+        line-height: 50px;
+        font-size: 18px;
+        color: white;
+    }
+
+}
+
 .home-container {
     background-color: $white;
     .facts-container {
