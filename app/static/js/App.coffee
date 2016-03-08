@@ -23,7 +23,7 @@ module.exports = React.createClass
 
   render: ->
     return (
-      <div>
+      <div className="app-container">
         <NavBar />
         <main>
             {@props.children}

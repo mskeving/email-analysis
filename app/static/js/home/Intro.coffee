@@ -33,12 +33,14 @@ module.exports = React.createClass
     return (
       <div className="intro-container">
         <div className="content">
-          <Slider {...settings}>
-            {@_get_facts()}
-          </Slider>
+          <div>
+            <Slider {...settings}>
+              {@_get_facts()}
+            </Slider>
+          </div>
         </div>
         <div className="trust">
-          <div className="quote red lighten-4">"Skarkov is the best email analysis we've seen. period." -- <strong>Forbes</strong></div>
+          <div className="quote red lighten-4">"Skarkov is the best email analysis on the web. period." -- <strong>Forbes</strong></div>
         </div>
       </div>
     )

@@ -5,7 +5,8 @@
   width: 50%;
   min-width: 525px;
   margin: auto;
-  margin-top: $container-margin-top;
+  padding-top: $container-padding-top;
+  padding-bottom: $container-padding-bottom;
   .prefill-input {
     padding-left: 55px;
   }

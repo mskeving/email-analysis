@@ -31,6 +31,7 @@ def facts():
     first_msg_timestamp = convert_unix_to_readable(first_msg.send_time_unix)
     first_msg_sender = User.query.filter_by(id=first_msg.sender_user_id).first()
     longest_thread_subject, longest_thread_length = Message .longest_thread_subject_length()
+
     facts = [
         'There have been %s unqiue messages between us.' % (num_messages),
         'The first message was sent on %s by %s' %

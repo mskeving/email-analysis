@@ -17,8 +17,8 @@
     width: 80%;
     max-width: 725px;
     margin: auto;
-    margin-top: $container-margin-top;
-    margin-bottom: 40px;
+    padding-top: $container-padding-top;
+    padding-bottom: $container-padding-bottom;
 }
 .chain-info {
     display: inline-block;

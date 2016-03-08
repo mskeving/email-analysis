@@ -2,8 +2,8 @@
 
 .user-container {
     margin: auto;
-    margin-top: $container-margin-top;
-    width: 85%;
+    padding-top: $container-padding-top;
+    padding-bottom: $container-padding-bottom;
     max-width: 1200px;
     .table {
         display: inline-block;
