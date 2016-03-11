@@ -1,62 +1,62 @@
 @import "variables.scss";
 
-.str-count-container {
-  display: inline-block;
-  width: 50%;
-  min-width: 525px;
-  margin: auto;
-  padding-top: $container-padding-top;
-  padding-bottom: $container-padding-bottom;
-  .prefill-input {
-    padding-left: 55px;
-  }
-  .btn {
+.extra-container {
+  .str-count-container {
     display: inline-block;
-    margin-top: 17px;
-  }
-  .bar-chart {
-    display: inline-block;
-    h5 {
-      text-align: center;
+    width: 50%;
+    min-width: 525px;
+    margin: auto;
+    .prefill-input {
+      padding-left: 55px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 17px;
+    }
+    .bar-chart {
+      display: inline-block;
+      h5 {
+        text-align: center;
+      }
     }
   }
-}
 
-.bar-chart-container {
-  display: inline-block;
-  width: 50%;
-  min-width: 525px;
-  text-align: center;
-}
+  .bar-chart-container {
+    display: inline-block;
+    width: 50%;
+    min-width: 525px;
+    text-align: center;
+  }
 
-.bar-chart-title {
-  text-align: center;
-  font-size: 2em;
-  font-weight: bold;
-}
+  .bar-chart-title {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+  }
 
-.bar-chart-subtitle {
-  text-align: center;
-  font-size: 1em;
-  font-weight: bold;
-}
+  .bar-chart-subtitle {
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+  }
 
-svg.bar-chart {
-	padding: 50px;
-}
+  svg.bar-chart {
+  	padding: 50px;
+  }
 
-.bar {
-  fill: steelblue;
-}
+  .bar {
+    fill: steelblue;
+  }
 
-.selection ul {
-  margin: 0;
-  padding: 0;
-}
+  .selection ul {
+    margin: 0;
+    padding: 0;
+  }
 
-.selection ul li {
-  display: inline;
-  text-decoration: none;
-  margin-left: 10px;
-  cursor: pointer;
+  .selection ul li {
+    display: inline;
+    text-decoration: none;
+    margin-left: 10px;
+    cursor: pointer;
+  }
 }

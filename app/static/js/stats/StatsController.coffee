@@ -2,14 +2,14 @@ require("../../stylesheets/stats.scss")
 
 React       = require('react')
 $           = require('jquery')
-StringCount = require('./StringCount.coffee')
-BarChart    = require('../common/barchart/BarChart.coffee')
+StringCount = require('./StringCount')
+MyBarChart  = require('../common/MyBarChart')
 
 module.exports = React.createClass
   displayName: 'StatsController'
 
   getInitialState: ->
-    message_counts: []
+    message_counts: [{x: '', y: 0}]
 
   _get_str_count: (str) ->
     $.ajax
@@ -42,18 +42,34 @@ module.exports = React.createClass
           message_counts: []
         console.log "Error fetching data for message count"
 
-  render: ->
-    <div>
+  componentDidMount: ->
+    @_get_messages_count()
+
+  _message_count_data: ->
+    return [{
+      label: 'count',
+      values: @state.message_counts
+    }]
+
+  original: ->
+      # <StringCount
+      #   get_data={@_get_str_count}
+      #   values={@state.str_count}
+      #   chart_title={@state.str_count_chart_title}
+      #   chart_sub_title="Case Insensitive"
+      # />
+
+  render: -> return (
+    <div className="page-container extra-container">
       <StringCount
         get_data={@_get_str_count}
         values={@state.str_count}
         chart_title={@state.str_count_chart_title}
         chart_sub_title="Case Insensitive"
       />
-      <BarChart
-        get_data={@_get_messages_count}
-        data={@state.message_counts}
+      <MyBarChart
         title="Total Messages Sent"
+        data={@_message_count_data()}
       />
-
     </div>
+  )

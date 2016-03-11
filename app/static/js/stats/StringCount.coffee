@@ -3,9 +3,9 @@ _       = require('lodash')
 $$      = React.DOM
 V       = React.PropTypes
 
-BarChart       = React.createFactory(require('react-d3-components/lib/BarChart.js'))
-PrefilledInput = React.createFactory(require('../common/PrefilledInput'))
-Button         = React.createFactory(require('../common/Button'))
+BarChart       = require('react-d3-components/lib/BarChart')
+PrefilledInput = require('../common/PrefilledInput')
+Button         = require('../common/Button')
 
 module.exports = React.createClass
   displayName: 'StringCount'
@@ -13,6 +13,7 @@ module.exports = React.createClass
   propTypes:
     get_data: V.func.isRequired
     chart_title: V.string
+    values: V.array
 
   getDefaultProps: ->
     values: [{x: '', y: 0}]
@@ -35,24 +36,33 @@ module.exports = React.createClass
   componentDidMount: ->
     @props.get_data('!')
 
-  render: ->
-    $$.div className: 'str-count-container',
-      $$.div className: "row",
-        $$.div className: "col s6 prefill-input",
-          PrefilledInput
-            prefill: "!"
-            field_title: "Search Term"
-            on_change: @_update_search_term
-        $$.div className: "col s3",
-          Button
-            text: "test"
-            on_click: @_run_search
-      $$.div className: "bar-chart",
-        $$.h5 null, @props.chart_title
-        BarChart
-          data: @data()
-          width: 400
-          height: 400
-          margin: {top: 10, bottom: 50, left: 50, right: 10}
-          tooltipHtml: (x, y0, y, total) ->
-            return y.toString()
+  render: -> return (
+    <div className='str-count-container'>
+      <div className="row">
+        <div className="col s6 prefill-input">
+          <PrefilledInput
+            prefill="!"
+            field_title="Search Term"
+            on_change={@_update_search_term}
+          />
+        </div>
+        <div className="col s3">
+          <Button text="search" on_click={@_run_search} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col bar-chart">
+          <div className="bar-chart-title">{@props.chart_title}</div>
+          <BarChart
+            data={@data()}
+            width={400}
+            height={400}
+            margin={{top: 10, bottom: 50, left: 50, right: 10}}
+            tooltipHtml={(x, y0, y, total) ->
+              return y.toString()
+            }
+          />
+        </div>
+      </div>
+    </div>
+  )
