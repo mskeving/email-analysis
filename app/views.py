@@ -18,7 +18,7 @@ def catch_all(path):
     # react-router is used on the client to take care of routing.
     # This is a catch-all url to say - whatever url we put in,
     # render base.jade with app js and the client takes care of the rest.
-    return render_template('base.jade', js_filename='app.bundle.js')
+    return render_template('base.jade', js_filename=app.config['JS_FILENAME'])
 
 
 @app.route('/facts', methods=['POST'])

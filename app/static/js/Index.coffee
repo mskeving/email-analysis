@@ -3,6 +3,7 @@ ReactDom    = require("react-dom")
 {Router, Route, IndexRoute, browserHistory} = require("react-router")
 
 App             = require('./App')
+FAQController   = require('./faq/FAQController')
 HomeController  = require('./home/HomeController')
 NotFound        = require('./common/404')
 SkarkovDisplay  = require('./markovs/SkarkovDisplay')
@@ -16,6 +17,7 @@ router = (
       <Route path="/users" component={UsersController} />
       <Route path="/markovs" component={SkarkovDisplay} />
       <Route path="/extra" component={StatsController} />
+      <Route path="/faq" component={FAQController} />
       <Route path="/*" component={NotFound} />
     </Route>
   </Router>

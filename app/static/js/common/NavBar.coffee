@@ -8,6 +8,7 @@ module.exports = React.createClass
       { name: 'Users', href: '/users' }
       { name: 'Markovs', href: '/markovs' }
       { name: 'Extra', href: '/extra' }
+      { name: 'FAQ', href: '/faq' }
     ]
 
   _get_nav_items: ->

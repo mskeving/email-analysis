@@ -4,7 +4,6 @@ React       = require('react')
 $           = require('jquery')
 StringCount = require('./StringCount.coffee')
 BarChart    = require('../common/barchart/BarChart.coffee')
-NavBar      = require('../common/NavBar.coffee')
 
 module.exports = React.createClass
   displayName: 'StatsController'

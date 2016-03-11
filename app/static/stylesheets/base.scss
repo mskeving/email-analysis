@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 .app-container {
     position: relative;
     min-height: 100%;
@@ -21,6 +23,12 @@
         }
     }
 
+    .page-container {
+        margin: auto;
+        padding-top: $container-padding-top;
+        padding-bottom: $container-padding-bottom;
+        max-width: 1200px;
+    }
     .preloader-container {
         height: 80%;
         padding-top: 8%;
