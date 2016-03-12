@@ -30,3 +30,19 @@ def convert_unix_to_readable(unix_timestamp):
 
 def capitalize(s):
     return s[0].upper() + s[1:].lower()
+
+def seconds_to_time(s):
+    total_secs = int(s)
+
+    hours = total_secs / 60 / 60
+    secs_left = total_secs - (hours * 60 * 60)
+
+    mins = secs_left / 60
+    seconds = secs_left - (mins * 60)
+
+
+    h = 'hour' if hours == 1 else 'hours'
+    m = 'min' if mins == 1 else 'mins'
+    s = 'second' if seconds == 1 else 'seconds'
+
+    return "%d %s, %d %s, and %d %s" % (hours, h, mins, m, seconds, s)

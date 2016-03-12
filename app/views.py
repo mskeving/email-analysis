@@ -9,6 +9,7 @@ from flask import render_template, request
 from lib.markov_generator import make_chain
 from lib.functools import timeit
 from lib.helper import convert_unix_to_readable, capitalize
+from lib.helper import seconds_to_time
 from models import Markov, User, Message, DatabaseImport
 
 
@@ -26,18 +27,30 @@ def catch_all(path):
 def facts():
     ''' This is where we query for any needed info for our facts list.
     '''
+    # total number of messages sent
     num_messages = len(Message.query.all())
+
+    # the first message's date and sender
     first_msg = Message.query.order_by(asc(Message.send_time_unix)).first()
     first_msg_timestamp = convert_unix_to_readable(first_msg.send_time_unix)
     first_msg_sender = User.query.filter_by(id=first_msg.sender_user_id).first()
-    longest_thread_subject, longest_thread_length = Message .longest_thread_subject_length()
+
+    # longest thread's length and subject
+    longest_thread_subject, longest_thread_length = Message.longest_thread_subject_length()
+
+    # fastest response time
+    fastest_responder = User.fastest_responder()
+    fr_name = capitalize(fastest_responder.name)
+    fr_time = seconds_to_time(fastest_responder.avg_response_time())
 
     facts = [
         'There have been %s unqiue messages between us.' % (num_messages),
         'The first message was sent on %s by %s' %
         (first_msg_timestamp, capitalize(first_msg_sender.name)),
         'The longest thread between us has %s messages. The subject is "%s".' %
-        (longest_thread_length, longest_thread_subject)
+        (longest_thread_length, longest_thread_subject),
+        'The person with the fastest response time is %s with a response time of %s' %
+        (fr_name, fr_time),
     ]
 
     return json.dumps({'facts': facts})

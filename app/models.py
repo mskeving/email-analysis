@@ -154,6 +154,12 @@ class User(db.Model):
                 total += int(msg.response_time)
         return total/counter
 
+    @classmethod
+    def fastest_responder(cls):
+        users = [u for u in cls.query.all()]
+        sorted_users = sorted(users, key=lambda x: x.avg_response_time())
+        return sorted_users[0]
+
     def to_api_dict(self):
         return {
             'id': self.id,
