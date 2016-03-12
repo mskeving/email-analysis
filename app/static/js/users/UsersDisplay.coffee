@@ -16,12 +16,11 @@ module.exports = React.createClass
 
   render: ->
     return $$.div null,
-      $$.div className: 'container user-container',
-        Tab
-          options: @props.users
-          on_click: @props.select_user
-          selected_option: @props.selected_user
-        UserDetails
-          user: @props.selected_user
-        UserStats
-          user: @props.selected_user
+      Tab
+        options: @props.users
+        on_click: @props.select_user
+        selected_option: @props.selected_user
+      UserDetails
+        user: @props.selected_user
+      UserStats
+        user: @props.selected_user

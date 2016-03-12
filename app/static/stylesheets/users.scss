@@ -5,12 +5,16 @@
     padding-top: $container-padding-top;
     padding-bottom: $container-padding-bottom;
     max-width: 1200px;
+    .response-percentages {
+        text-align: center;
+    }
     .table {
         display: inline-block;
         min-width: 400px;
         td {
             text-align: right;
             padding: 6px 0px 6px 30px;
+            width: 50%
         }
     }
     .user-details {

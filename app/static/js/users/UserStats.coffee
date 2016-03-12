@@ -39,7 +39,8 @@ module.exports = React.createClass
           title: "Initiated Threads"
           yearly_y_scale: d3.scale.linear().domain([0, 85]).range([140, 0])
           quarterly_y_scale: d3.scale.linear().domain([0, 30]).range([140, 0])
-      $$.div className: 'table',
-        Table
-          title: "Response Percentages"
-          items: @_get_response_percentages()
+      $$.div className: 'response-percentages',
+        $$.div className: 'table',
+          Table
+            title: "Response Percentages"
+            items: @_get_response_percentages()

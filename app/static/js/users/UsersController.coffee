@@ -44,15 +44,10 @@ module.exports = React.createClass
         />
       )
     else
-      return (
-        <div className="preloader-container">
-          <Preloader />
-        </div>
-      )
+      return <Preloader />
 
-  render: ->
-    return (
-      <div>
-        {@_get_display_or_waiting()}
-      </div>
-    )
+  render: -> return  (
+    <div className='container user-container'>
+      {@_get_display_or_waiting()}
+    </div>
+  )

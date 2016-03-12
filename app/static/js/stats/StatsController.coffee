@@ -4,12 +4,14 @@ React       = require('react')
 $           = require('jquery')
 StringCount = require('./StringCount')
 MyBarChart  = require('../common/MyBarChart')
+Preloader   = require('../common/Preloader')
 
 module.exports = React.createClass
   displayName: 'StatsController'
 
   getInitialState: ->
     message_counts: [{x: '', y: 0}]
+    str_counts: {}
 
   _get_str_count: (str) ->
     $.ajax
@@ -51,25 +53,29 @@ module.exports = React.createClass
       values: @state.message_counts
     }]
 
-  original: ->
-      # <StringCount
-      #   get_data={@_get_str_count}
-      #   values={@state.str_count}
-      #   chart_title={@state.str_count_chart_title}
-      #   chart_sub_title="Case Insensitive"
-      # />
+  _get_display_or_waiting: ->
+    if @state.message_counts.length
+      return (
+        <div>
+          <StringCount
+            get_data={@_get_str_count}
+            values={@state.str_count}
+            chart_title={@state.str_count_chart_title}
+            chart_sub_title="Case Insensitive"
+          />
+          <MyBarChart
+            title="Total Messages Sent"
+            data={@_message_count_data()}
+          />
+        </div>
+      )
+    else
+      return (
+        <Preloader />
+      )
 
   render: -> return (
     <div className="page-container extra-container">
-      <StringCount
-        get_data={@_get_str_count}
-        values={@state.str_count}
-        chart_title={@state.str_count_chart_title}
-        chart_sub_title="Case Insensitive"
-      />
-      <MyBarChart
-        title="Total Messages Sent"
-        data={@_message_count_data()}
-      />
+      {@_get_display_or_waiting()}
     </div>
   )

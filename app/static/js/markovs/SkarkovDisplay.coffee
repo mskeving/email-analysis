@@ -1,9 +1,10 @@
 require("../../stylesheets/skarkov.scss")
 
-React   = require('react')
-_       = require('lodash')
-$       = require('jquery')
-Chain  = require('./Chain')
+React     = require('react')
+_         = require('lodash')
+$         = require('jquery')
+Chain     = require('./Chain')
+Preloader = require('../common/Preloader')
 
 module.exports = React.createClass
   displayName: 'UserMarkovs'
@@ -55,14 +56,28 @@ module.exports = React.createClass
       />
     )
 
-  render: ->
-    return (
-      <div>
-        <div className="skarkov-container">
-          <a className="reference" href="http://www.piliapp.com/twitter-symbols/">
+  _get_display_or_waiting: ->
+    if @state.markovs.length
+      return (
+        <div>
+          <a
+            className="reference"
+            href="http://www.piliapp.com/twitter-symbols/"
+            target="_blank"
+          >
             User Symbols
           </a>
           {_.map(@state.markovs, @renderChain)}
         </div>
+      )
+    else
+      return (
+        <Preloader />
+      )
+
+  render: ->
+    return (
+      <div className="page-container">
+        {@_get_display_or_waiting()}
       </div>
     )

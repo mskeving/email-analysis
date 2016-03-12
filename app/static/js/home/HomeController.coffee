@@ -28,9 +28,7 @@ module.exports = React.createClass
       return <HomeDisplay facts=@state.facts />
     else
       return (
-        <div className="preloader-container">
-          <Preloader />
-        </div>
+        <Preloader />
       )
 
   render: ->

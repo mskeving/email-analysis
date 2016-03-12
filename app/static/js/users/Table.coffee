@@ -14,13 +14,22 @@ module.exports = React.createClass
     title: "Table Title"
     items: []
 
+  styles: {
+    leftValue: {
+      textAlign: 'right'
+    }
+    rightValue: {
+      textAlign: 'left'
+    }
+  }
+
   _get_items: ->
-    return map(@props.items, (item, i) ->
+    return map(@props.items, (item, i) =>
       for name, value of item
         return $$.tr
           key: i,
-            $$.td null, "#{name}:"
-            $$.td null, value
+            $$.td style:@styles.leftValue, "#{name}:"
+            $$.td style:@styles.rightValue, value
       )
 
   render: ->
