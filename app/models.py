@@ -154,6 +154,12 @@ class User(db.Model):
                 total += int(msg.response_time)
         return total/counter
 
+    def participation(self):
+        # get all messages this person has sent and count number of unique threads
+        threads = [m.thread_id for m in self.messages]
+        unique_thread_count = len(set(threads))
+        return unique_thread_count
+
     @classmethod
     def fastest_responder(cls):
         users = [u for u in cls.query.all()]
