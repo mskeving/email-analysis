@@ -71,7 +71,7 @@ def get_base_data():
 
 
 @app.route('/api/users', methods=['GET'])
-@app.cache.cached(timeout=60)
+@app.cache.cached(timeout=600)
 def get_users():
     users = User.query.all()
     users = [u.to_api_dict() for u in users]

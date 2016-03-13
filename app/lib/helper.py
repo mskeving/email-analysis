@@ -45,4 +45,4 @@ def seconds_to_time(s):
     m = 'min' if mins == 1 else 'mins'
     s = 'second' if seconds == 1 else 'seconds'
 
-    return "%d %s, %d %s, and %d %s" % (hours, h, mins, m, seconds, s)
+    return "%d %s and %d %s" % (hours, h, mins, m)

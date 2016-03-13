@@ -4,6 +4,8 @@ client_secret.json
 app/data/
 env/
 nltk_data/
+app/static/js/webpack/build/app.bundle.js
+app/static/js/webpack/build/app.bundle.js.map
 app/static/js/node_modules
 app/static/js/build
 app/static/js/npm-debug.log
