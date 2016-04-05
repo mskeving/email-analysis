@@ -14,7 +14,7 @@ module.exports = React.createClass
   render: ->
     return (
       <a
-        className="waves-effect waves-light btn"
+        className="cyan darken-2 waves-effect waves-light btn"
         onClick={@props.on_click}
       >
         {@props.text}

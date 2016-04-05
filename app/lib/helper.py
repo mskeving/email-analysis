@@ -25,7 +25,7 @@ def convert_timestamp_to_unix(timestamp):
 def convert_unix_to_readable(unix_timestamp):
     return datetime.datetime.fromtimestamp(
             int(unix_timestamp)
-        ).strftime('%m/%d/%Y')
+        ).strftime('%Y-%m-%d')
 
 
 def capitalize(s):

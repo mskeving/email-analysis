@@ -16,7 +16,7 @@ module.exports = React.createClass
     }
     {
       question: "Does this include chats?"
-      answer: "No. No Google Hangouts or WhatAapp data are
+      answer: "No. No Google Hangouts or WhatsApp data are
       included here."
     }
     {
@@ -66,7 +66,7 @@ module.exports = React.createClass
     {
       question: "I don’t trust that this is an accurate portrayal
       of our email habits. Who can I talk to?"
-      answer: "Noone."
+      answer: "No one."
     }
   ]
 

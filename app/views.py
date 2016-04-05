@@ -44,13 +44,13 @@ def facts():
     fr_time = seconds_to_time(fastest_responder.avg_response_time())
 
     facts = [
-        'There have been %s unqiue messages between us.' % (num_messages),
-        'The first message was sent on %s by %s' %
+        'Number of emails between us: %s' % (num_messages),
+        'First message sent: %s by %s' %
         (first_msg_timestamp, capitalize(first_msg_sender.name)),
-        'The longest thread between us has %s messages. The subject is "%s".' %
-        (longest_thread_length, longest_thread_subject),
-        'The person with the fastest response time is %s with a response time of %s' %
-        (fr_name, fr_time),
+        'Longest thread: "%s" with %s messages' %
+        (longest_thread_subject, longest_thread_length),
+        'Fastest average response time: %s by %s' %
+        (fr_time, fr_name),
     ]
 
     return json.dumps({'facts': facts})

@@ -13,7 +13,6 @@ module.exports = React.createClass
     facts: []
 
   _get_facts: ->
-    console.log "getting facts"
     return (
       @props.facts.map((fact, i) ->
         return <div key={i}>{fact}</div>
@@ -40,7 +39,7 @@ module.exports = React.createClass
           </div>
         </div>
         <div className="trust">
-          <div className="quote red lighten-4">"Skarkov is the best email analysis on the web. period." -- <strong>Forbes</strong></div>
+          <div className="quote">"Skarkov is the best email analysis on the web. period." -- <strong>Forbes</strong></div>
         </div>
       </div>
     )
