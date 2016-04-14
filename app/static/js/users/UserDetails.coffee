@@ -28,10 +28,13 @@ module.exports = React.createClass
 
   _get_email_addresses: ->
     return map(@props.user.addresses, (address, i) ->
+      username = address.split("@")[0]
+      domain = address.split("@")[1]
+      hidden_address = "#{username[0]}****@#{domain}"
       return $$.div
         className: 'email'
         key: i,
-        address
+        hidden_address
     )
 
   render: ->
