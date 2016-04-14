@@ -1,0 +1,24 @@
+@import "variables.scss";
+
+.login-form-container {
+    position: relative;
+    width: 415px;
+    max-width: 80%;
+    height: 320px;
+    margin: auto;
+    margin-top: 165px;
+    .message {
+        position: absolute;
+        bottom: 74px;
+        right: 23px;
+        color: $error-message;
+    }
+    .title {
+        text-align: center;
+    }
+    .btn {
+        position: absolute;
+        right: 23px;
+        bottom: 28px;
+    }
+}

@@ -1,29 +1,69 @@
 import json
-
 from datetime import datetime
 from collections import defaultdict
 from sqlalchemy import asc
+from flask import render_template, request, redirect
+from flask.ext.login import (login_user, logout_user, 
+                             current_user, login_required)
 
-from app import app, db
-from flask import render_template, request
+from app import app, db, login_manager
 from lib.markov_generator import make_chain
 from lib.functools import timeit
 from lib.helper import convert_unix_to_readable, capitalize
 from lib.helper import seconds_to_time
+from login import LoginUser, load_user
 from models import Markov, User, Message, DatabaseImport
+from settings import settings
+
+
+@app.route('/login', methods=['GET'])
+def login():
+    if current_user.is_authenticated:
+        return redirect('/')
+
+    return render_template('base.jade', js_filename=app.config['LOGIN_JS_FILENAME'])
+
+@app.route('/submit_login', methods=['POST'])
+def submit_login():
+    next = request.args.get('next')
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Note: this (dumb) strategy of login allows you to only login with
+    # your general credentials. Need to refactor this to allow other usernames.
+    general_user = LoginUser.get('general')
+
+    if (username == general_user.username and
+            password == general_user.password):
+
+        user = load_user(general_user.username)
+        if user:
+            login_user(user)
+            return json.dumps({'message': "success"})
+
+    return json.dumps({'message': "Invalid Credentials"})
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
+@login_required
 def catch_all(path):
     # react-router is used on the client to take care of routing.
     # This is a catch-all url to say - whatever url we put in,
     # render base.jade with app js and the client takes care of the rest.
-    return render_template('base.jade', js_filename=app.config['JS_FILENAME'])
+    return render_template('base.jade', js_filename=app.config['APP_JS_FILENAME'])
 
 
 @app.route('/facts', methods=['POST'])
 @app.cache.cached(timeout=60)
+@login_required
 def facts():
     ''' This is where we query for any needed info for our facts list.
     '''
@@ -57,6 +97,7 @@ def facts():
 
 
 @app.route('/api/base', methods=['POST'])
+@login_required
 def get_base_data():
     """ This is the info we need to get to show on every page.
     For example, anything that needs to be in the header or footer
@@ -72,6 +113,7 @@ def get_base_data():
 
 @app.route('/api/users', methods=['GET'])
 @app.cache.cached(timeout=600)
+@login_required
 def get_users():
     users = User.query.all()
     users = [u.to_api_dict() for u in users]
@@ -80,6 +122,7 @@ def get_users():
 
 
 @app.route('/stats/message_time_bargraph', methods=['GET'])
+@login_required
 def message_time_bargraph():
     msgs = Message.query.all()
     year_to_messages = defaultdict(list)
@@ -108,6 +151,7 @@ def message_time_bargraph():
 
 
 @app.route('/stats/message_time_graph', methods=['GET'])
+@login_required
 def message_time_graph():
     def sort_by_year(messages):
         data = []
@@ -131,6 +175,7 @@ def message_time_graph():
 
 
 @app.route('/stats/get_message_count', methods=['GET'])
+@login_required
 def get_message_count():
     '''For each user, get the total number of messages they have sent'''
     all_users = User.query.all()
@@ -142,6 +187,7 @@ def get_message_count():
 
 
 @app.route('/stats/get_count', methods=['GET'])
+@login_required
 def get_count():
     string = request.args.get('string_to_match')
     if not string:
@@ -178,6 +224,7 @@ def markov():
 
 
 @app.route('/get_markovs', methods=['POST'])
+@login_required
 def get_markovs():
     # on page load, get markov for every user
     users = User.query.all()
@@ -198,6 +245,7 @@ def get_markovs():
 
 
 @app.route('/get_one_markov', methods=['POST'])
+@login_required
 def get_one_markov():
     user_name = request.form.get('user_name', None)
     if not user_name:
@@ -213,6 +261,7 @@ def get_one_markov():
 
 
 @app.route('/tweet', methods=['POST'])
+@login_required
 def tweet():
     markov_id = request.form.get('markov_id', None)
     markov = Markov.query.filter_by(id=markov_id).one()

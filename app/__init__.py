@@ -1,6 +1,8 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.cache import Cache
+from flask.ext.login import LoginManager
+
 from settings import settings
 
 SQLALCHEMY_DATABASE_URI = settings.database.url
@@ -11,6 +13,12 @@ app.config.update(settings.flask_config)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 app.cache = Cache(app)
 db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+# if a user attempts to view a page while not logged in,
+# they'll be redirected to /login
+login_manager.login_view = 'login'
 
 
 def create_app(config="Production"):
