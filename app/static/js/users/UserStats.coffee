@@ -14,14 +14,22 @@ module.exports = React.createClass
   propTypes:
     user: V.object.isRequired
 
-  _get_response_percentages: ->
+  _get_response_percentage: (category) ->
     ret = []
-    for name, num of @props.user.response_percentages
+
+    if category is "you_respond_to"
+      response_percentage = @props.user.you_respond_to
+    else if category is "responds_to_you"
+      response_percentage = @props.user.responds_to_you
+
+    for name, num of response_percentage
       ret.push({"#{capitalize(name)}": "#{percentage(num)}"})
+
     return ret
 
   render: ->
     user = @props.user
+    name = capitalize(user.name)
 
     return $$.div className: 'user-stats',
       $$.div className: 'msg-graphs',
@@ -39,8 +47,15 @@ module.exports = React.createClass
           title: "Initiated Threads"
           yearly_y_scale: d3.scale.linear().domain([0, 85]).range([140, 0])
           quarterly_y_scale: d3.scale.linear().domain([0, 30]).range([140, 0])
+      $$.div className: 'section-title',
+        "Response Percentages"
       $$.div className: 'response-percentages',
-        $$.div className: 'table',
-          Table
-            title: "Response Percentages"
-            items: @_get_response_percentages()
+        Table
+          description: "Out of the messages received from each
+            person, this is the percentage of times #{name} has replied directly."
+          items: @_get_response_percentage("you_respond_to")
+      $$.div className: 'response-percentages',
+        Table
+          description: "Out of the messages #{name} has sent, this is
+            how often other people respond."
+          items: @_get_response_percentage("responds_to_you")

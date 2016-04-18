@@ -1,2 +1,2 @@
-module.exports = (num) ->
-  return "#{num.toString().split('.')[0]}%"
+module.exports = (float) ->
+  return "#{Math.round(float)}%"

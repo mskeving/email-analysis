@@ -1,3 +1,4 @@
+require("../../stylesheets/components/_table.scss")
 React   = require('react')
 $$      = React.DOM
 V       = React.PropTypes
@@ -11,7 +12,8 @@ module.exports = React.createClass
     items: V.array
 
   getDefaultProps: ->
-    title: "Table Title"
+    description: ""
+    title: ""
     items: []
 
   styles: {
@@ -24,21 +26,25 @@ module.exports = React.createClass
   }
 
   _get_items: ->
-    return map(@props.items, (item, i) =>
+    # Note: For now, this table is only good for two columns.
+    return map(@props.items, (item, i) ->
       for name, value of item
-        return $$.tr
-          key: i,
-            $$.td style:@styles.leftValue, "#{name}:"
-            $$.td style:@styles.rightValue, value
+        return $$.div
+          key: i
+          className: "table-row",
+            $$.div className: "left-column",
+              "#{name}:"
+            $$.div className: "right-column",
+              value
       )
 
   render: ->
-    return $$.div null,
+    return $$.div className: "table-container",
       $$.h5 null,
         @props.title
-      $$.table null,
-        $$.thead null
-        $$.tbody null,
-          @_get_items()
+      $$.div className: "description",
+        @props.description
+      $$.div className: "content-container",
+        @_get_items()
 
 

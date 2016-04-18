@@ -4,7 +4,6 @@ import nltk
 
 from app import app, db
 from app.lib.helper import parse_recipients
-from app.lib.functools import timeit
 
 # nltk data is stored in root folder to play nice with heroku.
 nltk.data.path.append('./nltk_data')
@@ -102,14 +101,63 @@ class User(db.Model):
         average = self.word_count() / self.message_count()
         return average
 
-    def response_percentages(self):
-        '''From here you should be able to tell favorites by seeing who this person
-        has the highest response percentage for. This does not look at any cc info,
-        just the first person in the 'to' field.
+    def replies(self):
+        replies = [m for m in self.messages
+                   if m.subject and m.subject[:3].lower() == 're:']
+        return replies
+
+    def responds_to_you(self):
+        '''
+        Similar to self.you_respond_to(), this looks at the messages YOU
+        have sent, and who responds to them. So if you send an email, you'll
+        have an idea of who is most likely to respond.
+        '''
+        my_addresses = [a.email_address for a in self.addresses]
+        num_emails_ive_sent = len(self.messages)
+        users = User.query.all()
+
+        # keep track of total number of replies coming to you. That
+        # way you can see how many of your messages don't get a response.
+        reply_count = 0
+
+        response_dict = {}
+        for u in users:
+
+            if u.name == self.name:
+                continue
+
+            for reply in u.replies():
+                msg_recipients = parse_recipients(reply)
+
+                if not msg_recipients:
+                    continue
+
+                if msg_recipients[0] in my_addresses:
+                    response_dict[u.name] = response_dict.get(u.name, 0) + 1
+                    reply_count += 1
+
+        # number of emails you've sent that had no reply
+        response_dict['No Response'] = len(self.messages) - reply_count
+
+        response_percentages = {}
+        for name, num_replies in response_dict.iteritems():
+            # Turns those reply counts into percentages based on the total
+            # number of emails you've sent out.
+            response_percentages[name] = 100 * \
+                float(num_replies) / float(num_emails_ive_sent)
+
+        return response_percentages
+
+    def you_respond_to(self):
+        '''
+        Similar to self.responds_to_you, this looks at who you're responding
+        to. So, give all the replies you have, look at the first person in
+        the To: field to see who it's a direct response to. Presumably, the
+        person with the highest percentage is your favorite.
 
         this is how the percentages should look:
-        person_1: {
-            person_2: (100 * (responses to person_2 / total msgs person_2 has sent))
+        user_1: {
+            user_2: (100 * (responses to user_2 / total msgs user_2 has sent))
         }
 
         '''
@@ -117,26 +165,32 @@ class User(db.Model):
         # We're only going to take the first email address that shows up
         # in message.recipients, because they're the 'true' recipient
         recipients = []
-        for message in self.messages:
-            msg_recipients = parse_recipients(message)
+        for reply in self.replies():
+            msg_recipients = parse_recipients(reply)
             if msg_recipients:
                 recipients.append(msg_recipients[0])
 
         resp_counts = Counter(recipients)
 
-        # we need to go through and aggregate based on people in our db. For example,
-        # if person_1 has 3 email addresses, we want to combine all of those counts.
+        # we need to go through and aggregate based on people in our db.
+        # For example, if person_1 has 3 email addresses, we want to combine
+        # all of those counts.
         all_users = self.query.all()
         resp_percentages = {}
         for user in all_users:
-            if user.id == self.id: continue
-            for email in [email.email_address for email in user.addresses]:
-                if resp_counts.get(email, None):
-                    resp_percentages[user.name] = resp_percentages.get(user.name, 0) + resp_counts[email]
+
+            if user.id == self.id:
+                continue
+
+            for email in [e.email_address for e in user.addresses]:
+                if resp_counts.get(email):
+                    resp_percentages[user.name] = resp_percentages.get(
+                        user.name, 0) + resp_counts[email]
 
             num_messages_received = user.message_count()
             num_resp = resp_percentages[user.name]
-            resp_percentages[user.name] = 100 * float(num_resp) / float(num_messages_received)
+            resp_percentages[user.name] = 100 * \
+                float(num_resp) / float(num_messages_received)
 
         return resp_percentages
 
@@ -174,7 +228,8 @@ class User(db.Model):
             'avatar_link': self.avatar_link,
             'avg_word_count': self.avg_word_count_per_message(),
             'message_count': self.message_count(),
-            'response_percentages': self.response_percentages(),
+            'you_respond_to': self.you_respond_to(),
+            'responds_to_you': self.responds_to_you(),
             'messages': self.serialize_messages(self.messages),
             'initiating_msgs': self.serialize_messages(self.initiating_msgs()),
             'num_words_all_caps': self.num_words_all_caps(),

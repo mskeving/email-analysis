@@ -1,0 +1,17 @@
+.table-container {
+    .table-row {
+        text-align: center;
+        margin-top: 14px;
+        .left-column, .right-column {
+            display: inline-block;
+            width: 50%;
+        }
+        .left-column {
+            text-align: right;
+        }
+        .right-column {
+            text-align: left;
+            padding-left: 18px;
+        }
+    }
+}

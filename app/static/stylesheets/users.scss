@@ -6,11 +6,14 @@
     padding-bottom: $container-padding-bottom;
     max-width: 1200px;
     .response-percentages {
-        text-align: center;
-    }
-    .table {
         display: inline-block;
-        min-width: 400px;
+        width: 100%;
+        text-align: center;
+        table {
+            display: inline-block;
+            width: 200px;
+            margin-top: 15px;
+        }
         td {
             text-align: right;
             padding: 6px 0px 6px 30px;
@@ -19,7 +22,7 @@
     }
     .user-details {
         .avatar.card-image {
-            // height: 256px;
+            height: 232px;
         }
     }
     .user-stats {
@@ -29,6 +32,10 @@
         border-radius: 5px;
         .msg-graphs {
             text-align: center
+        }
+        .section-title {
+            text-align: center;
+            font-size: 30px;
         }
         .bar-chart {
             display: inline-block;
