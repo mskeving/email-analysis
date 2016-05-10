@@ -77,7 +77,7 @@ module.exports = React.createClass
 
   render: ->
     return (
-      <div className="page-container">
+      <div className="skarkov-container">
         {@_get_display_or_waiting()}
       </div>
     )
