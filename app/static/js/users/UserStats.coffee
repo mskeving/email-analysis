@@ -47,15 +47,15 @@ module.exports = React.createClass
           title: "Initiated Threads"
           yearly_y_scale: d3.scale.linear().domain([0, 85]).range([140, 0])
           quarterly_y_scale: d3.scale.linear().domain([0, 30]).range([140, 0])
-      $$.div className: 'section-title',
-        "Response Percentages"
-      $$.div className: 'response-percentages',
-        Table
-          description: "Out of the messages received from each
-            person, this is the percentage of times #{name} has replied directly."
-          items: @_get_response_percentage("you_respond_to")
-      $$.div className: 'response-percentages',
-        Table
-          description: "Out of the messages #{name} has sent, this is
-            how often other people respond."
-          items: @_get_response_percentage("responds_to_you")
+      $$.div className: "response-container",
+        $$.div className: 'section-title',
+          "Response Percentages"
+        $$.div className: "responses",
+          $$.div className: 'response-percentages',
+            Table
+              description: "How often others respond to #{name}"
+              items: @_get_response_percentage("responds_to_you")
+          $$.div className: 'response-percentages',
+            Table
+              description: "How often #{name} responds to"
+              items: @_get_response_percentage("you_respond_to")

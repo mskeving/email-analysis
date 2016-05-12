@@ -5,19 +5,20 @@
     padding-top: $container-padding-top;
     padding-bottom: $container-padding-bottom;
     max-width: 1200px;
+    .responses {
+        text-align: center;
+    }
     .response-percentages {
         display: inline-block;
-        width: 100%;
+        margin: 0px 45px 15px 45px;
         text-align: center;
-        table {
-            display: inline-block;
-            width: 200px;
-            margin-top: 15px;
+        vertical-align: top;
+        .description {
+            font-size: 16px;
+            text-decoration: underline;
         }
-        td {
-            text-align: right;
-            padding: 6px 0px 6px 30px;
-            width: 50%
+        .table-row {
+            margin-top: 6px;
         }
     }
     .user-details {
