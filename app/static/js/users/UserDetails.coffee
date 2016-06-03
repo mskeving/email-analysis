@@ -23,6 +23,7 @@ module.exports = React.createClass
       { "Total emails sent": @props.user.message_count }
       { "Average word count": @props.user.avg_word_count }
       { "Total threads initiated": @props.user.initiating_msgs.length }
+      { "Thread participation": "#{percentage(@props.user.thread_participation)}" }
       { "Average response time": "#{seconds_to_time(@props.user.avg_response_time)}" }
     ]
 

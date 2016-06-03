@@ -194,10 +194,12 @@ class User(db.Model):
 
         return resp_percentages
 
-    def num_of_participated_threads(self):
-        # participated_threads = number of unique thread ids from self.messages
-        # participated_threads/Message.threads_count * 100
-        pass
+    def thread_participation(self):
+        '''Returns the percentage of threads this user has participated in'''
+        num_participated = float(len(set(m.thread_id for m in self.messages)))
+        total_threads = float(Message.threads_count())
+
+        return (num_participated / total_threads) * 100
 
     def avg_response_time(self):
         counter = 0
@@ -207,12 +209,6 @@ class User(db.Model):
                 counter += 1
                 total += int(msg.response_time)
         return total/counter
-
-    def participation(self):
-        # get all messages this person has sent and count number of unique threads
-        threads = [m.thread_id for m in self.messages]
-        unique_thread_count = len(set(threads))
-        return unique_thread_count
 
     @classmethod
     def fastest_responder(cls):
@@ -235,6 +231,7 @@ class User(db.Model):
             'num_words_all_caps': self.num_words_all_caps(),
             'word_count': self.word_count(),
             'avg_response_time': self.avg_response_time(),
+            'thread_participation': self.thread_participation(),
         }
 
 
