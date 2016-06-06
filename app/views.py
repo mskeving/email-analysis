@@ -1,19 +1,15 @@
 import json
-from datetime import datetime
-from collections import defaultdict
 from sqlalchemy import asc
 from flask import render_template, request, redirect
-from flask.ext.login import (login_user, logout_user, 
+from flask.ext.login import (login_user, logout_user,
                              current_user, login_required)
 
-from app import app, db, login_manager
+from app import app, db
 from lib.markov_generator import make_chain
-from lib.functools import timeit
 from lib.helper import convert_unix_to_readable, capitalize
 from lib.helper import seconds_to_time
 from login import LoginUser, load_user
 from models import Markov, User, Message, DatabaseImport
-from settings import settings
 
 
 @app.route('/login', methods=['GET'])
@@ -21,7 +17,9 @@ def login():
     if current_user.is_authenticated:
         return redirect('/')
 
-    return render_template('base.jade', js_filename=app.config['LOGIN_JS_FILENAME'])
+    return render_template('base.jade',
+                           js_filename=app.config['LOGIN_JS_FILENAME'])
+
 
 @app.route('/submit_login', methods=['POST'])
 def submit_login():
@@ -58,39 +56,41 @@ def catch_all(path):
     # react-router is used on the client to take care of routing.
     # This is a catch-all url to say - whatever url we put in,
     # render base.jade with app js and the client takes care of the rest.
-    return render_template('base.jade', js_filename=app.config['APP_JS_FILENAME'])
+    return render_template('base.jade',
+                           js_filename=app.config['APP_JS_FILENAME'])
 
 
 @app.route('/facts', methods=['POST'])
 @app.cache.cached(timeout=60)
 @login_required
 def facts():
-    ''' This is where we query for any needed info for our facts list.
+    ''' This is where we query for any needed info for our facts list
+    on the homepage. Returns a list of facts in json.
     '''
-    # total number of messages sent
+    # fact: total number of messages sent
     num_messages = len(Message.query.all())
 
-    # the first message's date and sender
+    # fact: the first message's date and sender
     first_msg = Message.query.order_by(asc(Message.send_time_unix)).first()
     first_msg_timestamp = convert_unix_to_readable(first_msg.send_time_unix)
     first_msg_sender = User.query.filter_by(id=first_msg.sender_user_id).first()
 
-    # longest thread's length and subject
+    # fact: longest thread's length and subject
     longest_thread_subject, longest_thread_length = Message.longest_thread_subject_length()
 
-    # fastest response time
+    # fact: fastest response time
     fastest_responder = User.fastest_responder()
     fr_name = capitalize(fastest_responder.name)
     fr_time = seconds_to_time(fastest_responder.avg_response_time())
 
     facts = [
-        'Number of emails between us: %s' % (num_messages),
-        'First message sent: %s by %s' %
-        (first_msg_timestamp, capitalize(first_msg_sender.name)),
-        'Longest thread: "%s" with %s messages' %
-        (longest_thread_subject, longest_thread_length),
-        'Fastest average response time: %s by %s' %
-        (fr_time, fr_name),
+        'Number of emails between us: {}'.format(num_messages),
+        'First message sent: {} by {}'.format(
+            first_msg_timestamp, capitalize(first_msg_sender.name)),
+        'Longest thread: "{}" with {} messages'.format(
+            longest_thread_subject, longest_thread_length),
+        'Fastest average response time: {} by {}'.format(
+            fr_time, fr_name),
     ]
 
     return json.dumps({'facts': facts})
@@ -104,21 +104,16 @@ def get_base_data():
     """
     last_import = DatabaseImport.query.first()
 
-    data = {
-        'last_import': last_import.timestamp
-    }
-
-    return json.dumps(data)
+    return json.dumps({'last_import': last_import.timestamp})
 
 
 @app.route('/api/users', methods=['GET'])
 @app.cache.cached(timeout=600)
 @login_required
 def get_users():
-    users = User.query.all()
-    users = [u.to_api_dict() for u in users]
+    user_info = [u.to_api_dict() for u in User.query.all()]
 
-    return json.dumps(users)
+    return json.dumps(user_info)
 
 
 @app.route('/stats/get_message_count', methods=['GET'])
@@ -126,9 +121,7 @@ def get_users():
 def get_message_count():
     '''For each user, get the total number of messages they have sent'''
     all_users = User.query.all()
-    data = []
-    for u in all_users:
-        data.append({'x': u.name, 'y': u.message_count()})
+    data = [{'x': u.name, 'y': u.message_count()} for u in all_users]
 
     return json.dumps(data)
 
@@ -136,6 +129,7 @@ def get_message_count():
 @app.route('/stats/get_count', methods=['GET'])
 @login_required
 def get_count():
+    '''search for the number of times a user has typed a word'''
     string = request.args.get('string_to_match')
     if not string:
         return json.dumps({})
@@ -153,11 +147,6 @@ def get_count():
         data['usr_to_str_counts'].append({'x': u.name, 'y': usr_to_str_counts})
 
     return json.dumps(data)
-
-
-@app.route('/markov', methods=['GET'])
-def markov():
-    return render_template('base.jade', js_filename='skarkov.bundle.js')
 
 
 @app.route('/get_markovs', methods=['POST'])
@@ -184,7 +173,7 @@ def get_markovs():
 @app.route('/get_one_markov', methods=['POST'])
 @login_required
 def get_one_markov():
-    user_name = request.form.get('user_name', None)
+    user_name = request.form.get('user_name')
     if not user_name:
         return "Error: No user name found"
     user = User.query.filter_by(name=user_name).first()
@@ -200,8 +189,11 @@ def get_one_markov():
 @app.route('/tweet', methods=['POST'])
 @login_required
 def tweet():
-    markov_id = request.form.get('markov_id', None)
-    markov = Markov.query.filter_by(id=markov_id).one()
+    ''' keep track of the tweeted markovs so we can get an
+    idea of what our success rate is compared to how many we
+    generate'''
+    markov_id = request.form.get('markov_id')
+    markov = Markov.query.filter_by(id=markov_id).first()
 
     if not markov:
         return "no markov found"

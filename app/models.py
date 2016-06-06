@@ -340,7 +340,6 @@ class Markov(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'chain': self.chain,
-            'is_tweeted': self.is_tweeted,
             'is_legit': self.is_legit(self.chain),
         }
 

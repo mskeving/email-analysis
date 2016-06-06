@@ -10,7 +10,7 @@ module.exports = React.createClass
       question: "What emails are included in this analysis?"
       answer: "Any email that is FROM one of the five of
       us and is TO the other four, using any of our email
-      address. If there are other recipients on the TO field
+      addresses. If there are other recipients on the TO field
       outside of our family, that email is included. If someone
       from our family was cc-ed, that email is not included."
     }
@@ -28,10 +28,7 @@ module.exports = React.createClass
     {
       question: "Where is everything stored?"
       answer: "Skarkov is hosted by a company called Heroku.
-      They provisioned a Postgres database for me to store
-      this data. Many many companies use  Heroku to host
-      their site and store their data. I trust that it
-      is safe."
+      They provisioned a database for me to store everything."
     }
     {
       question: "How long have you been working on this?"
@@ -50,9 +47,8 @@ module.exports = React.createClass
       question: "If all the code is online and public,
       should I be worried about spammers or weird people
       finding my email address?"
-      answer: "No. This project was built with open-source
-      in mind and nothing was hardcoded. There is no way
-      to tie this project to you in any way from the code directly."
+      answer: "Nope. Nothing specific to you is stored in
+      code directly."
     }
     {
       question: "What was the hardest part of this project?"
