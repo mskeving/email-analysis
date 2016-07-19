@@ -27,15 +27,12 @@ module.exports = React.createClass
       { "Average response time": "#{seconds_to_time(@props.user.avg_response_time)}" }
     ]
 
-  _get_email_addresses: ->
-    return map(@props.user.addresses, (address, i) ->
-      username = address.split("@")[0]
-      domain = address.split("@")[1]
-      hidden_address = "#{username[0]}****@#{domain}"
+  _format_addresses: (addresses) ->
+    return map(addresses, (address, i) ->
       return $$.div
         className: 'email'
         key: i,
-        hidden_address
+        address
     )
 
   render: ->
@@ -43,7 +40,7 @@ module.exports = React.createClass
       $$.div className: "col s3",
         CardReveal
           avatar_link: @props.user.avatar_link
-          hidden_info: @_get_email_addresses()
+          hidden_info: @_format_addresses(@props.user.addresses)
           title: capitalize(@props.user.name)
       $$.div className: "col s6",
         $$.div className: "table",

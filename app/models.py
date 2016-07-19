@@ -216,11 +216,19 @@ class User(db.Model):
         sorted_users = sorted(users, key=lambda x: x.avg_response_time())
         return sorted_users[0]
 
+    def hidden_email_addresses(self):
+        ret = []
+        for a in self.addresses:
+            user_name, domain = a.email_address.split('@')
+            ret.append("{}*****@{}".format(user_name[0], domain))
+
+        return ret
+
     def to_api_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'addresses': [a.email_address for a in self.addresses],
+            'addresses': self.hidden_email_addresses(),
             'avatar_link': self.avatar_link,
             'avg_word_count': self.avg_word_count_per_message(),
             'message_count': self.message_count(),
