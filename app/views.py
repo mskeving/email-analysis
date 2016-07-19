@@ -7,7 +7,7 @@ from flask.ext.login import (login_user, logout_user,
 from app import app, db
 from lib.markov_generator import make_chain
 from lib.helper import convert_unix_to_readable, capitalize
-from lib.helper import seconds_to_time
+from lib.helper import seconds_to_time, add_commas
 from login import LoginUser, load_user
 from models import Markov, User, Message, DatabaseImport
 
@@ -69,6 +69,7 @@ def facts():
     '''
     # fact: total number of messages sent
     num_messages = len(Message.query.all())
+    num_messages = add_commas(num_messages)
 
     # fact: the first message's date and sender
     first_msg = Message.query.order_by(asc(Message.send_time_unix)).first()
