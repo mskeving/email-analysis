@@ -74,24 +74,15 @@ def facts():
     # fact: the first message's date and sender
     first_msg = Message.query.order_by(asc(Message.send_time_unix)).first()
     first_msg_timestamp = convert_unix_to_readable(first_msg.send_time_unix)
-    first_msg_sender = User.query.filter_by(id=first_msg.sender_user_id).first()
 
     # fact: longest thread's length and subject
-    longest_thread_subject, longest_thread_length = Message.longest_thread_subject_length()
-
-    # fact: fastest response time
-    fastest_responder = User.fastest_responder()
-    fr_name = capitalize(fastest_responder.name)
-    fr_time = seconds_to_time(fastest_responder.avg_response_time())
+    _, longest_thread_length = Message.longest_thread_subject_length()
 
     facts = [
-        'Number of emails between us: {}'.format(num_messages),
-        'First message sent: {} by {}'.format(
-            first_msg_timestamp, capitalize(first_msg_sender.name)),
-        'Longest thread: "{}" with {} messages'.format(
-            longest_thread_subject, longest_thread_length),
-        'Fastest average response time: {} by {}'.format(
-            fr_time, fr_name),
+        'Family members: 5',
+        'First message: {}'.format(first_msg_timestamp),
+        'Total emails: {}'.format(num_messages),
+        'Longest thread: {}'.format(longest_thread_length),
     ]
 
     return json.dumps({'facts': facts})

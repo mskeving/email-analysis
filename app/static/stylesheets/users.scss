@@ -22,8 +22,18 @@
         }
     }
     .user-details {
+        .no-width {
+            width: initial;
+        }
+        .card {
+            width: 230px;
+            margin-right: 100px;
+        }
         .avatar.card-image {
             height: 232px;
+        }
+        .user-facts {
+            width: 370px;
         }
     }
     .user-stats {

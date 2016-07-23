@@ -16,12 +16,11 @@ module.exports = React.createClass
       type: 'POST'
       dataType: 'JSON'
       success: (data) =>
-        facts = data.facts
         @setState
-          facts: facts
+          facts: data.facts
 
       error: (jqXHR, textStatus, errorThrown) ->
-        alert "Error #{jqXHR}, #{textStatus}, #{errorThrown}"
+        console.log "Error #{jqXHR}, #{textStatus}, #{errorThrown}"
 
   _get_display_or_waiting: ->
     if @state.facts.length
@@ -35,7 +34,9 @@ module.exports = React.createClass
     return (
       <div>
         <div className="home-container">
-          {@_get_display_or_waiting()}
+          <div className="intro-container">
+            {@_get_display_or_waiting()}
+          </div>
         </div>
       </div>
     )

@@ -37,13 +37,13 @@ module.exports = React.createClass
 
   render: ->
     return $$.div className: 'row user-details',
-      $$.div className: "col s3",
+      $$.div className: "col s3 no-width",
         CardReveal
           avatar_link: @props.user.avatar_link
           hidden_info: @_format_addresses(@props.user.addresses)
           title: capitalize(@props.user.name)
-      $$.div className: "col s6",
-        $$.div className: "table",
+      $$.div className: "col s6 no-width",
+        $$.div className: "table user-facts",
           Table
             title: ""
             items: @_get_facts()
