@@ -1,68 +1,27 @@
 import json
+
+from datetime import datetime
+from collections import defaultdict
 from sqlalchemy import asc
-from flask import render_template, request, redirect
-from flask.ext.login import (login_user, logout_user,
-                             current_user, login_required)
 
 from app import app, db
+from flask import render_template, request
 from lib.markov_generator import make_chain
-from lib.helper import convert_unix_to_readable, capitalize
-from lib.helper import seconds_to_time, add_commas
-from login import LoginUser, load_user
+from lib.helper import convert_unix_to_readable, add_commas
 from models import Markov, User, Message, DatabaseImport
-
-
-@app.route('/login', methods=['GET'])
-def login():
-    if current_user.is_authenticated:
-        return redirect('/')
-
-    return render_template('base.jade',
-                           js_filename=app.config['LOGIN_JS_FILENAME'])
-
-
-@app.route('/submit_login', methods=['POST'])
-def submit_login():
-    next = request.args.get('next')
-    username = request.form.get('username')
-    password = request.form.get('password')
-
-    # Note: this (dumb) strategy of login allows you to only login with
-    # your general credentials. Need to refactor this to allow other usernames.
-    general_user = LoginUser.get('general')
-
-    if (username == general_user.username and
-            password == general_user.password):
-
-        user = load_user(general_user.username)
-        if user:
-            login_user(user)
-            return json.dumps({'message': "success"})
-
-    return json.dumps({'message': "Invalid Credentials"})
-
-
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return redirect('/login')
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-@login_required
 def catch_all(path):
     # react-router is used on the client to take care of routing.
     # This is a catch-all url to say - whatever url we put in,
     # render base.jade with app js and the client takes care of the rest.
-    return render_template('base.jade',
-                           js_filename=app.config['APP_JS_FILENAME'])
+    return render_template('base.jade', js_filename=app.config['JS_FILENAME'])
 
 
 @app.route('/facts', methods=['POST'])
 @app.cache.cached(timeout=60)
-@login_required
 def facts():
     ''' This is where we query for any needed info for our facts list
     on the homepage. Returns a list of facts in json.
@@ -89,7 +48,6 @@ def facts():
 
 
 @app.route('/api/base', methods=['POST'])
-@login_required
 def get_base_data():
     """ This is the info we need to get to show on every page.
     For example, anything that needs to be in the header or footer
@@ -101,15 +59,65 @@ def get_base_data():
 
 @app.route('/api/users', methods=['GET'])
 @app.cache.cached(timeout=600)
-@login_required
 def get_users():
-    user_info = [u.to_api_dict() for u in User.query.all()]
+    users = User.query.all()
+    users = [u.to_api_dict() for u in users]
+
+    return json.dumps(users)
+
+
+@app.route('/stats/message_time_bargraph', methods=['GET'])
+def message_time_bargraph():
+    msgs = Message.query.all()
+    year_to_messages = defaultdict(list)
+    for m in msgs:
+        year = datetime.fromtimestamp(int(m.send_time_unix)).strftime('%Y')
+        year_to_messages[year].append(m)
+
+    all_data = []
+    for year, msgs in year_to_messages.iteritems():
+        if year == '2008':
+            continue
+        year_data = {}
+
+        user_to_count = {}
+        for m in msgs:
+            user_to_count[m.sender] = user_to_count.get(m.sender, 0) + 1
+
+        values = []
+        for user, count in user_to_count.iteritems():
+            values.append({'x': user, 'y': count})
+        year_data['label'] = year
+        year_data['values'] = values
+        all_data.append(year_data)
+
+    return json.dumps(all_data)
+
+
+@app.route('/stats/message_time_graph', methods=['GET'])
+def message_time_graph():
+    def sort_by_year(messages):
+        data = []
+        year_to_count = {}
+        for m in messages:
+            year = datetime.fromtimestamp(float(m.send_time_unix)).strftime('%Y')
+            year_to_count[year] = year_to_count.get(year, 0) + 1
+
+        for year, count in year_to_count.iteritems():
+            data.append({'x': year, 'y': year_to_count[year]})
+        sorted_by_year = sorted(data, key=lambda data: data['x'])
+        return sorted_by_year
+
+    data = []
+    all_users = User.query.all()
+    for u in all_users:
+        messages = Message.query.filter_by(sender=u.id).order_by('send_time_unix').all()
+        data.append({'label': u.name, 'values': sort_by_year(messages)})
 
     return json.dumps(user_info)
 
 
 @app.route('/stats/get_message_count', methods=['GET'])
-@login_required
 def get_message_count():
     '''For each user, get the total number of messages they have sent'''
     all_users = User.query.all()
@@ -119,7 +127,6 @@ def get_message_count():
 
 
 @app.route('/stats/get_count', methods=['GET'])
-@login_required
 def get_count():
     '''search for the number of times a user has typed a word'''
     string = request.args.get('string_to_match')
@@ -142,7 +149,6 @@ def get_count():
 
 
 @app.route('/get_markovs', methods=['POST'])
-@login_required
 def get_markovs():
     # on page load, get markov for every user
     users = User.query.all()
@@ -163,7 +169,6 @@ def get_markovs():
 
 
 @app.route('/get_one_markov', methods=['POST'])
-@login_required
 def get_one_markov():
     user_name = request.form.get('user_name')
     if not user_name:
@@ -179,7 +184,6 @@ def get_one_markov():
 
 
 @app.route('/tweet', methods=['POST'])
-@login_required
 def tweet():
     ''' keep track of the tweeted markovs so we can get an
     idea of what our success rate is compared to how many we

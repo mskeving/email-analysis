@@ -10,27 +10,17 @@ class Settings(object):
                  flask_config,
                  user_list,
                  email_handler,
-                 general_credentials=None,
-                 admin_credentials=None,
                  ):
         self.app_name = app_name
         self.database = database
         self.flask_config = flask_config
         self.user_list = user_list
         self.email_handler = email_handler
-        self.general_credentials = general_credentials
-        self.admin_credentials = admin_credentials
 
 
 class Database(object):
     def __init__(self, url):
         self.url = url
-
-
-class LoginCredentials(object):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
 
 
 class HerokuDatabase(Database):
