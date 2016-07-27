@@ -35,6 +35,13 @@ module.exports = React.createClass
       answer: "On and off since June, 2015."
     }
     {
+      question: "Where does the name Skarkov come from?"
+      answer: <span>The first part of this project involved creating&nbsp;
+      <a target="_blank" href="https://twitter.com/skev_says">Markov Chains</a>
+      &nbsp;from each person's emails. Get it? Skevington
+      Markov Chains? Skarkov? I thought it was clever too.</span>
+    }
+    {
       question: "I think this website it pretty and all,
       but I’d really prefer to read through all the lines
       of code you wrote with your own two hands. Where can
