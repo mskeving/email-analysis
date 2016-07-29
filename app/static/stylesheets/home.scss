@@ -1,10 +1,11 @@
 @import "variables.scss";
 
 .home-container {
+    position: relative;
     color: #263238;
     .intro-container {
         position: relative;
-        min-height: 100%;
+        min-height: 93%;
         margin: auto;
         padding-top: $container-padding-top;
         padding-bottom: 120px;
