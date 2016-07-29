@@ -10,6 +10,8 @@ from lib.markov_generator import make_chain
 from lib.helper import convert_unix_to_readable, add_commas
 from models import Markov, User, Message, DatabaseImport
 
+CACHE_TIMEOUT = 3600  # 1 hour
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -21,7 +23,7 @@ def catch_all(path):
 
 
 @app.route('/facts', methods=['POST'])
-@app.cache.cached(timeout=60)
+@app.cache.cached(timeout=CACHE_TIMEOUT)
 def facts():
     ''' This is where we query for any needed info for our facts list
     on the homepage. Returns a list of facts in json.
@@ -48,6 +50,7 @@ def facts():
 
 
 @app.route('/api/base', methods=['POST'])
+@app.cache.cached(timeout=CACHE_TIMEOUT)
 def get_base_data():
     """ This is the info we need to get to show on every page.
     For example, anything that needs to be in the header or footer
@@ -58,7 +61,7 @@ def get_base_data():
 
 
 @app.route('/api/users', methods=['GET'])
-@app.cache.cached(timeout=600)
+@app.cache.cached(timeout=CACHE_TIMEOUT)
 def get_users():
     users = User.query.all()
     users = [u.to_api_dict() for u in users]
@@ -118,6 +121,7 @@ def message_time_graph():
 
 
 @app.route('/stats/get_message_count', methods=['GET'])
+@app.cache.cached(timeout=CACHE_TIMEOUT)
 def get_message_count():
     '''For each user, get the total number of messages they have sent'''
     all_users = User.query.all()
