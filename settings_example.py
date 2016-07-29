@@ -11,7 +11,11 @@ settings = Settings(
     app_name="email-analysis",
     database=Database("postgresql://localhost:5432/db_name"),
     flask_config=dict(
+        CACHE_TYPE="simple",
+        CONFIG_ENV="Development",
         CSRF_ENABLED=True,
+        DEBUG=True,
+        JS_FILENAME="http://localhost:8080/assets/build/app.bundle.js",  # react hot loader
         SECRET_KEY='you-will-never-guess',
     ),
     user_list=[fake_user],
