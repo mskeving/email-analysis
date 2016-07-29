@@ -1,6 +1,5 @@
 React   = require('react')
 cls     = require('classnames')
-$       = require('jquery')
 $$      = React.DOM
 
 module.exports = React.createClass

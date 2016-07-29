@@ -1,5 +1,4 @@
 React       = require('react')
-$           = require('jquery')
 HomeDisplay = require('./HomeDisplay')
 Preloader   = require('../common/Preloader')
 

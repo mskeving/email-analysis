@@ -1,6 +1,5 @@
 require("../../stylesheets/users.scss")
 React    = require('react')
-$        = require('jquery')
 index_of = require('lodash/array/indexOf')
 
 UsersDisplay = require('./UsersDisplay')

@@ -2,7 +2,6 @@ require("../../stylesheets/skarkov.scss")
 
 React     = require('react')
 _         = require('lodash')
-$         = require('jquery')
 Chain     = require('./Chain')
 Preloader = require('../common/Preloader')
 

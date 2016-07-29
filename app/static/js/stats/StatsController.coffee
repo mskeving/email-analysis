@@ -1,7 +1,6 @@
 require("../../stylesheets/stats.scss")
 
 React       = require('react')
-$           = require('jquery')
 StringCount = require('./StringCount')
 MyBarChart  = require('../common/MyBarChart')
 Preloader   = require('../common/Preloader')
