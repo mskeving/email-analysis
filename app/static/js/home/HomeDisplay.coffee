@@ -33,7 +33,7 @@ module.exports = React.createClass
 
   render: ->
     return (
-      <div>
+      <div className="content">
         <div className="header">
           <div className="title">Skarkov</div>
           <div className="sub-title">A family's email history</div>
