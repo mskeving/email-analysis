@@ -1,23 +1,29 @@
 @import "variables.scss";
 
 .home-container {
+    position: relative;
     color: #263238;
-    text-align: center;
-    &:after {
-        background-image: url("/static/images/other/home_hero.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        content: "";
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        position: absolute;
-        z-index: -1;
-        opacity: .5;
-    }
-    .content {
-        padding: 50px 0;
+    .intro-container {
+        position: relative;
+        min-height: 93%;
+        margin: auto;
+        padding-top: $container-padding-top;
+        padding-bottom: 120px;
+        text-align: center;
+        &:after {
+            background-image: url("/static/images/other/home_hero.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position-x: 77%;
+            content: "";
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            z-index: -1;
+            opacity: .5;
+        }
         .title {
             font-size: 98px;
         }
@@ -27,7 +33,8 @@
             font-weight: 400;
         }
         .facts {
-            margin: 50px;
+            margin-top: 50px;
+            margin-left: 40px;
             font-size: 20px;
             line-height: 1.3;
             font-weight: 400;

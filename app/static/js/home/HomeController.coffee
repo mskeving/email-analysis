@@ -31,7 +31,11 @@ module.exports = React.createClass
 
   render: ->
     return (
-      <div className="home-container">
-        {@_get_display_or_waiting()}
+      <div>
+        <div className="home-container">
+          <div className="intro-container">
+            {@_get_display_or_waiting()}
+          </div>
+        </div>
       </div>
     )

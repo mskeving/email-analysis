@@ -1,24 +1,27 @@
 @import "variables.scss";
 
 .app-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    position: relative;
+    min-height: 100%;
+
     header {
+        width: 100%;
         z-index: 5;
     }
 
     main {
         flex: 1 0 auto;
-        position: relative;
     }
 
     footer {
-        margin-top: 0px;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
         .import-date {
             padding-left: 8px;
         }
     }
+
     .page-container {
         margin: auto;
         padding-top: $container-padding-top;
