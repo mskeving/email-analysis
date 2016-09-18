@@ -59,13 +59,21 @@ module.exports = React.createClass
     if @state.markovs.length
       return (
         <div>
-          <a
-            className="reference"
-            href="http://www.piliapp.com/twitter-symbols/"
-            target="_blank"
-          >
-            User Symbols
-          </a>
+          <div className="top-options">
+            <a
+              className="reference"
+              href="http://www.piliapp.com/twitter-symbols/"
+              target="_blank"
+            >
+              User Symbols
+            </a>
+            <div
+              className="refresh"
+              onClick=@loadMarkovs
+            >
+              Refresh All
+            </div>
+          </div>
           {_.map(@state.markovs, @renderChain)}
         </div>
       )
