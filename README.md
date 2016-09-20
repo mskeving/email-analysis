@@ -4,7 +4,7 @@ http://www.skarkov.com
 ### Background
 Skarkov started as a project to create [markov chains](http://setosa.io/ev/markov-chains/) from my family's emails. To do this, I used the Gmail API to get all emails that included the five of us, and began creating and [tweeting](https://www.twitter.com/skev_says) the chains.
 
- Once I had all our emails stored in a database, one thing lead to another, I blacked out, and now I have a full blown analysis of our history, including facts like, _who has the fastest average response time?_ and _who responds to me the most_?  
+ Once I had all our emails stored in a database, one thing led to another, I blacked out, and now I have a full blown analysis of our history, including facts like, _who has the fastest average response time?_ and _who responds to me the most_?  
  
 
  __My favorite discovery:__ My mother is by far the most enthusiastic emailer of the family.
