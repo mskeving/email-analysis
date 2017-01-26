@@ -67,6 +67,15 @@ def get_users():
     return json.dumps(users)
 
 
+@app.route('/api/all_messages', methods=['GET'])
+@app.cache.cached(timeout=CACHE_TIMEOUT)
+def get_all_messages():
+    messages = Message.query.all()
+    messages = [m.to_api_dict() for m in messages]
+
+    return json.dumps(messages)
+
+
 @app.route('/stats/get_message_count', methods=['GET'])
 @app.cache.cached(timeout=CACHE_TIMEOUT)
 def get_message_count():

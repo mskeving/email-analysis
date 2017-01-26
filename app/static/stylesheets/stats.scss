@@ -55,4 +55,22 @@
     margin-left: 10px;
     cursor: pointer;
   }
+
+  .bar-chart-email-count {
+    display: inline-block;
+
+    .title {
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    .messages-sent {
+      display: inline-block;
+    }
+
+    .switch {
+      text-align: center;
+    }
+  }
 }
