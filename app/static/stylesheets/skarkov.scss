@@ -11,8 +11,23 @@
     a:hover {
         text-decoration: underline;
     }
-    .reference {
-        margin-left: 15px;
+    .top-options {
+        display: inline-block;
+        width: 100%;
+        .reference {
+            margin-left: 15px;
+        }
+        .refresh {
+            float: right;
+            margin-right: 71px;
+            padding: 5px;
+            border: 1px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .refresh:hover {
+            background-color: #ddd;
+        }
     }
     width: 80%;
     max-width: 725px;

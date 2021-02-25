@@ -34,6 +34,12 @@ def convert_unix_to_readable(unix_timestamp):
 def capitalize(s):
     return s[0].upper() + s[1:].lower()
 
+
+def add_commas(num):
+    '''change 1234 is 1,234 etc.'''
+    return "{:,d}".format(num)
+
+
 def seconds_to_time(s):
     total_secs = int(s)
 
@@ -42,7 +48,6 @@ def seconds_to_time(s):
 
     mins = secs_left / 60
     seconds = secs_left - (mins * 60)
-
 
     h = 'hour' if hours == 1 else 'hours'
     m = 'min' if mins == 1 else 'mins'

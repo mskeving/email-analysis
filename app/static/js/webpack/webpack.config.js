@@ -1,15 +1,14 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: {
-        app: "../index.coffee",
-        login: "../login/login.coffee"
-    },
+    entry: [
+        "../index.coffee"
+    ],
     devtool: 'source-map',
     output: {
         path: __dirname,
         publicPath: "http://localhost:8080/assets/",
-        filename: "build/[name].bundle.js"
+        filename: "build/app.bundle.js"
     },
     resolve: {
       extensions: ['', '.js', '.coffee']

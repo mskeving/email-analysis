@@ -194,10 +194,12 @@ class User(db.Model):
 
         return resp_percentages
 
-    def num_of_participated_threads(self):
-        # participated_threads = number of unique thread ids from self.messages
-        # participated_threads/Message.threads_count * 100
-        pass
+    def thread_participation(self):
+        '''Returns the percentage of threads this user has participated in'''
+        num_participated = float(len(set(m.thread_id for m in self.messages)))
+        total_threads = float(Message.threads_count())
+
+        return (num_participated / total_threads) * 100
 
     def avg_response_time(self):
         counter = 0
@@ -208,23 +210,25 @@ class User(db.Model):
                 total += int(msg.response_time)
         return total/counter
 
-    def participation(self):
-        # get all messages this person has sent and count number of unique threads
-        threads = [m.thread_id for m in self.messages]
-        unique_thread_count = len(set(threads))
-        return unique_thread_count
-
     @classmethod
     def fastest_responder(cls):
         users = [u for u in cls.query.all()]
         sorted_users = sorted(users, key=lambda x: x.avg_response_time())
         return sorted_users[0]
 
+    def hidden_email_addresses(self):
+        ret = []
+        for a in self.addresses:
+            user_name, domain = a.email_address.split('@')
+            ret.append("{}*****@{}".format(user_name[0], domain))
+
+        return ret
+
     def to_api_dict(self):
         return {
             'id': self.id,
             'name': self.name,
-            'addresses': [a.email_address for a in self.addresses],
+            'addresses': self.hidden_email_addresses(),
             'avatar_link': self.avatar_link,
             'avg_word_count': self.avg_word_count_per_message(),
             'message_count': self.message_count(),
@@ -235,6 +239,7 @@ class User(db.Model):
             'num_words_all_caps': self.num_words_all_caps(),
             'word_count': self.word_count(),
             'avg_response_time': self.avg_response_time(),
+            'thread_participation': self.thread_participation(),
         }
 
 
@@ -343,7 +348,6 @@ class Markov(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'chain': self.chain,
-            'is_tweeted': self.is_tweeted,
             'is_legit': self.is_legit(self.chain),
         }
 

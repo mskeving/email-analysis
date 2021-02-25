@@ -11,8 +11,15 @@ StatsController = require('./stats/StatsController')
 TweetTimeline   = require('./markovs/TweetTimeline')
 UsersController = require('./users/UsersController')
 
+ReactGA = require('react-ga')
+ReactGA.initialize('UA-80973915-1')
+
+logPageView = ->
+  ReactGA.set({ page: window.location.pathname })
+  ReactGA.pageview(window.location.pathname)
+
 router = (
-  <Router history={browserHistory}>
+  <Router history={browserHistory} onUpdate={logPageView}>
     <Route path="/" component={App}>
       <IndexRoute component={HomeController} />
       <Route path="/users" component={UsersController} />
