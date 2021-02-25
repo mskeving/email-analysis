@@ -20,27 +20,35 @@ service = GmailApi().get_service()
 
 
 def create_users():
-    existing_users = [u.name for u in User.query.all()]
-    for user in settings.user_list:
-        if user.name in existing_users:
-            # note: this means you won't be able to update a new user,
-            # for example if they have a new email address.
-            print ("Can't create user %s. Already exists") % user.name
+    commit_new_data = False
+    user_name_to_user = {}
+    for existing_user in User.query.all():
+        user_name_to_user[existing_user.name] = existing_user
 
+    existing_emails = [e.email_address for e in EmailAddress.query.all()]
+
+    for user in settings.user_list:
+        found_user = user_name_to_user.get(user.name)
+        if found_user:
+            user_id = found_user.id
         else:
-            print ("Create: %s") % user.name
+            print ("Creating new user: %s") % user.name
             new_user = User(name=user.name,
                             avatar_link=user.avatar_link)
             db.session.add(new_user)
             db.session.commit()
             db.session.refresh(new_user)
-            new_user_id = new_user.id
+            user_id = new_user.id
 
-            for address in user.addresses:
-                new_address = EmailAddress(
-                        user_id=new_user_id,
-                        email_address=address)
-                db.session.add(new_address)
+        for address in user.addresses:
+            if address in existing_emails:
+                continue
+
+            print ("Adding new email address: %s") % address
+            new_address = EmailAddress(
+                    user_id=user_id,
+                    email_address=address)
+            db.session.add(new_address)
             db.session.commit()
 
 
