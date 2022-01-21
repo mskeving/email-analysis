@@ -16,7 +16,7 @@ google-api-python-client==1.4.1
 gunicorn==19.4.5
 httplib2==0.9.1
 ipdb==0.8.1
-ipython==4.0.1
+ipython==7.16.3
 ipython-genutils==0.1.0
 itsdangerous==0.24
 nltk==3.0.4
